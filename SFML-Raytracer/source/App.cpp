@@ -23,7 +23,7 @@ void App::Run()
     _spheres.emplace_back(
         AA::Sphere(
             AA::Vec(_width / 2, _height / 2, 10), 
-            500, 
+            200, 
             sf::Color(255, 255, 255, 255)
         )
     );
