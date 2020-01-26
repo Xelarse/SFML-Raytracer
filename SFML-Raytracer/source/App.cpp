@@ -106,21 +106,13 @@ void App::CalculatePixel(int x, int y)
 
 void App::UpdateRenderTexture()
 {
-    //TODO potentially update the texture instead of load from memory?
-    //void* dataPtr = _pixelColourBuffer->GetDataBasePointer();
-    //size_t dataSize = _pixelColourBuffer->GetDataSize();
-
-    //if (_renderTexture->loadFromMemory(dataPtr, dataSize))
-    //{
-    //    _renderTarget.setTexture(_renderTexture.get());
-    //}
-
     //Create an image that uses the raytraced pixel data
     sf::Image renderData;
     renderData.create(_width, _height, reinterpret_cast<sf::Uint8*>(_pixelColourBuffer->GetDataBasePointer()));
 
     //renderData.saveToFile("C:\\Users\\Xelarse\\Desktop\\test.png");
 
+    //TODO potentially update instead of loading every tick for better performance
     if (_renderTexture->loadFromImage(renderData))
     {
         _renderTarget.setTexture(_renderTexture.get());
