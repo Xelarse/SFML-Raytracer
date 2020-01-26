@@ -32,6 +32,7 @@ void App::Run()
     {
         float deltaTimeMs = _pAppClock->restart().asMilliseconds();
         Tick(deltaTimeMs);
+        std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
     }
 
 }
