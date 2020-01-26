@@ -15,13 +15,6 @@ namespace AA
 		Vec operator / (double rh) const { return Vec(_x / rh, _y / rh, _z / rh); }
 	};
 
-	struct Colour
-	{
-		double _r, _g, _b;
-		Colour() : _r(0), _g(0), _b(0) { }
-		Colour(double r, double g, double b) : _r(r), _g(g), _b(b) { }
-	};
-
 	class Ray
 	{
 	public:
@@ -35,31 +28,41 @@ namespace AA
 	public:
 		Vec _origin;
 		double _radius;
-		Colour _col;
-		Sphere(Vec o, double r, Colour col) : _origin(o), _radius(r), _col(col) { }
+		sf::Color _col;
+		Sphere(Vec o, double r, sf::Color col) : _origin(o), _radius(r), _col(col) { }
 	};
 
 	class ColourArray
 	{
 	public:
 		ColourArray() = delete;
-		ColourArray(int rows, int columns) : _rows(rows), _columns(columns), _colours(std::vector<Colour>(rows * columns, Colour(0,0,0))) { }
+		ColourArray(int rows, int columns) : _rows(rows), _columns(columns), _colours(std::vector<sf::Color>(rows * columns, sf::Color(0,0,0,255))) { }
 
-		Colour& GetColourAtPosition(int x, int y)
+		sf::Color& GetColourAtPosition(int x, int y)
 		{
-			return _colours.at(y * _rows + x);
+			return _colours.at(y * _columns + x);
 		}
 
-		void ColourPixelAtPosition(int x, int y, Colour col)
+		void ColourPixelAtPosition(int x, int y, sf::Color col)
 		{
-			_colours.at(y * _rows + x) = col;
+			_colours.at(y * _columns + x) = col;
+		}
+
+		void* GetDataBasePointer()
+		{
+			return reinterpret_cast<void*>(_colours.data());
+		}
+
+		size_t GetDataSize()
+		{
+			return _colours.size() * sizeof(sf::Color);
 		}
 
 	private:
 		int _rows;
 		int _columns;
 
-		std::vector<Colour> _colours;
+		std::vector<sf::Color> _colours;
 	};
 
 	static double DotProduct(Vec a, Vec b)

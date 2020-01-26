@@ -21,6 +21,7 @@ private:
 	void Draw();
 
 	void CalculatePixel(int x, int y);
+	void UpdateRenderTexture();
 	void CreateImage();
 
 
@@ -31,11 +32,10 @@ private:
 	std::unique_ptr<EventHandler> _pEventHander;
 	std::unique_ptr<sf::Clock> _pAppClock;
 
+	sf::RectangleShape _renderTarget;
+	std::unique_ptr<sf::Texture> _renderTexture;
+\
 	std::unique_ptr<AA::ColourArray> _pixelColourBuffer;
 	std::vector<AA::Sphere> _spheres;
-
-
-	//To remove later, just used for testing SFML
-	sf::CircleShape _testCircle;
 };
 
