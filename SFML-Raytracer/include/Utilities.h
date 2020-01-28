@@ -9,10 +9,52 @@ namespace AA
 		double _x, _y, _z;
 		Vec() : _x(0), _y(0), _z(0) { }
 		Vec(double x, double y, double z) : _x(x), _y(y), _z(z) { }
-		Vec operator - (Vec rh) const { return Vec(_x - rh._x, _y - rh._y, _z - rh._z); }
-		Vec operator + (Vec rh) const { return Vec(_x + rh._x, _y + rh._y, _z + rh._z); }
-		Vec operator * (double rh) const { return Vec(_x * rh, _y * rh, _z * rh); }
-		Vec operator / (double rh) const { return Vec(_x / rh, _y / rh, _z / rh); }
+
+		//Operators
+		inline Vec& operator - (Vec rh)
+		{
+			_x -= rh._x;
+			_y -= rh._y; 
+			_z -= rh._z;
+			return *this;
+		}
+		inline Vec& operator + (Vec rh)
+		{
+			_x += rh._x; 
+			_y += rh._y; 
+			_z += rh._z;
+			return *this;
+		}
+		inline Vec& operator * (double rh)
+		{
+			_x *= rh;
+			_y *= rh;
+			_z *= rh;
+			return *this;
+		}
+		inline Vec& operator / (double rh)
+		{
+			_x /= rh;
+			_y /= rh;
+			_z /= rh;
+			return *this;
+		}
+
+		//Vector math functions
+		inline double DotProduct(Vec b) const
+		{
+			return ((_x * b._x) + (_y * b._y) + (_z * b._z));
+		}
+
+		inline double Length() const
+		{
+			return sqrt(_x * _x + _y * _y + _z * _z);
+		}
+
+		inline double SqrLength() const
+		{
+			return _x * _x + _y * _y + _z * _z;
+		}
 	};
 
 	class Ray
@@ -65,17 +107,12 @@ namespace AA
 		std::vector<sf::Color> _colours;
 	};
 
-	static double DotProduct(Vec a, Vec b)
-	{
-		return ( (a._x * b._x) + (a._y * b._y) + (a._z * b._z) );
-	}
-
 	static bool RayIntersectSphere(Ray ray, Sphere sphere, double& t)
 	{
 		Vec sphereToRay = ray._startPos - sphere._origin;
 		Vec rayToSphere = ray._dir;
-		double b = 2 * DotProduct(sphereToRay, rayToSphere);			
-		double c = DotProduct(sphereToRay, sphereToRay) - (sphere._radius * sphere._radius);
+		double b = 2 * sphereToRay.DotProduct(rayToSphere);			
+		double c = sphereToRay.DotProduct(sphereToRay) - (sphere._radius * sphere._radius);
 		double delta = b * b - 4 * c;	//Quick test of the appropraite part of the Quad formula to see if it intersects at all
 		if (delta < 0 ) { return false; }	//Ray didn't intersect with the sphere at all
 		else
