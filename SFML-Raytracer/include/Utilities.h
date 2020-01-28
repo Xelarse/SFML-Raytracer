@@ -1,5 +1,7 @@
 #pragma once
 #include <cmath>
+#include <SFML/Graphics.hpp>
+
 
 namespace AA
 {
@@ -109,9 +111,9 @@ namespace AA
 			return _x * _x + _y * _y + _z * _z;
 		}
 
-		inline Vec3 UnitVector(Vec3 vec)
+		inline Vec3 UnitVector() const
 		{
-			return vec / vec.Length();
+			return *this / this->Length();
 		}
 
 		inline void MakeUnitVector()
@@ -120,6 +122,11 @@ namespace AA
 			_x *= k;
 			_y *= k;
 			_z *= k;
+		}
+
+		inline sf::Color Vec3ToCol() const
+		{
+			return sf::Color(_x, _y, _z, 255);
 		}
 	};
 
@@ -132,20 +139,11 @@ namespace AA
 		inline Vec3 GetPointAlongRay(double t) const { return _startPos + _dir * t; }
 	};
 
-	class Sphere
-	{
-	public:
-		Vec3 _origin;
-		double _radius;
-		sf::Color _col;
-		Sphere(Vec3 o, double r, sf::Color col) : _origin(o), _radius(r), _col(col) { }
-	};
-
 	class ColourArray
 	{
 	public:
 		ColourArray() = delete;
-		ColourArray(int rows, int columns) : _rows(rows), _columns(columns), _colours(std::vector<sf::Color>(rows * columns, sf::Color(0,0,0,255))) { }
+		ColourArray(int columns, int rows) : _rows(rows), _columns(columns), _colours(std::vector<sf::Color>(rows * columns, sf::Color(0,0,0,255))) { }
 
 		sf::Color& GetColourAtPosition(int& x, int& y)
 		{
@@ -174,25 +172,10 @@ namespace AA
 		std::vector<sf::Color> _colours;
 	};
 
-	static bool RayIntersectSphere(const Ray& ray, const Sphere& sphere, double& t)
+	static sf::Color LinearLerp(const sf::Color& a, const sf::Color& b, const float& t)
 	{
-		Vec3 sphereToRay = ray._startPos - sphere._origin;
-		Vec3 rayToSphere = ray._dir;
-		double b = 2 * sphereToRay.DotProduct(rayToSphere);			
-		double c = sphereToRay.DotProduct(sphereToRay) - (sphere._radius * sphere._radius);
-		double delta = b * b - 4 * c;	//Quick test of the appropraite part of the Quad formula to see if it intersects at all
-		if (delta < 0 ) { return false; }	//Ray didn't intersect with the sphere at all
-		else
-		{
-			// Find the points that it intersects at
-			delta = sqrt(delta);
-			double t0 = -b - delta;
-			double t1 = -b + delta;
-
-			//Store the distance the of the first intersection in t
-			//Use this later to scrub along the ray to sphere to work out where we need to calc normals.
-			t = t0 < t1 ? t0 : t1;
-			return true;
-		}
+		sf::Color lh(a.r * (1 - t), a.g * (1 - t), a.b * (1 - t), 255);
+		sf::Color rh(b.r * t, b.g * t, b.b * t, 255);
+		return sf::Color(lh.r + rh.r, lh.g + rh.g, lh.b + rh.b, 255);
 	}
 }

@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "EventHandler.h"
 #include "Utilities.h"
+#include "Camera.h"
+#include "Sphere.h"
 
 class App
 {
@@ -24,6 +26,8 @@ private:
 	void UpdateRenderTexture();
 	void CreateImage();
 
+	sf::Color BackgroundGradientCol(const AA::Ray& ray);
+
 
 	int _width = 800;
 	int _height = 600;
@@ -34,8 +38,9 @@ private:
 
 	sf::RectangleShape _renderTarget;
 	std::unique_ptr<sf::Texture> _renderTexture;
-\
+
 	std::unique_ptr<AA::ColourArray> _pixelColourBuffer;
-	std::vector<AA::Sphere> _spheres;
+	std::unique_ptr<Camera> _cam;
+	std::vector<std::unique_ptr<Hittable>> _hittables;
 };
 
