@@ -57,6 +57,15 @@ namespace AA
 			_z += rh._z;
 			return *this;
 		}
+
+		inline Vec3& operator += (const double& rh)
+		{
+			_x += rh;
+			_y += rh;
+			_z += rh;
+			return *this;
+		}
+
 		inline Vec3& operator *= (const Vec3& rh)
 		{
 			_x *= rh._x;
@@ -126,7 +135,7 @@ namespace AA
 
 		inline sf::Color Vec3ToCol() const
 		{
-			return sf::Color(_x, _y, _z, 255);
+			return sf::Color(_x * 255, _y * 255, _z * 255, 255);
 		}
 	};
 

@@ -4,6 +4,7 @@
 #include "Utilities.h"
 #include "Camera.h"
 #include "Sphere.h"
+#include "Hittables.h"
 
 class App
 {
@@ -41,6 +42,6 @@ private:
 
 	std::unique_ptr<AA::ColourArray> _pixelColourBuffer;
 	std::unique_ptr<Camera> _cam;
-	std::vector<std::unique_ptr<Hittable>> _hittables;
+	std::unique_ptr<Hittables> _world;
 };
 
