@@ -22,11 +22,20 @@ void App::Run()
     //Add a sphere to the vector
     _spheres.emplace_back(
         AA::Sphere(
-            AA::Vec(_width / 2, _height / 2, 10), 
+            AA::Vec3(_width / 2, _height / 2, 10), 
             200, 
             sf::Color(255, 255, 255, 255)
         )
     );
+
+    AA::Vec3 v1 = AA::Vec3(2, 1, 2);
+    AA::Vec3 v2 = AA::Vec3(1, 1, 2);
+    AA::Vec3 v3 = v1;
+    v3 *= 5;
+
+    AA::Ray r1(v1, v2);
+    v3 = r1.GetPointAlongRay(10);
+
 
     while (_pWindow->isOpen())
     {
@@ -86,7 +95,7 @@ void App::Draw()
 void App::CalculatePixel(int x, int y)
 {
     //Create a ray that originates from the pixel position and goes forwards in the Z
-    AA::Ray pixelRay(AA::Vec(x, y, 0), AA::Vec(0, 0, 1));
+    AA::Ray pixelRay(AA::Vec3(x, y, 0), AA::Vec3(0, 0, 1));
     sf::Color pixelColour = sf::Color(0, 0, 0, 255);
 
     //Check for an intersection if it finds one,
