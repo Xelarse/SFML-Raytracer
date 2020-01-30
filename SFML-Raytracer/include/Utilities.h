@@ -1,6 +1,8 @@
 #pragma once
 #include <cmath>
 #include <SFML/Graphics.hpp>
+#include <functional>
+#include <random>
 
 
 namespace AA
@@ -135,7 +137,7 @@ namespace AA
 
 		inline sf::Color Vec3ToCol() const
 		{
-			return sf::Color(_x * 255, _y * 255, _z * 255, 255);
+			return sf::Color(_y * 255.0, _x * 255.0, _z * 255.0, 255.0);
 		}
 	};
 
@@ -181,10 +183,20 @@ namespace AA
 		std::vector<sf::Color> _colours;
 	};
 
-	static sf::Color LinearLerp(const sf::Color& a, const sf::Color& b, const float& t)
+	static AA::Vec3 LinearLerp(const AA::Vec3& a, const AA::Vec3& b, const float& t)
 	{
-		sf::Color lh(a.r * (1 - t), a.g * (1 - t), a.b * (1 - t), 255);
-		sf::Color rh(b.r * t, b.g * t, b.b * t, 255);
-		return sf::Color(lh.r + rh.r, lh.g + rh.g, lh.b + rh.b, 255);
+		AA::Vec3 lh(a._x * (1 - t), a._y * (1 - t), a._z * (1 - t));
+		AA::Vec3 rh(b._x * t, b._y * t, b._z * t);
+		return AA::Vec3(lh._x + rh._x, lh._y + rh._y, lh._z + rh._z);
+	}
+
+	//Returns a double inclusive 0, exclusive 1
+	static double RanDouble()
+	{
+		static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+		static std::mt19937 generator;
+		static std::function<double()> rand_generator =
+			std::bind(distribution, generator);
+		return rand_generator();
 	}
 }

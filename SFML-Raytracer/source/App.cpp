@@ -93,24 +93,17 @@ void App::Draw()
 void App::CalculatePixel(int x, int y)
 {
     //Use the camera to translate the x and y to viewport and draw a ray from it
-    AA::Ray pixelRay(_cam->Origin(), _cam->GetDir(x, y, _width, _height));
-    sf::Color pixelColour = BackgroundGradientCol(pixelRay);
+    sf::Color pixelColour = sf::Color::Black;
 
-    //TODO change later to loop over all spheres to check against, for now dirty just one
-    Hittable::HitResult res;
-
-    if (_world->IntersectedRay(pixelRay, 0.0, 20000.0, res))
+    if (_antiAliasing)
     {
-        //Colour the pixel
-        AA::Vec3 norm = res.normal;
-        norm += 1;
-        norm *= 0.5;
-        pixelColour = norm.Vec3ToCol();
+        GetColourAntiAliasing(x, y, pixelColour);
     }
-
+    else
+    {
+        GetColour(x, y, pixelColour);
+    }
     _pixelColourBuffer->ColourPixelAtPosition(x, y, pixelColour);
-
-    //Fire another ray based on the angle of incidence to see where it bounces next
 }
 
 void App::UpdateRenderTexture()
@@ -143,10 +136,61 @@ void App::CreateImage()
     UpdateRenderTexture();
 }
 
-sf::Color App::BackgroundGradientCol(const AA::Ray& ray)
+void App::GetColour(const int& x, const int& y, sf::Color& colOut)
 {
-    sf::Color top = sf::Color::Blue;
-    sf::Color bottom = sf::Color::White;
+    AA::Ray pixelRay(_cam->Origin(), _cam->GetDir(x, y, _width, _height));
+
+    Hittable::HitResult res;
+
+    if (_world->IntersectedRay(pixelRay, 0.0, 20000.0, res))
+    {
+        //Colour the pixel
+        AA::Vec3 norm = res.normal;
+        norm += 1;
+        norm *= 0.5;
+        colOut = norm.Vec3ToCol();
+    }
+    else
+    {
+        colOut = BackgroundGradientCol(pixelRay).Vec3ToCol();
+    }
+}
+
+void App::GetColourAntiAliasing(const int& x, const int& y, sf::Color& colOut)
+{
+    AA::Vec3 tempColValues = AA::Vec3(0,0,0);
+    int pixelIterations = 100;
+    Hittable::HitResult res;
+
+    //Iterate with slight variance around the set X and Y position of the ray, get the colour data and add it to the temp
+    for (size_t i = 0; i < pixelIterations; i++)
+    {
+        double xVarience = AA::RanDouble();
+        double yVarience = AA::RanDouble();
+        AA::Ray pixelRay(_cam->Origin(), _cam->GetDir(x + xVarience, y + yVarience, _width, _height));
+
+        if (_world->IntersectedRay(pixelRay, 0.0, 20000.0, res))
+        {
+            //Colour the pixel
+            AA::Vec3 norm = res.normal;
+            norm += 1;
+            norm *= 0.5;
+            tempColValues += norm;
+        }
+        else
+        {
+            tempColValues += BackgroundGradientCol(pixelRay);
+        }
+    }
+
+    tempColValues /= static_cast<double>(pixelIterations);
+    colOut = tempColValues.Vec3ToCol();
+}
+
+AA::Vec3 App::BackgroundGradientCol(const AA::Ray& ray)
+{
+    AA::Vec3 top = AA::Vec3(0.0, 0.2, 1.0);
+    AA::Vec3 bottom = AA::Vec3(1.0, 1.0, 1.0);
 
     AA::Vec3 unitDir = ray._dir.UnitVector();
     float t = 0.5 * (unitDir._y + 1.0);

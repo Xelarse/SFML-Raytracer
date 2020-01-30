@@ -26,12 +26,15 @@ private:
 	void CalculatePixel(int x, int y);
 	void UpdateRenderTexture();
 	void CreateImage();
+	void GetColour(const int& x, const int& y, sf::Color& colOut);
+	void GetColourAntiAliasing(const int& x, const int& y, sf::Color& colOut);
 
-	sf::Color BackgroundGradientCol(const AA::Ray& ray);
+	AA::Vec3 BackgroundGradientCol(const AA::Ray& ray);
 
 
 	int _width = 800;
 	int _height = 600;
+	bool _antiAliasing = true;
 
 	std::unique_ptr<sf::RenderWindow> _pWindow;
 	std::unique_ptr<EventHandler> _pEventHander;

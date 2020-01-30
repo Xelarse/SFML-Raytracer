@@ -5,8 +5,8 @@ Camera::Camera(const int& width, const int& height)
 	int x = width / 100;
 	int y = height / 100;
 
-	_up._y = y * 2;
-	_right._x = x * 2;
+	_up._y = y * 2.0;
+	_right._x = x * 2.0;
 
 	_lowerLeft._x = -x;
 	_lowerLeft._y = -y;
