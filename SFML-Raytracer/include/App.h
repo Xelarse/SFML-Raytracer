@@ -4,6 +4,7 @@
 #include "Utilities.h"
 #include "Camera.h"
 #include "Sphere.h"
+#include "Box.h"
 #include "Hittables.h"
 
 class App

@@ -35,6 +35,11 @@ void App::Run()
         )
     );
 
+    _world->AddHittable(std::make_unique<Box>(
+        AA::Vec3(2, 0, -0.5), 1, 1, 0.1, sf::Color(0, 0, 0, 255)
+        )
+    );
+
     while (_pWindow->isOpen())
     {
         float deltaTimeMs = _pAppClock->restart().asMilliseconds();

@@ -1,8 +1,9 @@
 #include "..\include\Box.h"
 #include <cmath>
 
-Box::Box(AA::Vec3 origin, double width, double height, double depth) : _origin(origin), _scale(AA::Vec3(width, height, depth))
+Box::Box(AA::Vec3 origin, double width, double height, double depth, sf::Color col) : _origin(origin), _scale(AA::Vec3(width, height, depth))
 {
+    _col = col;
 	UpdateBounds();
 }
 

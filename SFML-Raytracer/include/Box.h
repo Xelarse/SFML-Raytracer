@@ -5,7 +5,7 @@ class Box : public Hittable
 {
 public:
 	Box() = delete;
-	Box(AA::Vec3 origin, double width, double height, double depth);
+	Box(AA::Vec3 origin, double width, double height, double depth, sf::Color col);
 	~Box();
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
