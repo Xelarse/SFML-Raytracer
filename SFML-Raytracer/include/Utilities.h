@@ -146,7 +146,18 @@ namespace AA
 	public:
 		Vec3 _startPos;
 		Vec3 _dir;
-		Ray(const Vec3& startPos, const Vec3& dir) : _startPos(startPos), _dir(dir) { }
+		Vec3 _inverseDir;
+		int _signs[3];
+		Ray(const Vec3& startPos, const Vec3& dir) : _startPos(startPos), _dir(dir)
+		{
+			_inverseDir._x = 1 / dir._x;
+			_inverseDir._y = 1 / dir._y;
+			_inverseDir._z = 1 / dir._z;
+
+			_signs[0] = (_inverseDir._x < 0);
+			_signs[1] = (_inverseDir._y < 0);
+			_signs[2] = (_inverseDir._z < 0);
+		}
 		inline Vec3 GetPointAlongRay(double t) const { return _startPos + _dir * t; }
 	};
 

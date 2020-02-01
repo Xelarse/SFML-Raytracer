@@ -16,7 +16,7 @@ public:
 	Hittable();
 	virtual ~Hittable();
 
-	virtual bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) const = 0;
+	virtual bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) = 0;
 
 	inline sf::Color Colour() const { return _col; };
 

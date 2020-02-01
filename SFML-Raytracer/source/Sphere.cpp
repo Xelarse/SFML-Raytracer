@@ -9,7 +9,7 @@ Sphere::~Sphere()
 {
 }
 
-bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) const
+bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
 {
 	AA::Vec3 oc = ray._startPos - _origin;
 	double a = ray._dir.DotProduct(ray._dir);

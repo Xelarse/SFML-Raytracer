@@ -34,7 +34,7 @@ private:
 
 	int _width = 800;
 	int _height = 600;
-	bool _antiAliasing = true;
+	bool _antiAliasing = false;
 
 	std::unique_ptr<sf::RenderWindow> _pWindow;
 	std::unique_ptr<EventHandler> _pEventHander;
