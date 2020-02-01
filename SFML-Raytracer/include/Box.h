@@ -13,6 +13,8 @@ public:
 	void MoveBox(AA::Vec3 pos);
 	void ScaleBox(double width, double height, double depth);
 
+	AA::Vec3 GetPosition() { return _origin; }
+
 private:
 
 	void UpdateBounds();

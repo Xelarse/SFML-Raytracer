@@ -1,5 +1,6 @@
 #include "..\include\Box.h"
 #include <cmath>
+#include <iostream>
 
 Box::Box(AA::Vec3 origin, double width, double height, double depth, sf::Color col) : _origin(origin), _scale(AA::Vec3(width, height, depth))
 {
@@ -88,35 +89,47 @@ void Box::CalcNormal(HitResult& res)
     // for each of x y z check where it is in relation to the origin if its > origin, +1 if its < origin, -1
     AA::Vec3 absoluteHit = AA::Vec3(abs(res.p._x), abs(res.p._y), abs(res.p._z));
 
-    if (absoluteHit._x > absoluteHit._y)
+    //if (absoluteHit._x > absoluteHit._y)
+    //{
+    //    absoluteHit._y = 0;
+    //    
+    //    if (absoluteHit._x > absoluteHit._z)
+    //    {
+    //        absoluteHit._z = 0;
+    //        absoluteHit._x = res.p._x < 0 ? -1 : 1;
+    //    }
+    //    else
+    //    {
+    //        absoluteHit._x = 0;
+    //        absoluteHit._z = res.p._z < 0 ? -1 : 1;
+    //    }
+    //}
+    //else
+    //{
+    //    absoluteHit._x = 0;
+
+    //    if (absoluteHit._y > absoluteHit._z)
+    //    {
+    //        absoluteHit._z = 0;
+    //        absoluteHit._y = res.p._y < 0 ? -1 : 1;
+    //    }
+    //    else
+    //    {
+    //        absoluteHit._y = 0;
+    //        absoluteHit._z = res.p._z < 0 ? -1 : 1;
+    //    }
+    //}
+
+
+    if (absoluteHit._y > absoluteHit._z)
     {
-        absoluteHit._y = 0;
-        
-        if (absoluteHit._x > absoluteHit._z)
-        {
-            absoluteHit._z = 0;
-            absoluteHit._x = res.p._x < 0 ? -1 : 1;
-        }
-        else
-        {
-            absoluteHit._x = 0;
-            absoluteHit._z = res.p._z < 0 ? -1 : 1;
-        }
+        absoluteHit._z = 0;
+        absoluteHit._y = res.p._y < 0 ? -1 : 1;
     }
     else
     {
-        absoluteHit._x = 0;
-
-        if (absoluteHit._y > absoluteHit._z)
-        {
-            absoluteHit._z = 0;
-            absoluteHit._y = res.p._y < 0 ? -1 : 1;
-        }
-        else
-        {
-            absoluteHit._y = 0;
-            absoluteHit._z = res.p._z < 0 ? -1 : 1;
-        }
+        absoluteHit._y = 0;
+        absoluteHit._z = res.p._z < 0 ? -1 : 1;
     }
 
     res.normal = absoluteHit;

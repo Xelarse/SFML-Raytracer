@@ -41,6 +41,8 @@ private:
 	std::unique_ptr<EventHandler> _pEventHander;
 	std::unique_ptr<sf::Clock> _pAppClock;
 
+	Box* _testBox = nullptr;
+
 	sf::RectangleShape _renderTarget;
 	std::unique_ptr<sf::Texture> _renderTexture;
 

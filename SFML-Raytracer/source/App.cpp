@@ -35,10 +35,13 @@ void App::Run()
         )
     );
 
-    _world->AddHittable(std::make_unique<Box>(
+    auto box = std::make_unique<Box>(
         AA::Vec3(2, 0, -0.5), 1, 1, 0.1, sf::Color(0, 0, 0, 255)
-        )
-    );
+        );
+
+    _testBox = box.get();
+
+    _world->AddHittable(std::move(box));
 
     while (_pWindow->isOpen())
     {
@@ -71,14 +74,20 @@ void App::Update(float dt)
     //{
     //    _spheres.front()._origin._z -= 10;
     //}
-    //else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
-    //{
-    //    _spheres.front()._radius += 10;
-    //}
-    //else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
-    //{
-    //    _spheres.front()._radius -= 10;
-    //}
+    if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
+    {
+        AA::Vec3 previous = _testBox->GetPosition();
+        previous._x -= 0.05;
+        previous._x = previous._x < -4.0 ? -4.0 : previous._x;
+        _testBox->MoveBox(previous);
+    }
+    else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
+    {
+        AA::Vec3 previous = _testBox->GetPosition();
+        previous._x += 0.05;
+        previous._x = previous._x > 4.0 ? 4.0 : previous._x;
+        _testBox->MoveBox(previous);
+    }
 
     CreateImage();
 }
