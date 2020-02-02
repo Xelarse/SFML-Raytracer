@@ -66,14 +66,20 @@ void App::Tick(float dt)
 
 void App::Update(float dt)
 {
-    //if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
-    //{
-    //    _spheres.front()._origin._z += 10;
-    //}
-    //else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
-    //{
-    //    _spheres.front()._origin._z -= 10;
-    //}
+    if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
+    {
+        AA::Vec3 previous = _testBox->GetPosition();
+        previous._z -= 0.01;
+        previous._z = previous._z < -1.0 ? -1.0 : previous._z;
+        _testBox->MoveBox(previous);
+    }
+    else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
+    {
+        AA::Vec3 previous = _testBox->GetPosition();
+        previous._z += 0.01;
+        previous._z = previous._z > 0.25 ? 0.25 : previous._z;
+        _testBox->MoveBox(previous);
+    }
     if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
     {
         AA::Vec3 previous = _testBox->GetPosition();
