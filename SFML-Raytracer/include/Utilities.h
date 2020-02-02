@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <random>
+#include <vector>
+#include <array>
 
 
 namespace AA
@@ -158,7 +160,36 @@ namespace AA
 			_signs[1] = (_inverseDir._y < 0);
 			_signs[2] = (_inverseDir._z < 0);
 		}
+		~Ray() = default;
 		inline Vec3 GetPointAlongRay(double t) const { return _startPos + _dir * t; }
+	};
+
+	class Vertex
+	{
+	public:
+		Vertex() = delete;
+		Vertex(Vec3 pos, Vec3 norm) : _position(pos), _normal(norm) { }
+		~Vertex() = default;
+		Vec3 _position;
+		Vec3 _normal;
+	};
+
+	class Tri
+	{
+	public:
+		Tri() = delete;
+		Tri(std::array<Vertex, 3> verts) :  _verts(verts) {};
+		~Tri() = default;
+		std::array<Vertex, 3> _verts;
+	};
+
+	class Model
+	{
+	public:
+		Model() = delete;
+		Model(std::vector<Tri> tris) : _tris( std::vector<Tri>(tris.begin(), tris.end() ) ) {}
+		~Model() = default;
+		std::vector<Tri> _tris;
 	};
 
 	class ColourArray
@@ -194,7 +225,7 @@ namespace AA
 		std::vector<sf::Color> _colours;
 	};
 
-	static AA::Vec3 LinearLerp(const AA::Vec3& a, const AA::Vec3& b, const float& t)
+	static AA::Vec3 LinearLerp(const AA::Vec3& a, const AA::Vec3& b, const double& t)
 	{
 		AA::Vec3 lh(a._x * (1 - t), a._y * (1 - t), a._z * (1 - t));
 		AA::Vec3 rh(b._x * t, b._y * t, b._z * t);
