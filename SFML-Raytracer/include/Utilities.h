@@ -186,7 +186,7 @@ namespace AA
 	class Model
 	{
 	public:
-		Model() = delete;
+		Model() = default;
 		Model(std::vector<Tri> tris) : _tris( std::vector<Tri>(tris.begin(), tris.end() ) ) {}
 		~Model() = default;
 		std::vector<Tri> _tris;

@@ -1,5 +1,6 @@
 #include "..\include\App.h"
 #include <iostream>
+#include "ObjLoader.h"
 
 //https://raytracing.github.io/books/RayTracingInOneWeekend.html up to antialisaing
 //https://github.com/RayTracing/raytracing.github.io
@@ -39,9 +40,16 @@ void App::Run()
         AA::Vec3(2, 0, -0.5), 1, 1, 0.1, sf::Color(0, 0, 0, 255)
         );
 
+    //TODO remove this pointer later, just for moving cube independantly from the world hittables
     _testBox = box.get();
-
     _world->AddHittable(std::move(box));
+
+    //TODO remove later, model loading test
+    AA::Model model;
+    if (!ObjLoader::LoadObj("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj", model))
+    {
+        std::cout << "model didnt load, anti poggers" << std::endl;
+    }
 
     while (_pWindow->isOpen())
     {

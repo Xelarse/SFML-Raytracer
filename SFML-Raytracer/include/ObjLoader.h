@@ -7,6 +7,58 @@
 
 namespace ObjLoader
 {
+	//Utilities related to the obj loading go here
+
+	//Returns the first character of an inputted string
+	static char FirstToken(const std::string& in)
+	{
+		if (!in.empty())
+		{
+			//TODO clean this up later just returning a char?
+			char ref = in.front();
+			return in.front();
+		}
+		return ' ';
+	}
+
+	//Splits a string based on the inputted delimiter character
+	static std::vector<std::string> SplitString(const std::string& in, char delim)
+	{
+		std::vector<std::string> out;
+		std::string token;
+		std::istringstream streamToSplit(in);
+		while (std::getline(streamToSplit, token, delim))
+		{
+			out.push_back(token);
+		}
+		return out;
+	}
+
+	static double StringToDouble(const std::string& in)
+	{
+		std::istringstream i(in);
+		double x;
+		if (!(i >> x))
+		{
+			std::cout << "String to double failed on: " << in << std::endl;
+			return 0;
+		}
+		return x;
+	}
+
+	static int StringToInt(const std::string& in)
+	{
+		std::istringstream i(in);
+		int x;
+		if (!(i >> x))
+		{
+			std::cout << "String to Int failed on: " << in << std::endl;
+			return 0;
+		}
+		return x;
+	}
+
+	//Function used to load obj data in from a filepath
 	static bool LoadObj(std::string filePath, AA::Model& modelOut)
 	{
 		//Check that the path is actually an obj
@@ -35,7 +87,7 @@ namespace ObjLoader
 		while (std::getline(file, currentLine))
 		{
 			//Get all the vertex positions
-			if (FirstToken(currentLine) == 'v')
+			if (currentLine.substr(0, 2) == "v ")
 			{
 				//Drop the first two chars and split the string into the 3 co ords
 				std::vector<std::string> ords = SplitString(currentLine.substr(2, currentLine.size()), ' ');
@@ -49,7 +101,7 @@ namespace ObjLoader
 			}
 
 			//Get all the vertex normals
-			if (FirstToken(currentLine) == 'vn')
+			if (currentLine.substr(0, 2) == "vn")
 			{
 				//Drop the first two chars and split the string into the 3 co ords
 				std::vector<std::string> ords = SplitString(currentLine.substr(3, currentLine.size()), ' ');
@@ -96,59 +148,5 @@ namespace ObjLoader
 		//At this point all Tris should be created to make a model and move it to the unique ptr
 		modelOut = AA::Model(modelTris);
 		return true;
-	}
-
-	namespace
-	{
-		//Utilities related to the obj loading go here
-
-		//Returns the first character of an inputted string
-		static char FirstToken(const std::string& in)
-		{
-			if (!in.empty())
-			{
-				//TODO clean this up later just returning a char?
-				char ref = in.front();
-				return in.front();
-			}
-			return ' ';
-		}
-
-		//Splits a string based on the inputted delimiter character
-		static std::vector<std::string> SplitString(const std::string& in, char delim)
-		{
-			std::vector<std::string> out;
-			std::string token;
-			std::istringstream streamToSplit(in);
-			while (std::getline(streamToSplit, token, delim))
-			{
-				out.push_back(token);
-			}
-			return out;
-		}
-
-		double StringToDouble(const std::string& in)
-		{
-			std::istringstream i(in);
-			double x;
-			if (!(i >> x))
-			{
-				std::cout << "String to double failed on: " << in << std::endl;
-				return 0;
-			}
-			return x;
-		}
-
-		int StringToInt(const std::string& in)
-		{
-			std::istringstream i(in);
-			int x;
-			if (!(i >> x))
-			{
-				std::cout << "String to Int failed on: " << in << std::endl;
-				return 0;
-			}
-			return x;
-		}
 	}
 }
