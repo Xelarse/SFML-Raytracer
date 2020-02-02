@@ -48,7 +48,7 @@ void App::Run()
     AA::Model model;
     if (!ObjLoader::LoadObj("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj", model))
     {
-        std::cout << "model didnt load, anti poggers" << std::endl;
+        std::cout << "model didnt load, feelsbadman" << std::endl;
     }
 
     while (_pWindow->isOpen())
