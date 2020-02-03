@@ -135,7 +135,7 @@ namespace ObjLoader
 					int posInd = StringToInt(threeVals[0]) - 1;
 					int normInd = StringToInt(threeVals[2]) - 1;
 
-					AA::Vertex vert(vPos[posInd], vNorm[normInd]);
+					AA::Vertex vert(vPos[posInd], vNorm[normInd], AA::Vec2(0,0));
 					triVerts.push_back(vert);
 				}
 

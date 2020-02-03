@@ -43,7 +43,10 @@
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="source\Box.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Mesh.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,11 +71,14 @@
     <ClInclude Include="include\Hittable.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="include\Box.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ObjLoader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Box.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

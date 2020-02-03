@@ -143,6 +143,122 @@ namespace AA
 		}
 	};
 
+	class Vec2
+	{
+	public:
+		double _x, _y;
+		Vec2() : _x(0), _y(0)
+		{
+		}
+		Vec2(const double& x, const double& y) : _x(x), _y(y)
+		{
+		}
+
+		//Operators
+		inline Vec2 operator + (const Vec2& rh) const
+		{
+			return Vec2(_x + rh._x, _y + rh._y);
+		}
+
+		inline Vec2 operator - (const Vec2& rh) const
+		{
+			return Vec2(_x - rh._x, _y - rh._y);
+		}
+
+		inline Vec2 operator / (const Vec2& rh) const
+		{
+			return Vec2(_x / rh._x, _y / rh._y);
+		}
+
+		inline Vec2 operator / (const double& rh) const
+		{
+			return Vec2(_x / rh, _y / rh);
+		}
+
+		inline Vec2 operator * (const Vec2& rh) const
+		{
+			return Vec2(_x * rh._x, _y * rh._y);
+		}
+
+		inline Vec2 operator * (const double& rh) const
+		{
+			return Vec2(_x * rh, _y * rh);
+		}
+
+		inline Vec2& operator -= (const Vec2& rh)
+		{
+			_x -= rh._x;
+			_y -= rh._y;
+			return *this;
+		}
+		inline Vec2& operator += (const Vec2& rh)
+		{
+			_x += rh._x;
+			_y += rh._y;
+			return *this;
+		}
+
+		inline Vec2& operator += (const double& rh)
+		{
+			_x += rh;
+			_y += rh;
+			return *this;
+		}
+
+		inline Vec2& operator *= (const Vec2& rh)
+		{
+			_x *= rh._x;
+			_y *= rh._y;
+			return *this;
+		}
+		inline Vec2& operator *= (const double& rh)
+		{
+			_x *= rh;
+			_y *= rh;
+			return *this;
+		}
+		inline Vec2& operator /= (const Vec2& rh)
+		{
+			_x /= rh._x;
+			_y /= rh._y;
+			return *this;
+		}
+		inline Vec2& operator /= (const double& rh)
+		{
+			_x /= rh;
+			_y /= rh;
+			return *this;
+		}
+
+		//Vector math functions
+		inline double DotProduct(const Vec2& b) const
+		{
+			return ((_x * b._x) + (_y * b._y));
+		}
+
+		inline double Length() const
+		{
+			return sqrt(_x * _x + _y * _y);
+		}
+
+		inline double SqrLength() const
+		{
+			return _x * _x + _y * _y;
+		}
+
+		inline Vec2 UnitVector() const
+		{
+			return *this / this->Length();
+		}
+
+		inline void MakeUnitVector()
+		{
+			double k = 1.0 / this->Length();
+			_x *= k;
+			_y *= k;
+		}
+	};
+
 	class Ray
 	{
 	public:
@@ -168,10 +284,11 @@ namespace AA
 	{
 	public:
 		Vertex() = delete;
-		Vertex(Vec3 pos, Vec3 norm) : _position(pos), _normal(norm) { }
+		Vertex(Vec3 pos, Vec3 norm, Vec2 tex) : _position(pos), _normal(norm), _texCord(tex) { }
 		~Vertex() = default;
 		Vec3 _position;
 		Vec3 _normal;
+		Vec2 _texCord;
 	};
 
 	class Tri
