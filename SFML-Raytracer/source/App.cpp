@@ -44,7 +44,7 @@ void App::Run()
     _world->AddHittable(std::move(box));
 
     //TODO remove later, model loading test
-    Mesh msh = Mesh("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj");
+    Mesh msh = Mesh("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\ship_light.obj");
 
     while (_pWindow->isOpen())
     {
