@@ -16,5 +16,7 @@ private:
 	
 	std::vector<AA::Vertex> _verts;
 	std::vector<uint32_t> _inds;
+
+	sf::Texture _texture;
 };
 

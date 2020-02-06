@@ -6,6 +6,7 @@
 #include "Sphere.h"
 #include "Box.h"
 #include "Hittables.h"
+#include "Mesh.h"
 
 class App
 {

@@ -1,6 +1,5 @@
 #include "..\include\App.h"
 #include <iostream>
-#include "ObjLoader.h"
 
 //https://raytracing.github.io/books/RayTracingInOneWeekend.html up to antialisaing
 //https://github.com/RayTracing/raytracing.github.io
@@ -45,11 +44,7 @@ void App::Run()
     _world->AddHittable(std::move(box));
 
     //TODO remove later, model loading test
-    AA::Model model;
-    if (!ObjLoader::LoadObj("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj", model))
-    {
-        std::cout << "model didnt load, feelsbadman" << std::endl;
-    }
+    Mesh msh = Mesh("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj");
 
     while (_pWindow->isOpen())
     {

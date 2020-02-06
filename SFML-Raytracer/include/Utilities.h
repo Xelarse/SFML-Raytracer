@@ -99,6 +99,11 @@ namespace AA
 			return *this;
 		}
 
+		inline bool operator == (const Vec3& other) const
+		{
+			return _x == other._x && _y == other._y && _z == other._z;
+		}
+
 		//Vector math functions
 		inline double DotProduct(const Vec3& b) const
 		{
@@ -230,6 +235,11 @@ namespace AA
 			return *this;
 		}
 
+		inline bool operator == (const Vec2& other) const
+		{
+			return _x == other._x && _y == other._y;
+		}
+
 		//Vector math functions
 		inline double DotProduct(const Vec2& b) const
 		{
@@ -283,14 +293,21 @@ namespace AA
 	class Vertex
 	{
 	public:
-		Vertex() = delete;
+		Vertex() : _position(Vec3()), _normal(Vec3()), _texCord(Vec2()) { }
 		Vertex(Vec3 pos, Vec3 norm, Vec2 tex) : _position(pos), _normal(norm), _texCord(tex) { }
 		~Vertex() = default;
 		Vec3 _position;
 		Vec3 _normal;
 		Vec2 _texCord;
-	};
 
+		//Operators
+
+		//used in unordered map to check for existance
+		inline bool operator == (const Vertex& other) const
+		{
+			return _position == other._position && _normal == other._normal && _texCord == other._texCord;
+		}
+	};
 	class Tri
 	{
 	public:
@@ -359,3 +376,30 @@ namespace AA
 		return rand_generator();
 	}
 }
+
+//Hash for Vec2
+template<> struct std::hash<AA::Vec2>
+{
+	size_t operator()(AA::Vec2 const& vec) const
+	{
+		return ( (std::hash<double>()(vec._x) ^ (std::hash<double>()(vec._y) << 1)) );
+	}
+};
+
+//Hash for Vec3
+template<> struct std::hash<AA::Vec3>
+{
+	size_t operator()(AA::Vec3 const& vec) const
+	{
+		return ((std::hash<double>()(vec._x) ^ (std::hash<double>()(vec._y) << 1)) >> 1) ^ (std::hash<double>()(vec._z) << 1);
+	}
+};
+
+//Hash for vertex
+template<> struct std::hash<AA::Vertex>
+{
+	size_t operator()(AA::Vertex const& vertex) const
+	{
+		return ((std::hash<AA::Vec3>()(vertex._position) ^ (std::hash<AA::Vec3>()(vertex._normal) << 1)) >> 1) ^ (std::hash<AA::Vec2>()(vertex._texCord) << 1);
+	}
+};
