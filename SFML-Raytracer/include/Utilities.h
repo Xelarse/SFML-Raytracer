@@ -104,6 +104,11 @@ namespace AA
 			return _x == other._x && _y == other._y && _z == other._z;
 		}
 
+		inline bool operator != (const Vec3& other) const
+		{
+			return _x != other._x && _y != other._y && _z != other._z;
+		}
+
 		//Vector math functions
 		inline double DotProduct(const Vec3& b) const
 		{
@@ -238,6 +243,11 @@ namespace AA
 		inline bool operator == (const Vec2& other) const
 		{
 			return _x == other._x && _y == other._y;
+		}
+
+		inline bool operator != (const Vec2& other) const
+		{
+			return _x != other._x && _y != other._y;
 		}
 
 		//Vector math functions

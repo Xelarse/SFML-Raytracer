@@ -25,13 +25,20 @@ void App::Run()
     _renderTarget = sf::RectangleShape(sf::Vector2f(_width, _height));
 
     //Add a couple of spheres to the world
-    _world->AddHittable(std::make_unique<Sphere>(
-            AA::Vec3(0, 0, -1), 0.8, sf::Color(0, 0, 0, 255)
-        )
-    );
+    //_world->AddHittable(std::make_unique<Sphere>(
+    //        AA::Vec3(0, 0, -1), 0.8, sf::Color(0, 0, 0, 255)
+    //    )
+    //);
 
-    _world->AddHittable(std::make_unique<Sphere>(
-        AA::Vec3(0, _height + 0.5, -1), _height, sf::Color(0, 0, 0, 255)
+    //_world->AddHittable(std::make_unique<Sphere>(
+    //    AA::Vec3(0, _height + 0.5, -1), _height, sf::Color(0, 0, 0, 255)
+    //    )
+    //);
+
+    _world->AddHittable(std::make_unique<Mesh>(
+        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
+        AA::Vec3(0, 0, -50),
+        AA::Vec3(1, 1, 1)
         )
     );
 
@@ -44,7 +51,7 @@ void App::Run()
     _world->AddHittable(std::move(box));
 
     //TODO remove later, model loading test
-    Mesh msh = Mesh("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\ship_light.obj");
+    //Mesh msh = Mesh("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\ship_light.obj");
 
     while (_pWindow->isOpen())
     {

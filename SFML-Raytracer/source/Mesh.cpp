@@ -4,14 +4,98 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* path)
+Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale) : _position(position), _scale(scale)
 {
 	LoadModel(path);
 }
 
 bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
 {
-	return false;
+	//https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle
+
+	//Double check we actually have a full set if TRIs in the inds
+	if (_inds.size() % 3 != 0)
+	{
+		return false;
+	}
+
+	//Start the hit off really high so it will only be improved or ignored
+	//Ensure that the res for the p is a zero vector so that we can do a check later to see if its been changed
+	res.t = t_max;
+	res.p = AA::Vec3();
+
+	//Check against each tri
+	for (size_t i = 0; i < _inds.size(); i+=3)
+	{
+		//Get the verts of the triangle
+		AA::Vertex v0 = _verts[_inds[i]];
+		AA::Vertex v1 = _verts[_inds[i + 1]];
+		AA::Vertex v2 = _verts[_inds[i + 2]];
+
+		//Apply position and scale
+		v0._position *= _scale;
+		v1._position *= _scale;
+		v2._position *= _scale;
+
+		v0._position += _position;
+		v1._position += _position;
+		v2._position += _position;
+
+		//Calc planes normal
+		AA::Vec3 v0v1 = v1._position - v0._position;
+		AA::Vec3 v0v2 = v2._position - v0._position;
+		AA::Vec3 pNorm = v0v1.CrossProduct(v0v2);
+		double area = pNorm.Length();
+
+		//Check if the ray is parallel to the tri first
+		double pNormalDotRayDir = pNorm.DotProduct(ray._dir);
+		if (pNormalDotRayDir >= 0 && pNormalDotRayDir <= 0.01) { continue; }
+
+		//Next compute t and do a check to make sure the tri isnt behind the ray origin
+		double d = pNorm.DotProduct(v0._position);
+		double t = (pNorm.DotProduct(ray._startPos) + d);
+		if (t < t_min || t > t_max) { continue; }
+
+
+		//Calc P using previous formulas now we got t
+		AA::Vec3 p = ray._startPos + (ray._dir * t);
+
+		//Check if the position is within all 3 edges of the tri
+		AA::Vec3 C;
+		AA::Vec3 edge;
+		AA::Vec3 vp;
+
+		//Edge 1
+		edge = v1._position - v0._position;
+		vp = p - v0._position;
+		C = edge.CrossProduct(vp);
+		if (pNorm.DotProduct(C) < 0) { continue; }
+
+
+		//Edge 2
+		edge = v2._position - v1._position;
+		vp = p - v1._position;
+		C = edge.CrossProduct(vp);
+		if (pNorm.DotProduct(C) < 0) { continue; }
+
+		//Edge 3
+		edge = v1._position - v0._position;
+		vp = p - v0._position;
+		C = edge.CrossProduct(vp);
+		if (pNorm.DotProduct(C) < 0) { continue; }
+
+
+		//If it passes all of these conditions then one final check to make sure its the nearest tri and write it out
+		if (t < res.t)
+		{
+			res.t = t;
+			res.p = p;
+			res.normal = pNorm;
+		}
+	}
+
+	//Check if res is not set to default and if they aint return true
+	return res.t != t_max && res.p != AA::Vec3();
 }
 
 bool Mesh::LoadModel(const char* path)
