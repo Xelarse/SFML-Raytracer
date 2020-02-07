@@ -21,8 +21,7 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 
 	//Start the hit off really high so it will only be improved or ignored
 	//Ensure that the res for the p is a zero vector so that we can do a check later to see if its been changed
-	res.t = t_max;
-	res.p = AA::Vec3();
+	double closestHit = t_max;
 
 	//Check against each tri
 	for (size_t i = 0; i < _inds.size(); i+=3)
@@ -33,13 +32,13 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 		AA::Vertex v2 = _verts[_inds[i + 2]];
 
 		//Apply position and scale
-		v0._position *= _scale;
-		v1._position *= _scale;
-		v2._position *= _scale;
-
 		v0._position += _position;
 		v1._position += _position;
 		v2._position += _position;
+
+		v0._position *= _scale;
+		v1._position *= _scale;
+		v2._position *= _scale;
 
 		//Calc planes normal
 		AA::Vec3 v0v1 = v1._position - v0._position;
@@ -62,40 +61,38 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 
 		//Check if the position is within all 3 edges of the tri
 		AA::Vec3 C;
-		AA::Vec3 edge;
-		AA::Vec3 vp;
 
 		//Edge 1
-		edge = v1._position - v0._position;
-		vp = p - v0._position;
-		C = edge.CrossProduct(vp);
+		AA::Vec3 edge1 = v1._position - v0._position;
+		AA::Vec3 vp1 = p - v0._position;
+		C = edge1.CrossProduct(vp1);
 		if (pNorm.DotProduct(C) < 0) { continue; }
 
 
 		//Edge 2
-		edge = v2._position - v1._position;
-		vp = p - v1._position;
-		C = edge.CrossProduct(vp);
+		AA::Vec3 edge2 = v2._position - v1._position;
+		AA::Vec3 vp2 = p - v1._position;
+		C = edge2.CrossProduct(vp2);
 		if (pNorm.DotProduct(C) < 0) { continue; }
 
 		//Edge 3
-		edge = v1._position - v0._position;
-		vp = p - v0._position;
-		C = edge.CrossProduct(vp);
+		AA::Vec3 edge3 = v0._position - v2._position;
+		AA::Vec3 vp3 = p - v2._position;
+		C = edge3.CrossProduct(vp3);
 		if (pNorm.DotProduct(C) < 0) { continue; }
 
 
 		//If it passes all of these conditions then one final check to make sure its the nearest tri and write it out
-		if (t < res.t)
+		if (t < closestHit)
 		{
-			res.t = t;
+			res.t = closestHit = t;
 			res.p = p;
 			res.normal = pNorm;
 		}
 	}
 
 	//Check if res is not set to default and if they aint return true
-	return res.t != t_max && res.p != AA::Vec3();
+	return closestHit < t_max;
 }
 
 bool Mesh::LoadModel(const char* path)

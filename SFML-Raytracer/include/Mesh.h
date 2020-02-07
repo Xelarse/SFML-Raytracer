@@ -11,7 +11,6 @@ public:
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 private:
-
 	bool LoadModel(const char* path);
 	
 	AA::Vec3 _position = AA::Vec3();

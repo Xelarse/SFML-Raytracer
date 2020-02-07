@@ -37,7 +37,7 @@ void App::Run()
 
     _world->AddHittable(std::make_unique<Mesh>(
         "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
-        AA::Vec3(0, 0, -50),
+        AA::Vec3(-2, 0, -1),
         AA::Vec3(1, 1, 1)
         )
     );
