@@ -44,11 +44,11 @@ void App::Run()
         )
     );
 
-    //_world->AddHittable(std::make_unique<Mesh>(
-    //    //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
-    //    AA::Vec3(-1, 0, -0.2)
-    //    )
-    //);
+    _world->AddHittable(std::make_unique<Mesh>(
+        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
+        AA::Vec3(-1, 0, -0.2)
+        )
+    );
 
     auto box = std::make_unique<Box>(
         AA::Vec3(2, -0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255)
@@ -65,7 +65,7 @@ void App::Run()
     {
         float deltaTimeMs = _pAppClock->restart().asMilliseconds();
         Tick(deltaTimeMs);
-        //std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
+        std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
     }
 
 }
@@ -242,7 +242,7 @@ void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 void App::GetColourAntiAliasing(const double& u, const double& v, sf::Color& colOut)
 {
     AA::Vec3 tempColValues = AA::Vec3(0,0,0);
-    int pixelIterations = 100;
+    int pixelIterations = 10;
     Hittable::HitResult res;
 
     //Iterate with slight variance around the set X and Y position of the ray, get the colour data and add it to the temp

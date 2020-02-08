@@ -86,51 +86,46 @@ void Box::UpdateBounds()
 
 void Box::CalcNormal(HitResult& res)
 {
-    // for each of x y z check where it is in relation to the origin if its > origin, +1 if its < origin, -1
-    AA::Vec3 absoluteHit = AA::Vec3(abs(res.p._x), abs(res.p._y), abs(res.p._z));
+    //// for each of x y z check where it is in relation to the origin if its > origin, +1 if its < origin, -1
+    //AA::Vec3 hitMinusOrigin = res.p - _origin;
+    //AA::Vec3 absoluteHit = AA::Vec3(abs(hitMinusOrigin._x), abs(hitMinusOrigin._y), abs(hitMinusOrigin._z));
+    ////One of the axis should be the scale of box if its hit a face
 
-    //if (absoluteHit._x > absoluteHit._y)
+    //if ((absoluteHit._x >= absoluteHit._y) && (absoluteHit._x >= absoluteHit._z))
     //{
-    //    absoluteHit._y = 0;
-    //    
-    //    if (absoluteHit._x > absoluteHit._z)
+    //    if (res.p._x < 0)
     //    {
-    //        absoluteHit._z = 0;
-    //        absoluteHit._x = res.p._x < 0 ? -1 : 1;
+    //        res.normal = AA::Vec3(-1, 0, 0);
     //    }
     //    else
     //    {
-    //        absoluteHit._x = 0;
-    //        absoluteHit._z = res.p._z < 0 ? -1 : 1;
+    //        res.normal = AA::Vec3(1, 0, 0);
+    //    }
+    //}
+    //else if ((absoluteHit._y >= absoluteHit._x) && (absoluteHit._y >= absoluteHit._z))
+    //{
+    //    if (res.p._y < 0)
+    //    {
+    //        res.normal = AA::Vec3(0, -1, 0);
+    //    }
+    //    else
+    //    {
+    //        res.normal = AA::Vec3(0, 1, 0);
     //    }
     //}
     //else
     //{
-    //    absoluteHit._x = 0;
-
-    //    if (absoluteHit._y > absoluteHit._z)
+    //    if (res.p._z < 0)
     //    {
-    //        absoluteHit._z = 0;
-    //        absoluteHit._y = res.p._y < 0 ? -1 : 1;
+    //        res.normal = AA::Vec3(0, 0, -1);
     //    }
     //    else
     //    {
-    //        absoluteHit._y = 0;
-    //        absoluteHit._z = res.p._z < 0 ? -1 : 1;
+    //        res.normal = AA::Vec3(0, 0, 1);
     //    }
     //}
 
-
-    if (absoluteHit._y > absoluteHit._z)
-    {
-        absoluteHit._z = 0;
-        absoluteHit._y = res.p._y < 0 ? -1 : 1;
-    }
-    else
-    {
-        absoluteHit._y = 0;
-        absoluteHit._z = res.p._z < 0 ? -1 : 1;
-    }
-
-    res.normal = absoluteHit;
+    //Get vector from origin of cube to hit location use for Normal
+    AA::Vec3 oToHit = res.p - _origin;
+    res.normal = AA::Vec3::UnitVector(oToHit);
 }
