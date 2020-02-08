@@ -16,7 +16,6 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
 {
 	double tXMin, tYMin, tZMin, tXMax, tYMax, tZMax;
 
-
     //Work out tmin and max for both x and y and sort them without having to swap based on which is bigger
     tXMin = (_bounds[ray._signs[0]]._x - ray._startPos._x) * ray._inverseDir._x;
     tXMax = (_bounds[1 - ray._signs[0]]._x - ray._startPos._x) * ray._inverseDir._x;
@@ -25,21 +24,33 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
 
     //Check if the ray hit lies within bounds and alligned on the x n y, if they are continue to z
     if ((tXMin > tYMax) || (tYMin > tXMax))
+    {
         return false;
+    }
     if (tYMin > tXMin)
+    {
         tXMin = tYMin;
+    }
     if (tYMax < tXMax)
+    {
         tXMax = tYMax;
+    }
 
     tZMin = (_bounds[ray._signs[2]]._z - ray._startPos._z) * ray._inverseDir._z;
     tZMax = (_bounds[1 - ray._signs[2]]._z - ray._startPos._z) * ray._inverseDir._z;
 
     if ((tXMin > tZMax) || (tZMin > tXMax))
+    {
         return false;
+    }
     if (tZMin > tXMin)
+    {
         tXMin = tZMin;
+    }
     if (tZMax < tXMax)
+    {
         tXMax = tZMax;
+    }
 
     res.t = tXMin;
 
@@ -84,6 +95,41 @@ void Box::ScaleBox(double width, double height, double depth)
 	_scale._y = height;
 	_scale._z = depth;
 	UpdateBounds();
+}
+
+bool Box::RayHitVolume(const AA::Ray& ray)
+{
+    double tXMin, tYMin, tZMin, tXMax, tYMax, tZMax;
+
+    //Work out tmin and max for both x and y and sort them without having to swap based on which is bigger
+    tXMin = (_bounds[ray._signs[0]]._x - ray._startPos._x) * ray._inverseDir._x;
+    tXMax = (_bounds[1 - ray._signs[0]]._x - ray._startPos._x) * ray._inverseDir._x;
+    tYMin = (_bounds[ray._signs[1]]._y - ray._startPos._y) * ray._inverseDir._y;
+    tYMax = (_bounds[1 - ray._signs[1]]._y - ray._startPos._y) * ray._inverseDir._y;
+
+    //Check if the ray hit lies within bounds and alligned on the x n y, if they are continue to z
+    if ((tXMin > tYMax) || (tYMin > tXMax))
+    {
+        return false;
+    }
+    if (tYMin > tXMin)
+    {
+        tXMin = tYMin;
+    }
+    if (tYMax < tXMax)
+    {
+        tXMax = tYMax;
+    }
+
+    tZMin = (_bounds[ray._signs[2]]._z - ray._startPos._z) * ray._inverseDir._z;
+    tZMax = (_bounds[1 - ray._signs[2]]._z - ray._startPos._z) * ray._inverseDir._z;
+
+    if ((tXMin > tZMax) || (tZMin > tXMax))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void Box::UpdateBounds()

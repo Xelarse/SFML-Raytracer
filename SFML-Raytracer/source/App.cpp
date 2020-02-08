@@ -51,7 +51,7 @@ void App::Run()
         "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
         //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
         AA::Vec3(-2, 0.5, 0),
-        AA::Vec3(0.5, 0.5, 10)
+        AA::Vec3(0.5, 0.5, 2)
         )
     );
 

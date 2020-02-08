@@ -14,6 +14,8 @@ public:
 	void ScaleBox(double width, double height, double depth);
 
 	AA::Vec3 GetPosition() { return _origin; }
+	bool RayHitVolume(const AA::Ray& ray);
+
 
 private:
 
