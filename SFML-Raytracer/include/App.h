@@ -25,11 +25,11 @@ private:
 	void Update(float dt);
 	void Draw();
 
-	void CalculatePixel(int x, int y);
+	sf::Color CalculatePixel(const double& u, const double& v);
 	void UpdateRenderTexture();
 	void CreateImage();
-	void GetColour(const int& x, const int& y, sf::Color& colOut);
-	void GetColourAntiAliasing(const int& x, const int& y, sf::Color& colOut);
+	void GetColour(const double& u, const double& v, sf::Color& colOut);
+	void GetColourAntiAliasing(const double& u, const double& v, sf::Color& colOut);
 
 	AA::Vec3 BackgroundGradientCol(const AA::Ray& ray);
 

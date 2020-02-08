@@ -9,6 +9,8 @@
 
 namespace AA
 {
+	static const double PI = 3.14159265358979323846;
+
 	class Vec3
 	{
 	public:
@@ -139,6 +141,11 @@ namespace AA
 			return *this / this->Length();
 		}
 
+		static inline Vec3 UnitVector(Vec3 v)
+		{
+			return v / v.Length();
+		}
+
 		inline void MakeUnitVector()
 		{
 			double k = 1.0 / this->Length();
@@ -152,6 +159,11 @@ namespace AA
 			return sf::Color(_y * 255.0, _x * 255.0, _z * 255.0, 255.0);
 		}
 	};
+
+	inline Vec3 operator * (const double& lh, const Vec3& rh)
+	{
+		return Vec3(lh * rh._x, lh * rh._y, lh * rh._z);
+	}
 
 	class Vec2
 	{
@@ -347,7 +359,7 @@ namespace AA
 			return _colours.at(y * _columns + x);
 		}
 
-		void ColourPixelAtPosition(int& x, int& y, sf::Color& col)
+		void ColourPixelAtPosition(int& x, int& y, sf::Color col)
 		{
 			_colours.at(y * _columns + x) = col;
 		}

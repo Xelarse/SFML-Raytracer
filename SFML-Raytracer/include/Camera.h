@@ -6,18 +6,19 @@ class Camera
 public:
 
 	Camera() = delete;
-	Camera(const int& width, const int& height);
+	Camera(AA::Vec3 lookFrom, AA::Vec3 lookAt, AA::Vec3 vUp, double vFov, double aspect);
 	~Camera() = default;
 
-	AA::Vec3 GetDir(const int& x, const int& y, const int& width, const int& height);
-	AA::Vec3 Origin() const;
+
+	AA::Ray GetRay(const double& u, const double& v);
 
 private:
 
-	AA::Vec3 _up = AA::Vec3(0, 2, 0);
-	AA::Vec3 _right = AA::Vec3(4, 0, 0);
-	AA::Vec3 _forward = AA::Vec3(0, 0, -2);
-	AA::Vec3 _origin = AA::Vec3(0, 0, 0);
-	AA::Vec3 _lowerLeft = AA::Vec3(-2.0, -1.0, -1.0);
+	AA::Vec3 RandInUnitDisk();
+
+	AA::Vec3 _origin;
+	AA::Vec3 _lowerLeftCorn;
+	AA::Vec3 _horizontal;
+	AA::Vec3 _vertical;
 };
 

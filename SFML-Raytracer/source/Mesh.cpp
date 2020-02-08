@@ -4,9 +4,25 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale) : _position(position), _scale(scale)
+Mesh::Mesh(const char* path, AA::Vec3 position) : _position(position)
 {
 	LoadModel(path);
+}
+
+Mesh::Mesh(AA::Vec3 position) : _position(position)
+{
+	//Load in a single tri
+	AA::Vertex v0 = AA::Vertex(AA::Vec3(0, 0, 0), AA::Vec3(0, 0, -1), AA::Vec2(0, 0));
+	AA::Vertex v1 = AA::Vertex(AA::Vec3(0, 1, 0), AA::Vec3(0, 0, -1), AA::Vec2(0, 0));
+	AA::Vertex v2 = AA::Vertex(AA::Vec3(0, 0, -1), AA::Vec3(0, 0, -1), AA::Vec2(0, 0));
+
+	_verts.push_back(v0);
+	_verts.push_back(v1);
+	_verts.push_back(v2);
+
+	_inds.push_back(0);
+	_inds.push_back(1);
+	_inds.push_back(2);
 }
 
 bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
@@ -31,14 +47,10 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 		AA::Vertex v1 = _verts[_inds[i + 1]];
 		AA::Vertex v2 = _verts[_inds[i + 2]];
 
-		//Apply position and scale
+		////Apply position and scale
 		v0._position += _position;
 		v1._position += _position;
 		v2._position += _position;
-
-		v0._position *= _scale;
-		v1._position *= _scale;
-		v2._position *= _scale;
 
 		//Calc planes normal
 		AA::Vec3 v0v1 = v1._position - v0._position;
@@ -86,7 +98,7 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 		if (t < closestHit)
 		{
 			res.t = closestHit = t;
-			res.p = p;
+			res.p = ray.GetPointAlongRay(res.t);
 			res.normal = pNorm;
 		}
 	}

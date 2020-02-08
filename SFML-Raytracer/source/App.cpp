@@ -14,33 +14,41 @@ App::~App()
 
 void App::Run()
 {
+    //SFML related inits
     _pWindow = std::make_unique<sf::RenderWindow>(sf::VideoMode(_width, _height), "SFML-Raytracer");
     _pEventHander = std::make_unique<EventHandler>();
     _pAppClock = std::make_unique<sf::Clock>();
+
+    //Raytracer related inits
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
-    _cam = std::make_unique<Camera>(_width, _height);
     _world = std::make_unique<Hittables>();
     _renderTexture = std::make_unique<sf::Texture>();
+
+    AA::Vec3 lookFrom = AA::Vec3(0, -0.5, 5);
+    AA::Vec3 lookAt = AA::Vec3(0, 0, 0);
+    double vFov = 70;
+    _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0,1,0), vFov, (_width / _height));
+
+
 
     _renderTarget = sf::RectangleShape(sf::Vector2f(_width, _height));
 
     //Add a couple of spheres to the world
-    //_world->AddHittable(std::make_unique<Sphere>(
-    //        AA::Vec3(0, 0, -1), 0.8, sf::Color(0, 0, 0, 255)
-    //    )
-    //);
-
-    //_world->AddHittable(std::make_unique<Sphere>(
-    //    AA::Vec3(0, _height + 0.5, -1), _height, sf::Color(0, 0, 0, 255)
-    //    )
-    //);
-
-    _world->AddHittable(std::make_unique<Mesh>(
-        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
-        AA::Vec3(-2, 0, -1),
-        AA::Vec3(1, 1, 1)
+    _world->AddHittable(std::make_unique<Sphere>(
+            AA::Vec3(0, 0, -1), 0.8, sf::Color(0, 0, 0, 255)
         )
     );
+
+    _world->AddHittable(std::make_unique<Sphere>(
+        AA::Vec3(0, _height + 0.5, -1), _height, sf::Color(0, 0, 0, 255)
+        )
+    );
+
+    //_world->AddHittable(std::make_unique<Mesh>(
+    //    //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
+    //    AA::Vec3(-1, 0, -0.2)
+    //    )
+    //);
 
     auto box = std::make_unique<Box>(
         AA::Vec3(2, 0, -0.5), 1, 1, 0.1, sf::Color(0, 0, 0, 255)
@@ -120,20 +128,20 @@ void App::Draw()
     _pWindow->display();
 }
 
-void App::CalculatePixel(int x, int y)
+sf::Color App::CalculatePixel(const double& u, const double& v)
 {
-    //Use the camera to translate the x and y to viewport and draw a ray from it
     sf::Color pixelColour = sf::Color::Black;
 
     if (_antiAliasing)
     {
-        GetColourAntiAliasing(x, y, pixelColour);
+        GetColourAntiAliasing(u, v, pixelColour);
     }
     else
     {
-        GetColour(x, y, pixelColour);
+        GetColour(u, v, pixelColour);
     }
-    _pixelColourBuffer->ColourPixelAtPosition(x, y, pixelColour);
+
+    return pixelColour;
 }
 
 void App::UpdateRenderTexture()
@@ -158,7 +166,9 @@ void App::CreateImage()
     {
         for (int y = 0; y < _height; y++)
         {
-            CalculatePixel(x, y);
+            double u = double(x / double(_width));
+            double v = double(y / double(_height));
+            _pixelColourBuffer->ColourPixelAtPosition(x, y, CalculatePixel(u, v));
         }
     }
 
@@ -166,13 +176,12 @@ void App::CreateImage()
     UpdateRenderTexture();
 }
 
-void App::GetColour(const int& x, const int& y, sf::Color& colOut)
+void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 {
-    AA::Ray pixelRay(_cam->Origin(), _cam->GetDir(x, y, _width, _height));
-
     Hittable::HitResult res;
+    AA::Ray ray = _cam->GetRay(u, v);
 
-    if (_world->IntersectedRay(pixelRay, 0.0, 20000.0, res))
+    if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
     {
         //Colour the pixel
         AA::Vec3 norm = res.normal;
@@ -182,11 +191,11 @@ void App::GetColour(const int& x, const int& y, sf::Color& colOut)
     }
     else
     {
-        colOut = BackgroundGradientCol(pixelRay).Vec3ToCol();
+        colOut = BackgroundGradientCol(ray).Vec3ToCol();
     }
 }
 
-void App::GetColourAntiAliasing(const int& x, const int& y, sf::Color& colOut)
+void App::GetColourAntiAliasing(const double& u, const double& v, sf::Color& colOut)
 {
     AA::Vec3 tempColValues = AA::Vec3(0,0,0);
     int pixelIterations = 100;
@@ -195,11 +204,11 @@ void App::GetColourAntiAliasing(const int& x, const int& y, sf::Color& colOut)
     //Iterate with slight variance around the set X and Y position of the ray, get the colour data and add it to the temp
     for (size_t i = 0; i < pixelIterations; i++)
     {
-        double xVarience = AA::RanDouble();
-        double yVarience = AA::RanDouble();
-        AA::Ray pixelRay(_cam->Origin(), _cam->GetDir(x + xVarience, y + yVarience, _width, _height));
+        double rayU = ((u * _width) + AA::RanDouble()) / _width;
+        double rayV = ((v * _height) + AA::RanDouble()) / _height;
+        AA::Ray ray = _cam->GetRay(rayU, rayV);
 
-        if (_world->IntersectedRay(pixelRay, 0.0, 20000.0, res))
+        if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
         {
             //Colour the pixel
             AA::Vec3 norm = res.normal;
@@ -209,7 +218,7 @@ void App::GetColourAntiAliasing(const int& x, const int& y, sf::Color& colOut)
         }
         else
         {
-            tempColValues += BackgroundGradientCol(pixelRay);
+            tempColValues += BackgroundGradientCol(ray);
         }
     }
 
