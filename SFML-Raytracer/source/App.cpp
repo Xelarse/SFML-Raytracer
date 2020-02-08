@@ -24,7 +24,7 @@ void App::Run()
     _world = std::make_unique<Hittables>();
     _renderTexture = std::make_unique<sf::Texture>();
 
-    AA::Vec3 lookFrom = AA::Vec3(0, -0.5, 5);
+    AA::Vec3 lookFrom = AA::Vec3(0, -3, 5);
     AA::Vec3 lookAt = AA::Vec3(0, 0, 0);
     double vFov = 70;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0,1,0), vFov, (_width / _height));
@@ -35,7 +35,7 @@ void App::Run()
 
     //Add a couple of spheres to the world
     _world->AddHittable(std::make_unique<Sphere>(
-            AA::Vec3(0, 0, -1), 0.8, sf::Color(0, 0, 0, 255)
+            AA::Vec3(0, -0.5, -1), 0.8, sf::Color(0, 0, 0, 255)
         )
     );
 
@@ -51,7 +51,7 @@ void App::Run()
     //);
 
     auto box = std::make_unique<Box>(
-        AA::Vec3(2, 0, -0.5), 1, 1, 0.1, sf::Color(0, 0, 0, 255)
+        AA::Vec3(2, -0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255)
         );
 
     //TODO remove this pointer later, just for moving cube independantly from the world hittables
@@ -87,28 +87,28 @@ void App::Update(float dt)
     if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._z -= 0.01;
-        previous._z = previous._z < -1.0 ? -1.0 : previous._z;
+        previous._z -= 0.25;
+        previous._z = previous._z < -3.0 ? -3.0 : previous._z;
         _testBox->MoveBox(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._z += 0.01;
-        previous._z = previous._z > 0.25 ? 0.25 : previous._z;
+        previous._z += 0.25;
+        previous._z = previous._z > 3 ? 3 : previous._z;
         _testBox->MoveBox(previous);
     }
     if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._x -= 0.05;
+        previous._x -= 0.25;
         previous._x = previous._x < -4.0 ? -4.0 : previous._x;
         _testBox->MoveBox(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._x += 0.05;
+        previous._x += 0.25;
         previous._x = previous._x > 4.0 ? 4.0 : previous._x;
         _testBox->MoveBox(previous);
     }

@@ -37,6 +37,9 @@ private:
 	int _width = 800;
 	int _height = 600;
 	bool _antiAliasing = false;
+	
+	double _cameraXBound = 10.0;
+	double _cameraPanSpeed = 2.0;
 
 	std::unique_ptr<sf::RenderWindow> _pWindow;
 	std::unique_ptr<EventHandler> _pEventHander;
