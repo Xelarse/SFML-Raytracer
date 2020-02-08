@@ -27,31 +27,31 @@ void App::Run()
     _world = std::make_unique<Hittables>();
     _renderTexture = std::make_unique<sf::Texture>();
 
-    AA::Vec3 lookFrom = AA::Vec3(0, 5, 10);
+    AA::Vec3 lookFrom = AA::Vec3(0, 3, 5);
     AA::Vec3 lookAt = AA::Vec3(0, 0.5, 0);
     double vFov = 70;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0,1,0), vFov, (_width / _height));
 
-
-
     _renderTarget = sf::RectangleShape(sf::Vector2f(_width, _height));
 
     //Add a couple of spheres to the world
-    //_world->AddHittable(std::make_unique<Sphere>(
-    //        AA::Vec3(0, 0.5, -1), 0.8, sf::Color(0, 0, 0, 255)
-    //    )
-    //);
+    _world->AddHittable(std::make_unique<Sphere>(
+            AA::Vec3(0, 0.5, -1), 0.8, sf::Color(0, 0, 0, 255)
+        )
+    );
 
-    //_world->AddHittable(std::make_unique<Sphere>(
-    //    AA::Vec3(0, _height - 0.5, -1), _height, sf::Color(0, 0, 0, 255)
-    //    )
-    //);
+    auto backSphere = std::make_unique<Sphere>(
+        AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, sf::Color(102, 0, 102, 255)
+        );
+    backSphere->UseColour(true);
+
+    _world->AddHittable(std::move(backSphere));
 
     _world->AddHittable(std::make_unique<Mesh>(
-        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
-        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
+        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
+        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
         AA::Vec3(-2, 0.5, 0),
-        AA::Vec3(0.5, 0.5, 0.5)
+        AA::Vec3(0.5, 0.5, 10)
         )
     );
 
@@ -229,11 +229,7 @@ void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 
     if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
     {
-        //Colour the pixel
-        AA::Vec3 norm = res.normal;
-        norm += 1;
-        norm *= 0.5;
-        colOut = norm.Vec3ToCol();
+        colOut = res.col;
     }
     else
     {
@@ -256,11 +252,7 @@ void App::GetColourAntiAliasing(const double& u, const double& v, sf::Color& col
 
         if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
         {
-            //Colour the pixel
-            AA::Vec3 norm = res.normal;
-            norm += 1;
-            norm *= 0.5;
-            tempColValues += norm;
+            tempColValues += AA::Vec3(res.col.r, res.col.g, res.col.b);
         }
         else
         {

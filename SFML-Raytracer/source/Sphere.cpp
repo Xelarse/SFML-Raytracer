@@ -25,6 +25,14 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _origin) / _radius;
+            if (_useColour)
+            {
+                res.col = _col;
+            }
+            else
+            {
+                res.col = AA::NormalToColour(res.normal);
+            }
             return true;
         }
 
@@ -34,6 +42,14 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _origin) / _radius;
+            if (_useColour)
+            {
+                res.col = _col;
+            }
+            else
+            {
+                res.col = AA::NormalToColour(res.normal);
+            }
             return true;
         }
 	}

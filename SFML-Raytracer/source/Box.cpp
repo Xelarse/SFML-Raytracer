@@ -59,6 +59,16 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
 
     res.p = ray.GetPointAlongRay(res.t);
     CalcNormal(res);
+
+    if (_useColour)
+    {
+        res.col = _col;
+    }
+    else
+    {
+        res.col = AA::NormalToColour(res.normal);
+    }
+
     return true;
 }
 

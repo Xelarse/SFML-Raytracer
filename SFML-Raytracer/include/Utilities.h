@@ -157,7 +157,7 @@ namespace AA
 
 		inline sf::Color Vec3ToCol() const
 		{
-			return sf::Color(_y * 255.0, _x * 255.0, _z * 255.0, 255.0);
+			return sf::Color(_x * 255.0, _y * 255.0, _z * 255.0, 255.0);
 		}
 	};
 
@@ -397,6 +397,13 @@ namespace AA
 		static std::function<double()> rand_generator =
 			std::bind(distribution, generator);
 		return rand_generator();
+	}
+
+	static sf::Color NormalToColour(AA::Vec3 norm)
+	{
+		norm += 1;
+		norm *= 0.5;
+		return norm.Vec3ToCol();
 	}
 }
 

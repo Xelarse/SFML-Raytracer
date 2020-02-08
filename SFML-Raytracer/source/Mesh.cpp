@@ -87,6 +87,7 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 			res.t = closestHit = t;
 			res.p = ray.GetPointAlongRay(res.t);
 			res.normal = v0._normal;
+			res.col = AA::NormalToColour(res.normal);
 		}
 	}
 
