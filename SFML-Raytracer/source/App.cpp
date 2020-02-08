@@ -25,7 +25,7 @@ void App::Run()
     _renderTexture = std::make_unique<sf::Texture>();
 
     AA::Vec3 lookFrom = AA::Vec3(0, -3, 5);
-    AA::Vec3 lookAt = AA::Vec3(0, 0, 0);
+    AA::Vec3 lookAt = AA::Vec3(0, -0.5, 0);
     double vFov = 70;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0,1,0), vFov, (_width / _height));
 
@@ -65,7 +65,7 @@ void App::Run()
     {
         float deltaTimeMs = _pAppClock->restart().asMilliseconds();
         Tick(deltaTimeMs);
-        std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
+        //std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
     }
 
 }
@@ -111,6 +111,50 @@ void App::Update(float dt)
         previous._x += 0.25;
         previous._x = previous._x > 4.0 ? 4.0 : previous._x;
         _testBox->MoveBox(previous);
+    }
+
+    if (_pEventHander->IsKeyPressed(sf::Keyboard::Up))
+    {
+        double previous = _cam->GetVFov();
+        previous += 2;
+        previous = previous > 90 ? 90 : previous;
+        _cam->SetVFov(previous);
+    }
+    else if (_pEventHander->IsKeyPressed(sf::Keyboard::Down))
+    {
+        double previous = _cam->GetVFov();
+        previous -= 2;
+        previous = previous < 20 ? 20 : previous;
+        _cam->SetVFov(previous);
+    }
+
+    if (_camLeft)
+    {
+        //Take the current camera position
+        AA::Vec3 newPos = _cam->GetLookFrom();
+        //Add to it to make it go left
+        newPos._x += (dt / 1000) * _cameraPanSpeed;
+        //Check if it being left is outside the current set bounds
+        if (newPos._x > _cameraXBound)
+        {
+            newPos._x = _cameraXBound;
+            _camLeft = !_camLeft;
+        }
+        _cam->SetLookFrom(newPos);
+    }
+    else
+    {
+        //Take the current camera position
+        AA::Vec3 newPos = _cam->GetLookFrom();
+        //Add to it to make it go left
+        newPos._x -= (dt / 1000) *_cameraPanSpeed;
+        //Check if it being left is outside the current set bounds
+        if (newPos._x < -_cameraXBound)
+        {
+            newPos._x = -_cameraXBound;
+            _camLeft = !_camLeft;
+        }
+        _cam->SetLookFrom(newPos);
     }
 
     CreateImage();
