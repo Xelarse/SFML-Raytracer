@@ -18,14 +18,17 @@ void App::Run()
     _pWindow = std::make_unique<sf::RenderWindow>(sf::VideoMode(_width, _height), "SFML-Raytracer");
     _pEventHander = std::make_unique<EventHandler>();
     _pAppClock = std::make_unique<sf::Clock>();
+    sf::View view = _pWindow->getView();
+    view.setSize(_width, -_height);
+    _pWindow->setView(view);
 
     //Raytracer related inits
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
     _world = std::make_unique<Hittables>();
     _renderTexture = std::make_unique<sf::Texture>();
 
-    AA::Vec3 lookFrom = AA::Vec3(0, -3, 5);
-    AA::Vec3 lookAt = AA::Vec3(0, -0.5, 0);
+    AA::Vec3 lookFrom = AA::Vec3(0, 5, 10);
+    AA::Vec3 lookAt = AA::Vec3(0, 0.5, 0);
     double vFov = 70;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0,1,0), vFov, (_width / _height));
 
@@ -34,25 +37,26 @@ void App::Run()
     _renderTarget = sf::RectangleShape(sf::Vector2f(_width, _height));
 
     //Add a couple of spheres to the world
-    _world->AddHittable(std::make_unique<Sphere>(
-            AA::Vec3(0, -0.5, -1), 0.8, sf::Color(0, 0, 0, 255)
-        )
-    );
+    //_world->AddHittable(std::make_unique<Sphere>(
+    //        AA::Vec3(0, 0.5, -1), 0.8, sf::Color(0, 0, 0, 255)
+    //    )
+    //);
 
-    _world->AddHittable(std::make_unique<Sphere>(
-        AA::Vec3(0, _height + 0.5, -1), _height, sf::Color(0, 0, 0, 255)
-        )
-    );
+    //_world->AddHittable(std::make_unique<Sphere>(
+    //    AA::Vec3(0, _height - 0.5, -1), _height, sf::Color(0, 0, 0, 255)
+    //    )
+    //);
 
     _world->AddHittable(std::make_unique<Mesh>(
-        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
-        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\ship_light.obj",
-        AA::Vec3(-2, -0.5, 0)
+        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
+        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
+        AA::Vec3(-2, 0.5, 0),
+        AA::Vec3(0.5, 0.5, 0.5)
         )
     );
 
     auto box = std::make_unique<Box>(
-        AA::Vec3(2, -0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255)
+        AA::Vec3(2, 0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255)
         );
 
     //TODO remove this pointer later, just for moving cube independantly from the world hittables

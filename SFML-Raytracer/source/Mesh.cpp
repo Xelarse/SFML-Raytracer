@@ -4,12 +4,12 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* path, AA::Vec3 position) : _position(position)
+Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale) : _position(position), _scale(scale)
 {
 	LoadModel(path);
 }
 
-Mesh::Mesh(AA::Vec3 position) : _position(position)
+Mesh::Mesh(AA::Vec3 position, AA::Vec3 scale) : _position(position), _scale(scale)
 {
 	//Load in a single tri
 	AA::Vertex v0 = AA::Vertex(AA::Vec3(0, 0, 0), AA::Vec3(0, 0, -1), AA::Vec2(0, 0));
@@ -52,6 +52,10 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 		double u, v;
 
 		////Apply position and scale
+		v0._position *= _scale;
+		v1._position *= _scale;
+		v2._position *= _scale;
+
 		v0._position += _position;
 		v1._position += _position;
 		v2._position += _position;
