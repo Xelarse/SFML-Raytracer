@@ -10,6 +10,7 @@
 namespace AA
 {
 	static const double PI = 3.14159265358979323846;
+	static const float kEpsilon = 1e-8;
 
 	class Vec3
 	{

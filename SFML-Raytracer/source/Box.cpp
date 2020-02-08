@@ -88,7 +88,7 @@ void Box::CalcNormal(HitResult& res)
 {
     //// for each of x y z check where it is in relation to the origin if its > origin, +1 if its < origin, -1
     //AA::Vec3 hitMinusOrigin = res.p - _origin;
-    //AA::Vec3 absoluteHit = AA::Vec3(abs(hitMinusOrigin._x), abs(hitMinusOrigin._y), abs(hitMinusOrigin._z));
+    //AA::Vec3 absoluteHit = AA::Vec3(fabs(hitMinusOrigin._x), fabs(hitMinusOrigin._y), fabs(hitMinusOrigin._z));
     ////One of the axis should be the scale of box if its hit a face
 
     //if ((absoluteHit._x >= absoluteHit._y) && (absoluteHit._x >= absoluteHit._z))

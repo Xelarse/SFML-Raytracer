@@ -45,8 +45,9 @@ void App::Run()
     );
 
     _world->AddHittable(std::make_unique<Mesh>(
-        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
-        AA::Vec3(-1, 0, -0.2)
+        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
+        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\ship_light.obj",
+        AA::Vec3(-2, -0.5, 0)
         )
     );
 
@@ -57,9 +58,6 @@ void App::Run()
     //TODO remove this pointer later, just for moving cube independantly from the world hittables
     _testBox = box.get();
     _world->AddHittable(std::move(box));
-
-    //TODO remove later, model loading test
-    //Mesh msh = Mesh("D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\ship_light.obj");
 
     while (_pWindow->isOpen())
     {

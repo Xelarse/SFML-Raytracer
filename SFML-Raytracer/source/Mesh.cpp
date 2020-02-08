@@ -39,13 +39,17 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 	//Ensure that the res for the p is a zero vector so that we can do a check later to see if its been changed
 	double closestHit = t_max;
 
-	//Check against each tri
+	//Check against each tri using Muller Trumbore?
+	// RESEARCH IT FOR THE REPORT HERE https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
 	for (size_t i = 0; i < _inds.size(); i+=3)
 	{
 		//Get the verts of the triangle
 		AA::Vertex v0 = _verts[_inds[i]];
 		AA::Vertex v1 = _verts[_inds[i + 1]];
 		AA::Vertex v2 = _verts[_inds[i + 2]];
+
+		//Barycentric co ords
+		double u, v;
 
 		////Apply position and scale
 		v0._position += _position;
@@ -55,51 +59,30 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 		//Calc planes normal
 		AA::Vec3 v0v1 = v1._position - v0._position;
 		AA::Vec3 v0v2 = v2._position - v0._position;
-		AA::Vec3 pNorm = v0v1.CrossProduct(v0v2);
-		double area = pNorm.Length();
+		AA::Vec3 pvec = ray._dir.CrossProduct(v0v2);
+		float det = v0v1.DotProduct(pvec);
 
-		//Check if the ray is parallel to the tri first
-		double pNormalDotRayDir = pNorm.DotProduct(ray._dir);
-		if (pNormalDotRayDir >= 0 && pNormalDotRayDir <= 0.01) { continue; }
+		//Check if the ray misses or if it hits a backfacing tri by checking if determinant is close or below zero
+		if (det < AA::kEpsilon) { continue; }
 
-		//Next compute t and do a check to make sure the tri isnt behind the ray origin
-		double d = pNorm.DotProduct(v0._position);
-		double t = (pNorm.DotProduct(ray._startPos) + d);
-		if (t < t_min || t > t_max) { continue; }
+		float invDet = 1 / det;
 
+		AA::Vec3 tvec = ray._startPos - v0._position;
+		u = tvec.DotProduct(pvec) * invDet;
+		if (u < 0 || u > 1) { continue; };
 
-		//Calc P using previous formulas now we got t
-		AA::Vec3 p = ray._startPos + (ray._dir * t);
+		AA::Vec3 qvec = tvec.CrossProduct(v0v1);
+		v = ray._dir.DotProduct(qvec) * invDet;
+		if (v < 0 || u + v > 1) { continue; }
 
-		//Check if the position is within all 3 edges of the tri
-		AA::Vec3 C;
-
-		//Edge 1
-		AA::Vec3 edge1 = v1._position - v0._position;
-		AA::Vec3 vp1 = p - v0._position;
-		C = edge1.CrossProduct(vp1);
-		if (pNorm.DotProduct(C) < 0) { continue; }
-
-
-		//Edge 2
-		AA::Vec3 edge2 = v2._position - v1._position;
-		AA::Vec3 vp2 = p - v1._position;
-		C = edge2.CrossProduct(vp2);
-		if (pNorm.DotProduct(C) < 0) { continue; }
-
-		//Edge 3
-		AA::Vec3 edge3 = v0._position - v2._position;
-		AA::Vec3 vp3 = p - v2._position;
-		C = edge3.CrossProduct(vp3);
-		if (pNorm.DotProduct(C) < 0) { continue; }
-
+		double t = v0v2.DotProduct(qvec) * invDet;
 
 		//If it passes all of these conditions then one final check to make sure its the nearest tri and write it out
 		if (t < closestHit)
 		{
 			res.t = closestHit = t;
 			res.p = ray.GetPointAlongRay(res.t);
-			res.normal = pNorm;
+			res.normal = v0._normal;
 		}
 	}
 
