@@ -37,6 +37,7 @@ private:
 	int _width = 800;
 	int _height = 600;
 	bool _antiAliasing = false;
+	int _perPixelAA = 10;
 	
 	double _cameraXBound = 8.0;
 	double _cameraPanSpeed = 4.0;

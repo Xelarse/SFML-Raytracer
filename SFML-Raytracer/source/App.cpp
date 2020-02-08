@@ -47,13 +47,13 @@ void App::Run()
 
     _world->AddHittable(std::move(backSphere));
 
-    _world->AddHittable(std::make_unique<Mesh>(
-        "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
-        //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
-        AA::Vec3(-2, 0.5, 0),
-        AA::Vec3(0.5, 0.5, 2)
-        )
-    );
+    //_world->AddHittable(std::make_unique<Mesh>(
+    //    "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
+    //    //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
+    //    AA::Vec3(-2, 0.5, 0),
+    //    AA::Vec3(0.5, 0.5, 2)
+    //    )
+    //);
 
     auto box = std::make_unique<Box>(
         AA::Vec3(2, 0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255)
@@ -240,11 +240,10 @@ void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 void App::GetColourAntiAliasing(const double& u, const double& v, sf::Color& colOut)
 {
     AA::Vec3 tempColValues = AA::Vec3(0,0,0);
-    int pixelIterations = 10;
     Hittable::HitResult res;
 
     //Iterate with slight variance around the set X and Y position of the ray, get the colour data and add it to the temp
-    for (size_t i = 0; i < pixelIterations; i++)
+    for (size_t i = 0; i < _perPixelAA; i++)
     {
         double rayU = ((u * _width) + AA::RanDouble()) / _width;
         double rayV = ((v * _height) + AA::RanDouble()) / _height;
@@ -252,7 +251,7 @@ void App::GetColourAntiAliasing(const double& u, const double& v, sf::Color& col
 
         if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
         {
-            tempColValues += AA::Vec3(res.col.r, res.col.g, res.col.b);
+            tempColValues += AA::Vec3(res.col.r / 255.0, res.col.g / 255.0, res.col.b / 255.0);
         }
         else
         {
@@ -260,7 +259,7 @@ void App::GetColourAntiAliasing(const double& u, const double& v, sf::Color& col
         }
     }
 
-    tempColValues /= static_cast<double>(pixelIterations);
+    tempColValues /= static_cast<double>(_perPixelAA);
     colOut = tempColValues.Vec3ToCol();
 }
 
