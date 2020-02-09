@@ -11,6 +11,9 @@ public:
 	~Mesh() = default;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
+	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
+
+
 private:
 	bool LoadModel(const char* path);
 	

@@ -162,6 +162,7 @@
     <ClCompile Include="source\AABB.cpp" />
     <ClCompile Include="source\App.cpp" />
     <ClCompile Include="source\Box.cpp" />
+    <ClCompile Include="source\BvhNode.cpp" />
     <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\EventHandler.cpp" />
     <ClCompile Include="source\Hittable.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="include\AABB.h" />
     <ClInclude Include="include\App.h" />
     <ClInclude Include="include\Box.h" />
+    <ClInclude Include="include\BvhNode.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\EventHandler.h" />
     <ClInclude Include="include\Hittable.h" />

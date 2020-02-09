@@ -13,6 +13,7 @@ public:
 	inline AA::Vec3 SphereOrigin() const { return _origin; };
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
+	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
 
 private:
 	AA::Vec3 _origin;

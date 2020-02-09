@@ -56,3 +56,13 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
 
 	return false;
 }
+
+bool Sphere::BoundingBox(double t0, double t1, AABB& outBox) const
+{
+    outBox = AABB(
+        _origin - AA::Vec3(_radius, _radius, _radius),
+        _origin + AA::Vec3(_radius, _radius, _radius)
+    );
+
+    return true;
+}

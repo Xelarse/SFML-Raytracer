@@ -150,3 +150,13 @@ void Box::CalcNormal(HitResult& res)
     AA::Vec3 oToHit = res.p - _origin;
     res.normal = AA::Vec3::UnitVector(oToHit);
 }
+
+bool Box::BoundingBox(double t0, double t1, AABB& outBox) const
+{
+    outBox = AABB(
+        _bounds[0],
+        _bounds[1]
+    );
+
+    return true;
+}

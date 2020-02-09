@@ -9,6 +9,7 @@ public:
 	~Box();
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
+	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
 
 	void MoveBox(AA::Vec3 pos);
 	void ScaleBox(double width, double height, double depth);

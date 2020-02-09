@@ -35,19 +35,14 @@ void App::Run()
     _renderTarget = sf::RectangleShape(sf::Vector2f(_width, _height));
 
     //Add a couple of spheres to the world
-    _world->AddHittable(std::make_unique<Sphere>(
-            AA::Vec3(0, 0.5, -1), 0.8, sf::Color(0, 0, 0, 255)
-        )
-    );
+    _world->_hittableObjects.push_back(new Sphere( AA::Vec3(0, 0.5, -1), 0.8, sf::Color(0, 0, 0, 255) ));
 
-    auto backSphere = std::make_unique<Sphere>(
-        AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, sf::Color(102, 0, 102, 255)
-        );
+    auto backSphere = new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, sf::Color(102, 0, 102, 255));
     backSphere->UseColour(true);
 
-    _world->AddHittable(std::move(backSphere));
+    _world->_hittableObjects.push_back(backSphere);
 
-    //_world->AddHittable(std::make_unique<Mesh>(
+    //_world->_hittableObjects.push_back(new Mesh(
     //    "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
     //    //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
     //    AA::Vec3(-2, 0.5, 0),
@@ -55,13 +50,11 @@ void App::Run()
     //    )
     //);
 
-    auto box = std::make_unique<Box>(
-        AA::Vec3(2, 0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255)
-        );
+    auto box = new Box(AA::Vec3(2, 0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255));
 
     //TODO remove this pointer later, just for moving cube independantly from the world hittables
-    _testBox = box.get();
-    _world->AddHittable(std::move(box));
+    _testBox = box;
+    _world->_hittableObjects.push_back(box);
 
     while (_pWindow->isOpen())
     {

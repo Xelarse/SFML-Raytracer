@@ -147,3 +147,9 @@ bool Mesh::LoadModel(const char* path)
 
 	return true;
 }
+
+bool Mesh::BoundingBox(double t0, double t1, AABB& outBox) const
+{
+	//TODO add function to calc this later but for now meshes are gonna ignore the bounding box whilst i work out a way to process tris with it
+	return false;
+}
