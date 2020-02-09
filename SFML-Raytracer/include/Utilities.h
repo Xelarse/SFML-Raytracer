@@ -15,126 +15,146 @@ namespace AA
 	class Vec3
 	{
 	public:
-		double _x, _y, _z;
-		Vec3() : _x(0), _y(0), _z(0) { }
-		Vec3(const double& x, const double& y, const double& z) : _x(x), _y(y), _z(z) { }
+		Vec3()
+		{
+			_e[0] = 0;
+			_e[1] = 0;
+			_e[2] = 0;
+		}
+		Vec3(const double& x, const double& y, const double& z) 
+		{
+			_e[0] = x;
+			_e[1] = y;
+			_e[2] = z;
+		}
+
+		//Accessors
+		inline double X() const { return _e[0]; }
+		inline double Y() const { return _e[1]; }
+		inline double Z() const { return _e[2]; }
+		inline double R() const { return _e[0]; }
+		inline double G() const { return _e[1]; }
+		inline double B() const { return _e[2]; }
+		inline double operator[](int i) const { return _e[i]; }
+		inline double& operator[](int i) { return _e[i]; }
+
 
 		//Operators
 		inline Vec3 operator + (const Vec3& rh) const
 		{
-			return Vec3(_x + rh._x, _y + rh._y, _z + rh._z);
+			return Vec3(_e[0] + rh.X(), _e[1] + rh.Y(), _e[2] + rh.Z());
 		}
 
 		inline Vec3 operator - (const Vec3& rh) const
 		{
-			return Vec3(_x - rh._x, _y - rh._y, _z - rh._z);
+			return Vec3(_e[0] - rh.X(), _e[1] - rh.Y(), _e[2] - rh.Z());
 		}
 
 		inline Vec3 operator / (const Vec3& rh) const
 		{
-			return Vec3(_x / rh._x, _y / rh._y, _z / rh._z);
+			return Vec3(_e[0] / rh.X(), _e[1] / rh.Y(), _e[2] / rh.Z());
 		}
 
 		inline Vec3 operator / (const double& rh) const
 		{
-			return Vec3(_x / rh, _y / rh, _z / rh);
+			return Vec3(_e[0] / rh, _e[1] / rh, _e[2] / rh);
 		}
 
 		inline Vec3 operator * (const Vec3& rh) const
 		{
-			return Vec3(_x * rh._x, _y * rh._y, _z * rh._z);
+			return Vec3(_e[0] * rh.X(), _e[1] * rh.Y(), _e[2] * rh.Z());
 		}
 
 		inline Vec3 operator * (const double& rh) const
 		{
-			return Vec3(_x * rh, _y * rh, _z * rh);
+			return Vec3(_e[0] * rh, _e[1] * rh, _e[2] * rh);
 		}
 
 		inline Vec3& operator -= (const Vec3& rh)
 		{
-			_x -= rh._x;
-			_y -= rh._y; 
-			_z -= rh._z;
+			_e[0] -= rh.X();
+			_e[1] -= rh.Y();
+			_e[2] -= rh.Z();
 			return *this;
 		}
 		inline Vec3& operator += (const Vec3& rh)
 		{
-			_x += rh._x; 
-			_y += rh._y; 
-			_z += rh._z;
+			_e[0] += rh.X();
+			_e[1] += rh.Y();
+			_e[2] += rh.Z();
 			return *this;
 		}
 
 		inline Vec3& operator += (const double& rh)
 		{
-			_x += rh;
-			_y += rh;
-			_z += rh;
+			_e[0] += rh;
+			_e[1] += rh;
+			_e[2] += rh;
 			return *this;
 		}
 
 		inline Vec3& operator *= (const Vec3& rh)
 		{
-			_x *= rh._x;
-			_y *= rh._y;
-			_z *= rh._z;
+			_e[0] *= rh.X();
+			_e[1] *= rh.Y();
+			_e[2] *= rh.Z();
 			return *this;
 		}
 		inline Vec3& operator *= (const double& rh)
 		{
-			_x *= rh;
-			_y *= rh;
-			_z *= rh;
+			_e[0] *= rh;
+			_e[1] *= rh;
+			_e[2] *= rh;
 			return *this;
 		}
 		inline Vec3& operator /= (const Vec3& rh)
 		{
-			_x /= rh._x;
-			_y /= rh._y;
-			_z /= rh._z;
+			_e[0] /= rh.X();
+			_e[1] /= rh.Y();
+			_e[2] /= rh.Z();
 			return *this;
 		}
 		inline Vec3& operator /= (const double& rh)
 		{
-			_x /= rh;
-			_y /= rh;
-			_z /= rh;
+			_e[0] /= rh;
+			_e[1] /= rh;
+			_e[2] /= rh;
 			return *this;
 		}
 
 		inline bool operator == (const Vec3& other) const
 		{
-			return _x == other._x && _y == other._y && _z == other._z;
+			return _e[0] == other.X() && _e[1] == other.Y() && _e[2] == other.Z();
 		}
 
 		inline bool operator != (const Vec3& other) const
 		{
-			return _x != other._x && _y != other._y && _z != other._z;
+			return _e[0] != other.X() && _e[1] != other.Y() && _e[2] != other.Z();
 		}
 
 		//Vector math functions
 		inline double DotProduct(const Vec3& b) const
 		{
-			return ((_x * b._x) + (_y * b._y) + (_z * b._z));
+			return ((_e[0] * b.X()) + (_e[1] * b.Y()) + (_e[2] * b.Z()));
 		}
 
 		inline Vec3 CrossProduct(const Vec3& b) const
 		{
 			return Vec3(
-				_y * b._z - _z * b._y,
-				_z * b._x - _x * b._z,
-				_x * b._y - _y * b._x
+				_e[1] * b.Z() - _e[2] * b.Y(),
+				_e[2] * b.X() - _e[0] * b.Z(),
+				_e[0] * b.Y() - _e[1] * b.X()
 			);
 		}
 
 		inline double Length() const
 		{
-			return sqrt(_x * _x + _y * _y + _z * _z);
+			return sqrt(_e[0] * _e[0] + _e[1] * _e[1] + _e[2] * _e[2]);
 		}
 
 		inline double SqrLength() const
 		{
-			return _x * _x + _y * _y + _z * _z;
+			return _e[0] * _e[0] + _e[1] * _e[1] + _e[2] * _e[2];
 		}
 
 		inline Vec3 UnitVector() const
@@ -150,133 +170,145 @@ namespace AA
 		inline void MakeUnitVector()
 		{
 			double k = 1.0 / this->Length();
-			_x *= k;
-			_y *= k;
-			_z *= k;
+			_e[0] *= k;
+			_e[1] *= k;
+			_e[2] *= k;
 		}
 
 		inline sf::Color Vec3ToCol() const
 		{
-			return sf::Color(_x * 255.0, _y * 255.0, _z * 255.0, 255.0);
+			return sf::Color(_e[0] * 255.0, _e[1] * 255.0, _e[2] * 255.0, 255.0);
 		}
+
+	private:
+		double _e[3];
 	};
 
 	inline Vec3 operator * (const double& lh, const Vec3& rh)
 	{
-		return Vec3(lh * rh._x, lh * rh._y, lh * rh._z);
+		return Vec3(lh * rh.X(), lh * rh.Y(), lh * rh.Z());
 	}
 
 	class Vec2
 	{
 	public:
-		double _x, _y;
-		Vec2() : _x(0), _y(0)
+		Vec2()
 		{
+			_e[0] = 0;
+			_e[1] = 0;
 		}
-		Vec2(const double& x, const double& y) : _x(x), _y(y)
+		Vec2(const double& x, const double& y)
 		{
+			_e[0] = x;
+			_e[1] = y;
 		}
+
+		//Accessors
+		inline double X() const { return _e[0]; }
+		inline double Y() const { return _e[1]; }
+		inline double operator[](int i) const { return _e[i]; }
+		inline double& operator[](int i) { return _e[i]; }
 
 		//Operators
 		inline Vec2 operator + (const Vec2& rh) const
 		{
-			return Vec2(_x + rh._x, _y + rh._y);
+			return Vec2(_e[0] + rh.X(), _e[1] + rh.Y());
 		}
 
 		inline Vec2 operator - (const Vec2& rh) const
 		{
-			return Vec2(_x - rh._x, _y - rh._y);
+			return Vec2(_e[0] - rh.X(), _e[1] - rh.Y());
 		}
 
 		inline Vec2 operator / (const Vec2& rh) const
 		{
-			return Vec2(_x / rh._x, _y / rh._y);
+			return Vec2(_e[0] / rh.X(), _e[1] / rh.Y());
 		}
 
 		inline Vec2 operator / (const double& rh) const
 		{
-			return Vec2(_x / rh, _y / rh);
+			return Vec2(_e[0] / rh, _e[1] / rh);
 		}
 
 		inline Vec2 operator * (const Vec2& rh) const
 		{
-			return Vec2(_x * rh._x, _y * rh._y);
+			return Vec2(_e[0] * rh.X(), _e[1] * rh.Y());
 		}
 
 		inline Vec2 operator * (const double& rh) const
 		{
-			return Vec2(_x * rh, _y * rh);
+			return Vec2(_e[0] * rh, _e[1] * rh);
 		}
 
 		inline Vec2& operator -= (const Vec2& rh)
 		{
-			_x -= rh._x;
-			_y -= rh._y;
+			_e[0] -= rh.X();
+			_e[1] -= rh.Y();
 			return *this;
 		}
 		inline Vec2& operator += (const Vec2& rh)
 		{
-			_x += rh._x;
-			_y += rh._y;
+			_e[0] += rh.X();
+			_e[1] += rh.Y();
 			return *this;
 		}
 
 		inline Vec2& operator += (const double& rh)
 		{
-			_x += rh;
-			_y += rh;
+			_e[0] += rh;
+			_e[1] += rh;
 			return *this;
 		}
 
 		inline Vec2& operator *= (const Vec2& rh)
 		{
-			_x *= rh._x;
-			_y *= rh._y;
+			_e[0] *= rh.X();
+			_e[1] *= rh.Y();
 			return *this;
 		}
 		inline Vec2& operator *= (const double& rh)
 		{
-			_x *= rh;
-			_y *= rh;
+			_e[0] *= rh;
+			_e[1] *= rh;
 			return *this;
 		}
 		inline Vec2& operator /= (const Vec2& rh)
 		{
-			_x /= rh._x;
-			_y /= rh._y;
+			_e[0] /= rh.X();
+			_e[1] /= rh.Y();
 			return *this;
 		}
 		inline Vec2& operator /= (const double& rh)
 		{
-			_x /= rh;
-			_y /= rh;
+			_e[0] /= rh;
+			_e[1] /= rh;
 			return *this;
 		}
 
 		inline bool operator == (const Vec2& other) const
 		{
-			return _x == other._x && _y == other._y;
+			return _e[0] == other.X() && _e[1] == other.Y();
 		}
 
 		inline bool operator != (const Vec2& other) const
 		{
-			return _x != other._x && _y != other._y;
+			return _e[0] != other.X() && _e[1] != other.Y();
 		}
 
 		//Vector math functions
 		inline double DotProduct(const Vec2& b) const
 		{
-			return ((_x * b._x) + (_y * b._y));
+			return ((_e[0] * b.X()) + (_e[1] * b.Y()));
 		}
 
 		inline double Length() const
 		{
-			return sqrt(_x * _x + _y * _y);
+			return sqrt(_e[0] * _e[0] + _e[1] * _e[1]);
 		}
 
 		inline double SqrLength() const
 		{
-			return _x * _x + _y * _y;
+			return _e[0] * _e[0] + _e[1] * _e[1];
 		}
 
 		inline Vec2 UnitVector() const
@@ -287,9 +319,12 @@ namespace AA
 		inline void MakeUnitVector()
 		{
 			double k = 1.0 / this->Length();
-			_x *= k;
-			_y *= k;
+			_e[0] *= k;
+			_e[1] *= k;
 		}
+
+	private:
+		double _e[2];
 	};
 
 	class Ray
@@ -301,13 +336,13 @@ namespace AA
 		int _signs[3];
 		Ray(const Vec3& startPos, const Vec3& dir) : _startPos(startPos), _dir(dir)
 		{
-			_inverseDir._x = 1 / dir._x;
-			_inverseDir._y = 1 / dir._y;
-			_inverseDir._z = 1 / dir._z;
+			_inverseDir[0] = 1 / dir.X();
+			_inverseDir[1] = 1 / dir.Y();
+			_inverseDir[2] = 1 / dir.Z();
 
-			_signs[0] = (_inverseDir._x < 0);
-			_signs[1] = (_inverseDir._y < 0);
-			_signs[2] = (_inverseDir._z < 0);
+			_signs[0] = (_inverseDir.X() < 0);
+			_signs[1] = (_inverseDir.Y() < 0);
+			_signs[2] = (_inverseDir.Z() < 0);
 		}
 		~Ray() = default;
 		inline Vec3 GetPointAlongRay(double t) const { return _startPos + _dir * t; }
@@ -384,9 +419,9 @@ namespace AA
 
 	static AA::Vec3 LinearLerp(const AA::Vec3& a, const AA::Vec3& b, const double& t)
 	{
-		AA::Vec3 lh(a._x * (1 - t), a._y * (1 - t), a._z * (1 - t));
-		AA::Vec3 rh(b._x * t, b._y * t, b._z * t);
-		return AA::Vec3(lh._x + rh._x, lh._y + rh._y, lh._z + rh._z);
+		AA::Vec3 lh(a.X() * (1 - t), a.Y() * (1 - t), a.Z() * (1 - t));
+		AA::Vec3 rh(b.X() * t, b.Y() * t, b.Z() * t);
+		return AA::Vec3(lh.X() + rh.X(), lh.Y() + rh.Y(), lh.Z() + rh.Z());
 	}
 
 	//Returns a double inclusive 0, exclusive 1
@@ -405,6 +440,16 @@ namespace AA
 		norm *= 0.5;
 		return norm.Vec3ToCol();
 	}
+
+	static double dMin(double a, double b)
+	{
+		return a < b ? a : b;
+	}
+
+	static double dMax(double a, double b)
+	{
+		return a > b ? a : b;
+	}
 }
 
 //Hash for Vec2
@@ -412,7 +457,7 @@ template<> struct std::hash<AA::Vec2>
 {
 	size_t operator()(AA::Vec2 const& vec) const
 	{
-		return ( (std::hash<double>()(vec._x) ^ (std::hash<double>()(vec._y) << 1)) );
+		return ( (std::hash<double>()(vec.X()) ^ (std::hash<double>()(vec.Y()) << 1)) );
 	}
 };
 
@@ -421,7 +466,7 @@ template<> struct std::hash<AA::Vec3>
 {
 	size_t operator()(AA::Vec3 const& vec) const
 	{
-		return ((std::hash<double>()(vec._x) ^ (std::hash<double>()(vec._y) << 1)) >> 1) ^ (std::hash<double>()(vec._z) << 1);
+		return ((std::hash<double>()(vec.X()) ^ (std::hash<double>()(vec.Y()) << 1)) >> 1) ^ (std::hash<double>()(vec.Z()) << 1);
 	}
 };
 

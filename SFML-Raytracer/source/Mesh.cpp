@@ -119,18 +119,18 @@ bool Mesh::LoadModel(const char* path)
 			////Retrieve the vertex information from the loaded attributes
 
 			//Position
-			vert._position._x = attributes.vertices[3 * index.vertex_index + 0];
-			vert._position._y = attributes.vertices[3 * index.vertex_index + 1];
-			vert._position._z = attributes.vertices[3 * index.vertex_index + 2];
+			vert._position[0] = attributes.vertices[3 * index.vertex_index + 0];
+			vert._position[1] = attributes.vertices[3 * index.vertex_index + 1];
+			vert._position[2] = attributes.vertices[3 * index.vertex_index + 2];
 
 			//Normal
-			vert._normal._x = attributes.normals[3 * index.normal_index + 0];
-			vert._normal._y = attributes.normals[3 * index.normal_index + 1];
-			vert._normal._z = attributes.normals[3 * index.normal_index + 2];
+			vert._normal[0] = attributes.normals[3 * index.normal_index + 0];
+			vert._normal[1] = attributes.normals[3 * index.normal_index + 1];
+			vert._normal[2] = attributes.normals[3 * index.normal_index + 2];
 
 			//Tex cords
-			vert._texCord._x = attributes.texcoords[2 * index.texcoord_index + 0];
-			vert._texCord._y = attributes.texcoords[2 * index.texcoord_index + 1];
+			vert._texCord[0] = attributes.texcoords[2 * index.texcoord_index + 0];
+			vert._texCord[1] = attributes.texcoords[2 * index.texcoord_index + 1];
 
 
 			//// We only wanna store unique verts so check if this vert already exists, if it do just add the index in the indicies, if not push it

@@ -17,10 +17,10 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
 	double tXMin, tYMin, tZMin, tXMax, tYMax, tZMax;
 
     //Work out tmin and max for both x and y and sort them without having to swap based on which is bigger
-    tXMin = (_bounds[ray._signs[0]]._x - ray._startPos._x) * ray._inverseDir._x;
-    tXMax = (_bounds[1 - ray._signs[0]]._x - ray._startPos._x) * ray._inverseDir._x;
-    tYMin = (_bounds[ray._signs[1]]._y - ray._startPos._y) * ray._inverseDir._y;
-    tYMax = (_bounds[1 - ray._signs[1]]._y - ray._startPos._y) * ray._inverseDir._y;
+    tXMin = (_bounds[ray._signs[0]].X() - ray._startPos.X()) * ray._inverseDir.X();
+    tXMax = (_bounds[1 - ray._signs[0]].X() - ray._startPos.X()) * ray._inverseDir.X();
+    tYMin = (_bounds[ray._signs[1]].Y() - ray._startPos.Y()) * ray._inverseDir.Y();
+    tYMax = (_bounds[1 - ray._signs[1]].Y() - ray._startPos.Y()) * ray._inverseDir.Y();
 
     //Check if the ray hit lies within bounds and alligned on the x n y, if they are continue to z
     if ((tXMin > tYMax) || (tYMin > tXMax))
@@ -36,8 +36,8 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
         tXMax = tYMax;
     }
 
-    tZMin = (_bounds[ray._signs[2]]._z - ray._startPos._z) * ray._inverseDir._z;
-    tZMax = (_bounds[1 - ray._signs[2]]._z - ray._startPos._z) * ray._inverseDir._z;
+    tZMin = (_bounds[ray._signs[2]].Z() - ray._startPos.Z()) * ray._inverseDir.Z();
+    tZMax = (_bounds[1 - ray._signs[2]].Z() - ray._startPos.Z()) * ray._inverseDir.Z();
 
     if ((tXMin > tZMax) || (tZMin > tXMax))
     {
@@ -91,9 +91,9 @@ void Box::MoveBox(AA::Vec3 pos)
 
 void Box::ScaleBox(double width, double height, double depth)
 {
-	_scale._x = width;
-	_scale._y = height;
-	_scale._z = depth;
+	_scale[0] = width;
+	_scale[1] = height;
+	_scale[2] = depth;
 	UpdateBounds();
 }
 

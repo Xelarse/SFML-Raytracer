@@ -51,7 +51,7 @@ void App::Run()
     //    "D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\cube.obj",
     //    //"D:\\Alex\\Documents\\ProjectsAndWork\\ThirdYear\\SFML-Raytracer\\SFML-Raytracer\\assets\\KennyPirate\\pirate_captain.obj",
     //    AA::Vec3(-2, 0.5, 0),
-    //    AA::Vec3(0.5, 0.5, 2)
+    //    AA::Vec3(0.3, 0.3, 0.3)
     //    )
     //);
 
@@ -89,29 +89,29 @@ void App::Update(float dt)
     if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._z -= 0.25;
-        previous._z = previous._z < -3.0 ? -3.0 : previous._z;
+        previous[2] -= 0.25;
+        previous[2] = previous.Z() < -3.0 ? -3.0 : previous.Z();
         _testBox->MoveBox(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._z += 0.25;
-        previous._z = previous._z > 3 ? 3 : previous._z;
+        previous[2] += 0.25;
+        previous[2] = previous.Z() > 3 ? 3 : previous.Z();
         _testBox->MoveBox(previous);
     }
     if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._x -= 0.25;
-        previous._x = previous._x < -4.0 ? -4.0 : previous._x;
+        previous[0] -= 0.25;
+        previous[0] = previous.X() < -4.0 ? -4.0 : previous.X();
         _testBox->MoveBox(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
     {
         AA::Vec3 previous = _testBox->GetPosition();
-        previous._x += 0.25;
-        previous._x = previous._x > 4.0 ? 4.0 : previous._x;
+        previous[0] += 0.25;
+        previous[0] = previous.X() > 4.0 ? 4.0 : previous.X();
         _testBox->MoveBox(previous);
     }
 
@@ -135,11 +135,11 @@ void App::Update(float dt)
         //Take the current camera position
         AA::Vec3 newPos = _cam->GetLookFrom();
         //Add to it to make it go left
-        newPos._x += (dt / 1000) * _cameraPanSpeed;
+        newPos[0] += (dt / 1000) * _cameraPanSpeed;
         //Check if it being left is outside the current set bounds
-        if (newPos._x > _cameraXBound)
+        if (newPos.X() > _cameraXBound)
         {
-            newPos._x = _cameraXBound;
+            newPos[0] = _cameraXBound;
             _camLeft = !_camLeft;
         }
         _cam->SetLookFrom(newPos);
@@ -149,11 +149,11 @@ void App::Update(float dt)
         //Take the current camera position
         AA::Vec3 newPos = _cam->GetLookFrom();
         //Add to it to make it go left
-        newPos._x -= (dt / 1000) *_cameraPanSpeed;
+        newPos[0] -= (dt / 1000) *_cameraPanSpeed;
         //Check if it being left is outside the current set bounds
-        if (newPos._x < -_cameraXBound)
+        if (newPos.X() < -_cameraXBound)
         {
-            newPos._x = -_cameraXBound;
+            newPos[0] = -_cameraXBound;
             _camLeft = !_camLeft;
         }
         _cam->SetLookFrom(newPos);
@@ -269,7 +269,7 @@ AA::Vec3 App::BackgroundGradientCol(const AA::Ray& ray)
     AA::Vec3 bottom = AA::Vec3(1.0, 1.0, 1.0);
 
     AA::Vec3 unitDir = ray._dir.UnitVector();
-    float t = 0.5 * (unitDir._y + 1.0);
+    float t = 0.5 * (unitDir.Y() + 1.0);
 
     return AA::LinearLerp(top, bottom, t);
 }
