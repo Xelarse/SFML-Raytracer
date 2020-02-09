@@ -441,11 +441,14 @@ namespace AA
 		return norm.Vec3ToCol();
 	}
 
+
+	//Quicker fMin due to not needing to check for NaNs and other exceptions
 	static double dMin(double a, double b)
 	{
 		return a < b ? a : b;
 	}
 
+	//Quicker fMax due to not needing to check for NaNs and other exceptions
 	static double dMax(double a, double b)
 	{
 		return a > b ? a : b;
