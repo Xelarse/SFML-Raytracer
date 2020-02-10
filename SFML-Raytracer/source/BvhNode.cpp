@@ -1,9 +1,9 @@
 #include "..\include\BvhNode.h"
 #include <iostream>
 
-BvhNode::BvhNode(Hittable** dataPtr, int dataSize, double t0, double t1)
+BvhNode::BvhNode(std::vector<Hittable*> hittables, double t0, double t1)
 {
-	ConstructBVH(dataPtr, dataSize, t0, t1);
+	ConstructBVH(hittables, t0, t1);
 }
 
 bool BvhNode::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
@@ -49,41 +49,47 @@ bool BvhNode::BoundingBox(double t0, double t1, AABB& outBox) const
 	return true;
 }
 
-void BvhNode::ConstructBVH(Hittable** dataPtr, int dataSize, double t0, double t1)
+void BvhNode::ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1)
 {
-	//Done every update to corrispond with objects moving
-
 	//Randomly choose an axis to divide on
 	int axis = static_cast<int>(3 * AA::RanDouble());
 
 	//Sort on the random axis
 	if (axis == 0)
 	{
-		qsort(dataPtr, dataSize, sizeof(Hittable*), BvhNode::CompareXBox);
+		std::sort(hittables.begin(), hittables.end(), std::bind(BvhNode::CompareXBox, this));
 	}
 	else if (axis == 1)
 	{
-		qsort(dataPtr, dataSize, sizeof(Hittable*), BvhNode::CompareYBox);
+		std::sort(hittables.begin(), hittables.end(), std::bind(BvhNode::CompareYBox, this));
 	}
 	else
 	{
-		qsort(dataPtr, dataSize, sizeof(Hittable*), BvhNode::CompareZBox);
+		std::sort(hittables.begin(), hittables.end(), std::bind(BvhNode::CompareZBox, this));
 	}
 
 	//If theres only one or two hittables deal with the exceptions, otherwise recursively make another set of bvh's
-	if (dataSize == 1)
+	if (hittables.size() == 1)
 	{
-		_left = _right = dataPtr[0];
+		_left = _right = hittables[0];
 	}
-	else if (dataSize == 2)
+	else if (hittables.size() == 2)
 	{
-		_left = dataPtr[0];
-		_right = dataPtr[1];
+		_left = hittables.front();
+		_right = hittables.back();
 	}
 	else
 	{
-		_left = new BvhNode(dataPtr, dataSize / 2, t0, t1);
-		_right = new BvhNode(dataPtr + dataSize / 2, dataSize - (dataSize / 2), t0, t1);
+		std::vector<Hittable*> right;
+
+		for (int i = 0; i < hittables.size() / 2; ++i)
+		{
+			right.push_back(hittables.back());
+			hittables.pop_back();
+		}
+
+		_left = new BvhNode(hittables, t0, t1);
+		_right = new BvhNode(right, t0, t1);
 	}
 
 
@@ -98,13 +104,9 @@ void BvhNode::ConstructBVH(Hittable** dataPtr, int dataSize, double t0, double t
 	_box = AABB::SurroundingBox(leftBox, rightBox);
 }
 
-int BvhNode::CompareXBox(const void* a, const void* b)
+int BvhNode::CompareXBox(const Hittable* lhs, const Hittable* rhs)
 {
 	AABB leftBox, rightBox;
-
-	//Need to do this ptr malarkey to get around the const
-	Hittable* lhs = *(Hittable**)a;
-	Hittable* rhs = *(Hittable**)b;
 
 	if (!lhs->BoundingBox(0, 0, leftBox) || !rhs->BoundingBox(0, 0, rightBox))
 	{
@@ -113,21 +115,17 @@ int BvhNode::CompareXBox(const void* a, const void* b)
 
 	if (leftBox.Min().X() - rightBox.Min().X() < 0.0)
 	{
-		return -1;
+		return false;
 	}
 	else
 	{
-		return 1;
+		return true;
 	}
 }
 
-int BvhNode::CompareYBox(const void* a, const void* b)
+int BvhNode::CompareYBox(const Hittable* lhs, const Hittable* rhs)
 {
 	AABB leftBox, rightBox;
-
-	//Need to do this ptr malarkey to get around the const
-	Hittable* lhs = *(Hittable**)a;
-	Hittable* rhs = *(Hittable**)b;
 
 	if (!lhs->BoundingBox(0, 0, leftBox) || !rhs->BoundingBox(0, 0, rightBox))
 	{
@@ -136,21 +134,17 @@ int BvhNode::CompareYBox(const void* a, const void* b)
 
 	if (leftBox.Min().Y() - rightBox.Min().Y() < 0.0)
 	{
-		return -1;
+		return false;
 	}
 	else
 	{
-		return 1;
+		return true;
 	}
 }
 
-int BvhNode::CompareZBox(const void* a, const void* b)
+int BvhNode::CompareZBox(const Hittable* lhs, const Hittable* rhs)
 {
 	AABB leftBox, rightBox;
-
-	//Need to do this ptr malarkey to get around the const
-	Hittable* lhs = *(Hittable**)a;
-	Hittable* rhs = *(Hittable**)b;
 
 	if (!lhs->BoundingBox(0, 0, leftBox) || !rhs->BoundingBox(0, 0, rightBox))
 	{
@@ -159,10 +153,10 @@ int BvhNode::CompareZBox(const void* a, const void* b)
 
 	if (leftBox.Min().Z() - rightBox.Min().Z() < 0.0)
 	{
-		return -1;
+		return false;
 	}
 	else
 	{
-		return 1;
+		return true;
 	}
 }

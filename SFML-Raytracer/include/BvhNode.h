@@ -9,18 +9,18 @@ class BvhNode : public Hittable
 {
 public:
 	BvhNode() = default;
-	BvhNode(Hittable** dataPtr, int dataSize, double t0, double t1);
+	BvhNode(std::vector<Hittable*> dataPtr, double t0, double t1);
 	~BvhNode() = default;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
-	void ConstructBVH(Hittable** dataPtr, int dataSize, double t0, double t1);
+	void ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1);
 	
 
 	//qsort comparison functions
-	static int CompareXBox(const void* a, const void* b);
-	static int CompareYBox(const void* a, const void* b);
-	static int CompareZBox(const void* a, const void* b);
+	static int CompareXBox(const Hittable* a, const Hittable* b);
+	static int CompareYBox(const Hittable* a, const Hittable* b);
+	static int CompareZBox(const Hittable* a, const Hittable* b);
 
 
 	//Nodes of the trees, could either lead down to move BvhNodes or stop at a Hittable
