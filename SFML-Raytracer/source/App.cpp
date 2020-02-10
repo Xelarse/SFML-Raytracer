@@ -1,5 +1,6 @@
 #include "..\include\App.h"
 #include <iostream>
+#include <random>
 
 //https://raytracing.github.io/books/RayTracingInOneWeekend.html up to antialisaing
 //https://github.com/RayTracing/raytracing.github.io
@@ -41,6 +42,19 @@ void App::Run()
     backSphere->UseColour(true);
 
     _world->_hittableObjects.push_back(backSphere);
+
+    //Add a bunch of spheres using random dist
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> xDist(-5.0, 5.0);
+    std::uniform_real_distribution<double> yDist(0.0, 5.0);
+    std::uniform_real_distribution<double> zDist(-5, -12);
+    std::uniform_real_distribution<double> rad(0.1, 0.8);
+
+    for (int i = 0; i < 50; ++i)
+    {
+        _world->_hittableObjects.emplace_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), sf::Color(0, 0, 0, 255)));
+    }
 
     //_world->_hittableObjects.push_back(new Mesh(
     //    "assets/cube.obj",
