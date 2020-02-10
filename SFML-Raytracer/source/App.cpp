@@ -42,13 +42,13 @@ void App::Run()
 
     _world->_hittableObjects.push_back(backSphere);
 
-    _world->_hittableObjects.push_back(new Mesh(
-        "assets/cube.obj",
-        //"assets/KennyPirate/pirate_captain.obj",
-        AA::Vec3(-2, 0.5, 0),
-        AA::Vec3(0.3, 0.3, 0.3)
-        )
-    );
+    //_world->_hittableObjects.push_back(new Mesh(
+    //    "assets/cube.obj",
+    //    //"assets/KennyPirate/pirate_captain.obj",
+    //    AA::Vec3(-2, 0.5, 0),
+    //    AA::Vec3(0.3, 0.3, 0.3)
+    //    )
+    //);
 
     auto box = new Box(AA::Vec3(2, 0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255));
 

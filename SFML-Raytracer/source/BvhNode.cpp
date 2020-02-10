@@ -57,15 +57,15 @@ void BvhNode::ConstructBVH(std::vector<Hittable*> hittables, double t0, double t
 	//Sort on the random axis
 	if (axis == 0)
 	{
-		std::sort(hittables.begin(), hittables.end(), std::bind(BvhNode::CompareXBox, this));
+		std::sort(hittables.begin(), hittables.end(), BvhNode::CompareXBox);
 	}
 	else if (axis == 1)
 	{
-		std::sort(hittables.begin(), hittables.end(), std::bind(BvhNode::CompareYBox, this));
+		std::sort(hittables.begin(), hittables.end(), BvhNode::CompareYBox);
 	}
 	else
 	{
-		std::sort(hittables.begin(), hittables.end(), std::bind(BvhNode::CompareZBox, this));
+		std::sort(hittables.begin(), hittables.end(), BvhNode::CompareZBox);
 	}
 
 	//If theres only one or two hittables deal with the exceptions, otherwise recursively make another set of bvh's
@@ -104,7 +104,7 @@ void BvhNode::ConstructBVH(std::vector<Hittable*> hittables, double t0, double t
 	_box = AABB::SurroundingBox(leftBox, rightBox);
 }
 
-int BvhNode::CompareXBox(const Hittable* lhs, const Hittable* rhs)
+int BvhNode::CompareXBox(Hittable* lhs, Hittable* rhs)
 {
 	AABB leftBox, rightBox;
 
@@ -123,7 +123,7 @@ int BvhNode::CompareXBox(const Hittable* lhs, const Hittable* rhs)
 	}
 }
 
-int BvhNode::CompareYBox(const Hittable* lhs, const Hittable* rhs)
+int BvhNode::CompareYBox(Hittable* lhs, Hittable* rhs)
 {
 	AABB leftBox, rightBox;
 
@@ -142,7 +142,7 @@ int BvhNode::CompareYBox(const Hittable* lhs, const Hittable* rhs)
 	}
 }
 
-int BvhNode::CompareZBox(const Hittable* lhs, const Hittable* rhs)
+int BvhNode::CompareZBox(Hittable* lhs, Hittable* rhs)
 {
 	AABB leftBox, rightBox;
 

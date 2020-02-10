@@ -1,4 +1,5 @@
 #include "..\include\Hittables.h"
+#include "BvhNode.h"
 
 Hittables::~Hittables()
 {
@@ -14,13 +15,25 @@ bool Hittables::IntersectedRay(const AA::Ray& ray, double tmin, double tmax, Hit
 	bool didHit = false;
 	double closestHit = tmax;
 
-	for (auto& hitt : _hittableObjects)
+	////With BVH
+	//Create a bvh of the hittables, then do the iterations of the ray against the bvh intersect ray
+	if (_bvhEnabled)
 	{
-		if (hitt->IntersectedRay(ray, tmin, closestHit, tempRes))
+		BvhNode treeStart = BvhNode(_hittableObjects, 0, 0);
+		didHit = treeStart.IntersectedRay(ray, tmin, tmax, tempRes);
+	}
+
+	//// Without BVH
+	else
+	{
+		for (auto& hitt : _hittableObjects)
 		{
-			didHit = true;
-			closestHit = tempRes.t;
-			res = tempRes;
+			if (hitt->IntersectedRay(ray, tmin, closestHit, tempRes))
+			{
+				didHit = true;
+				closestHit = tempRes.t;
+				res = tempRes;
+			}
 		}
 	}
 

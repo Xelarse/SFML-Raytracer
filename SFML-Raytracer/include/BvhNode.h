@@ -18,9 +18,9 @@ public:
 	
 
 	//qsort comparison functions
-	static int CompareXBox(const Hittable* a, const Hittable* b);
-	static int CompareYBox(const Hittable* a, const Hittable* b);
-	static int CompareZBox(const Hittable* a, const Hittable* b);
+	static int CompareXBox(Hittable* a, Hittable* b);
+	static int CompareYBox(Hittable* a, Hittable* b);
+	static int CompareZBox(Hittable* a, Hittable* b);
 
 
 	//Nodes of the trees, could either lead down to move BvhNodes or stop at a Hittable
