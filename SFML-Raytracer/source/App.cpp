@@ -44,17 +44,17 @@ void App::Run()
     _world->_hittableObjects.push_back(backSphere);
 
     //Add a bunch of spheres using random dist
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> xDist(-5.0, 5.0);
-    std::uniform_real_distribution<double> yDist(0.0, 5.0);
-    std::uniform_real_distribution<double> zDist(-5, -12);
-    std::uniform_real_distribution<double> rad(0.1, 0.8);
+    //std::random_device rd;
+    //std::mt19937 gen(rd());
+    //std::uniform_real_distribution<double> xDist(-5.0, 5.0);
+    //std::uniform_real_distribution<double> yDist(0.0, 5.0);
+    //std::uniform_real_distribution<double> zDist(-12.0, -5.0);
+    //std::uniform_real_distribution<double> rad(0.1, 0.8);
 
-    for (int i = 0; i < 50; ++i)
-    {
-        _world->_hittableObjects.emplace_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), sf::Color(0, 0, 0, 255)));
-    }
+    //for (int i = 0; i < 50; ++i)
+    //{
+    //    _world->_hittableObjects.emplace_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), sf::Color(0, 0, 0, 255)));
+    //}
 
     //_world->_hittableObjects.push_back(new Mesh(
     //    "assets/cube.obj",
@@ -69,6 +69,12 @@ void App::Run()
     //TODO remove this pointer later, just for moving cube independantly from the world hittables
     _testBox = box;
     _world->_hittableObjects.push_back(box);
+
+    //Calculate the scene bvh
+    if (_bvhEnabled)
+    {
+        _sceneBvh = std::make_unique<BvhNode>(_world->_hittableObjects, 0, 0);
+    }
 
     while (_pWindow->isOpen())
     {
@@ -234,7 +240,11 @@ void App::GetColour(const double& u, const double& v, sf::Color& colOut)
     Hittable::HitResult res;
     AA::Ray ray = _cam->GetRay(u, v);
 
-    if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
+    if (_bvhEnabled && _sceneBvh->IntersectedRay(ray, 0.0, 20000.0, res))
+    {
+        colOut = res.col;
+    }
+    else if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
     {
         colOut = res.col;
     }

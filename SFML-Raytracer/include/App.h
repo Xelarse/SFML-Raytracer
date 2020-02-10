@@ -7,6 +7,7 @@
 #include "Box.h"
 #include "Hittables.h"
 #include "Mesh.h"
+#include "BvhNode.h"
 
 class App
 {
@@ -48,6 +49,9 @@ private:
 	std::unique_ptr<sf::Clock> _pAppClock;
 
 	Box* _testBox = nullptr;
+
+	bool _bvhEnabled = false;
+	std::unique_ptr<BvhNode> _sceneBvh;
 
 	sf::RectangleShape _renderTarget;
 	std::unique_ptr<sf::Texture> _renderTexture;
