@@ -2,9 +2,9 @@
 #include <cmath>
 #include <iostream>
 
-Box::Box(AA::Vec3 origin, double width, double height, double depth, sf::Color col) : _origin(origin), _scale(AA::Vec3(width, height, depth))
+Box::Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, sf::Color col, bool useColour) 
+    : Hittable(isStatic, col, useColour), _origin(origin), _scale(scale)
 {
-    _col = col;
 	UpdateBounds();
 }
 
@@ -83,17 +83,19 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
     return true;
 }
 
-void Box::MoveBox(AA::Vec3 pos)
+void Box::Move(AA::Vec3 newPos)
 {
-	_origin = pos;
+    if(_isStatic) { return; }
+	_origin = newPos;
 	UpdateBounds();
 }
 
-void Box::ScaleBox(double width, double height, double depth)
+void Box::Scale(AA::Vec3 newScale)
 {
-	_scale[0] = width;
-	_scale[1] = height;
-	_scale[2] = depth;
+    if(_isStatic) { return; }
+	_scale[0] = newScale.X();
+	_scale[1] = newScale.Y();
+	_scale[2] = newScale.Z();
 	UpdateBounds();
 }
 

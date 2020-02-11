@@ -15,6 +15,20 @@ App::~App()
 
 void App::Run()
 {
+    InitCoreSystems();
+    InitScene();
+
+    while (_pWindow->isOpen())
+    {
+        float deltaTimeMs = _pAppClock->restart().asMilliseconds();
+        Tick(deltaTimeMs);
+        std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
+    }
+
+}
+
+void App::InitCoreSystems()
+{
     //SFML related inits
     _pWindow = std::make_unique<sf::RenderWindow>(sf::VideoMode(_width, _height), "SFML-Raytracer");
     _pEventHander = std::make_unique<EventHandler>();
@@ -22,26 +36,31 @@ void App::Run()
     sf::View view = _pWindow->getView();
     view.setSize(_width, -_height);
     _pWindow->setView(view);
+    _renderTexture = std::make_unique<sf::Texture>();
+    _renderTarget = sf::RectangleShape(sf::Vector2f(_width, _height));
 
     //Raytracer related inits
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
     _world = std::make_unique<Hittables>();
-    _renderTexture = std::make_unique<sf::Texture>();
+    
 
     AA::Vec3 lookFrom = AA::Vec3(0, 3, 5);
     AA::Vec3 lookAt = AA::Vec3(0, 0.5, 0);
     double vFov = 70;
-    _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0,1,0), vFov, (_width / _height));
+    _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0, 1, 0), vFov, (_width / _height));
+}
 
-    _renderTarget = sf::RectangleShape(sf::Vector2f(_width, _height));
+void App::InitScene()
+{
+    //Add a static sphere with no specific colour and one with a colour for backdrop
+    _world->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
+    _world->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
 
-    //Add a couple of spheres to the world
-    _world->_hittableObjects.push_back(new Sphere( AA::Vec3(0, 0.5, -1), 0.8, sf::Color(0, 0, 0, 255) ));
+    //Add a box that can be moved with WASD, TODO potentially remove later
+    _world->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
+    _testBox = dynamic_cast<Box*>(_world->_hittableObjects.back());
 
-    auto backSphere = new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, sf::Color(102, 0, 102, 255));
-    backSphere->UseColour(true);
 
-    _world->_hittableObjects.push_back(backSphere);
 
     //Add a bunch of spheres using random dist
     //std::random_device rd;
@@ -64,25 +83,11 @@ void App::Run()
     //    )
     //);
 
-    auto box = new Box(AA::Vec3(2, 0.5, -0.5), 1, 1, 2, sf::Color(0, 0, 0, 255));
-
-    //TODO remove this pointer later, just for moving cube independantly from the world hittables
-    _testBox = box;
-    _world->_hittableObjects.push_back(box);
-
     //Calculate the scene bvh
     if (_bvhEnabled)
     {
         _sceneBvh = std::make_unique<BvhNode>(_world->_hittableObjects, 0, 0);
     }
-
-    while (_pWindow->isOpen())
-    {
-        float deltaTimeMs = _pAppClock->restart().asMilliseconds();
-        Tick(deltaTimeMs);
-        std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
-    }
-
 }
 
 void App::Tick(float dt)

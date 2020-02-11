@@ -4,7 +4,7 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale) : _position(position), _scale(scale)
+Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic) : Hittable(isStatic, sf::Color(255,255,255,255), false),  _position(position), _scale(scale)
 {
 	LoadModel(path);
 }
@@ -152,4 +152,16 @@ bool Mesh::BoundingBox(double t0, double t1, AABB& outBox) const
 {
 	//TODO add function to calc this later but for now meshes are gonna ignore the bounding box whilst i work out a way to process tris with it
 	return false;
+}
+
+void Mesh::Move(AA::Vec3 newPos)
+{
+	if(_isStatic) { return; }
+	_position = newPos;
+}
+
+void Mesh::Scale(AA::Vec3 newScale)
+{
+	if(_isStatic) { return; }
+	_scale = newScale;
 }

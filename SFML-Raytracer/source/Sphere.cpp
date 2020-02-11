@@ -1,8 +1,7 @@
 #include "..\include\Sphere.h"
 
-Sphere::Sphere(AA::Vec3 o, double r, sf::Color col) : _origin(o), _radius(r)
+Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, sf::Color col, bool useColour) : Hittable(isStatic, col, useColour), _origin(o), _radius(r)
 {
-	_col = col;
 }
 
 Sphere::~Sphere()
@@ -65,4 +64,16 @@ bool Sphere::BoundingBox(double t0, double t1, AABB& outBox) const
     );
 
     return true;
+}
+
+void Sphere::Move(AA::Vec3 newPos)
+{
+    if(_isStatic) { return; }
+    _origin = newPos;
+}
+
+void Sphere::Scale(AA::Vec3 newScale)
+{
+    if(_isStatic) { return; }
+    _radius = newScale.X();
 }

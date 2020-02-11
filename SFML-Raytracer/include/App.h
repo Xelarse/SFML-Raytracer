@@ -20,6 +20,10 @@ public:
 
 
 private:
+
+	void InitCoreSystems();
+	void InitScene();
+
 	//dt in milliseconds
 	void Tick(float dt);
 

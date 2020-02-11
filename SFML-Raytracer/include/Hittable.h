@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Utilities.h"
 #include "AABB.h"
+#include "Utilities.h"
 
 class Hittable
 {
@@ -16,6 +17,7 @@ public:
 	};
 
 	Hittable();
+	Hittable(bool isStatic, sf::Color col, bool useColour);
 	virtual ~Hittable();
 
 	//Override function for detecting if a ray has hit an object
@@ -25,6 +27,10 @@ public:
 	//t0 and t1 used to ensure bounding box follows moving objects over a frame
 	virtual bool BoundingBox(double t0, double t1, AABB& outBox) const = 0;
 
+	//Basic functions for derviatives to implement for their respective object
+	virtual void Move(AA::Vec3 newPos) = 0;
+	virtual void Scale(AA::Vec3 newScale) = 0;
+
 	inline sf::Color Colour() const { return _col; };
 	inline bool UseColour() const { return _useColour; }
 	inline void UseColour(bool use) { _useColour = use; }
@@ -32,5 +38,6 @@ public:
 protected:
 	sf::Color _col;
 	bool _useColour = false;
+	bool _isStatic = false;
 };
 
