@@ -22,7 +22,7 @@ void App::Run()
     {
         float deltaTimeMs = _pAppClock->restart().asMilliseconds();
         Tick(deltaTimeMs);
-        std::cout << "FPS: " << floor(1000 / deltaTimeMs) << std::endl;
+        std::cout << "FPS: " << floor(1000 / deltaTimeMs) << ", Frametime in MS: " << deltaTimeMs << std::endl;
     }
 
 }
@@ -41,7 +41,8 @@ void App::InitCoreSystems()
 
     //Raytracer related inits
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
-    _world = std::make_unique<Hittables>();
+    _staticHittables = std::make_unique<Hittables>(true, _useBvh);
+    _dynamicHittables = std::make_unique<Hittables>(false, _useBvh);
     
 
     AA::Vec3 lookFrom = AA::Vec3(0, 3, 5);
@@ -53,27 +54,27 @@ void App::InitCoreSystems()
 void App::InitScene()
 {
     //Add a static sphere with no specific colour and one with a colour for backdrop
-    _world->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
-    _world->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
 
     //Add a box that can be moved with WASD, TODO potentially remove later
-    _world->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
-    _testBox = dynamic_cast<Box*>(_world->_hittableObjects.back());
+    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
+    _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
 
 
 
     //Add a bunch of spheres using random dist
-    //std::random_device rd;
-    //std::mt19937 gen(rd());
-    //std::uniform_real_distribution<double> xDist(-5.0, 5.0);
-    //std::uniform_real_distribution<double> yDist(0.0, 5.0);
-    //std::uniform_real_distribution<double> zDist(-12.0, -5.0);
-    //std::uniform_real_distribution<double> rad(0.1, 0.8);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> xDist(-5.0, 5.0);
+    std::uniform_real_distribution<double> yDist(0.0, 5.0);
+    std::uniform_real_distribution<double> zDist(-12.0, -5.0);
+    std::uniform_real_distribution<double> rad(0.1, 0.8);
 
-    //for (int i = 0; i < 50; ++i)
-    //{
-    //    _world->_hittableObjects.emplace_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), sf::Color(0, 0, 0, 255)));
-    //}
+    for (int i = 0; i < 2000; ++i)
+    {
+        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false));
+    }
 
     //_world->_hittableObjects.push_back(new Mesh(
     //    "assets/cube.obj",
@@ -83,11 +84,10 @@ void App::InitScene()
     //    )
     //);
 
-    //Calculate the scene bvh
-    if (_bvhEnabled)
-    {
-        _sceneBvh = std::make_unique<BvhNode>(_world->_hittableObjects, 0, 0);
-    }
+
+    //Prompt the hittables to construt their BVH's
+    _staticHittables->ConstructBvh();
+    _dynamicHittables->ConstructBvh();
 }
 
 void App::Tick(float dt)
@@ -109,28 +109,28 @@ void App::Update(float dt)
         AA::Vec3 previous = _testBox->GetPosition();
         previous[2] -= 0.25;
         previous[2] = previous.Z() < -3.0 ? -3.0 : previous.Z();
-        _testBox->MoveBox(previous);
+        _testBox->Move(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
     {
         AA::Vec3 previous = _testBox->GetPosition();
         previous[2] += 0.25;
         previous[2] = previous.Z() > 3 ? 3 : previous.Z();
-        _testBox->MoveBox(previous);
+        _testBox->Move(previous);
     }
     if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
     {
         AA::Vec3 previous = _testBox->GetPosition();
         previous[0] -= 0.25;
         previous[0] = previous.X() < -4.0 ? -4.0 : previous.X();
-        _testBox->MoveBox(previous);
+        _testBox->Move(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
     {
         AA::Vec3 previous = _testBox->GetPosition();
         previous[0] += 0.25;
         previous[0] = previous.X() > 4.0 ? 4.0 : previous.X();
-        _testBox->MoveBox(previous);
+        _testBox->Move(previous);
     }
 
     if (_pEventHander->IsKeyPressed(sf::Keyboard::Up))
@@ -196,14 +196,16 @@ sf::Color App::CalculatePixel(const double& u, const double& v)
 {
     sf::Color pixelColour = sf::Color::Black;
 
-    if (_antiAliasing)
-    {
-        GetColourAntiAliasing(u, v, pixelColour);
-    }
-    else
-    {
+    //TODO rework antialisating to work with new static and dynamic system
+
+    //if (_antiAliasing)
+    //{
+    //    GetColourAntiAliasing(u, v, pixelColour);
+    //}
+    //else
+    //{
         GetColour(u, v, pixelColour);
-    }
+    //}
 
     return pixelColour;
 }
@@ -242,16 +244,24 @@ void App::CreateImage()
 
 void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 {
-    Hittable::HitResult res;
+    Hittable::HitResult staticRes, dynamicRes;
     AA::Ray ray = _cam->GetRay(u, v);
+    bool staticHit, dynamicHit;
 
-    if (_bvhEnabled && _sceneBvh->IntersectedRay(ray, 0.0, 20000.0, res))
+    staticHit = _staticHittables->IntersectedRay(ray, 0.0, 20000, staticRes);
+    dynamicHit = _dynamicHittables->IntersectedRay(ray, 0.0, 20000.0, dynamicRes);
+
+    if (staticHit && dynamicHit)
     {
-        colOut = res.col;
+        colOut = staticRes.t < dynamicRes.t ? staticRes.col : dynamicRes.col;
     }
-    else if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
+    else if (staticHit)
     {
-        colOut = res.col;
+        colOut = staticRes.col;
+    }
+    else if (dynamicHit)
+    {
+        colOut = dynamicRes.col;
     }
     else
     {
@@ -261,28 +271,29 @@ void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 
 void App::GetColourAntiAliasing(const double& u, const double& v, sf::Color& colOut)
 {
-    AA::Vec3 tempColValues = AA::Vec3(0,0,0);
-    Hittable::HitResult res;
+    //AA::Vec3 tempColValues = AA::Vec3(0,0,0);
+    //Hittable::HitResult staticRes, dynamicRes;
+    //bool staticHit, dynamicHit;
 
-    //Iterate with slight variance around the set X and Y position of the ray, get the colour data and add it to the temp
-    for (size_t i = 0; i < _perPixelAA; i++)
-    {
-        double rayU = ((u * _width) + AA::RanDouble()) / _width;
-        double rayV = ((v * _height) + AA::RanDouble()) / _height;
-        AA::Ray ray = _cam->GetRay(rayU, rayV);
+    ////Iterate with slight variance around the set X and Y position of the ray, get the colour data and add it to the temp
+    //for (size_t i = 0; i < _perPixelAA; i++)
+    //{
+    //    double rayU = ((u * _width) + AA::RanDouble()) / _width;
+    //    double rayV = ((v * _height) + AA::RanDouble()) / _height;
+    //    AA::Ray ray = _cam->GetRay(rayU, rayV);
 
-        if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
-        {
-            tempColValues += AA::Vec3(res.col.r / 255.0, res.col.g / 255.0, res.col.b / 255.0);
-        }
-        else
-        {
-            tempColValues += BackgroundGradientCol(ray);
-        }
-    }
+    //    if (_world->IntersectedRay(ray, 0.0, 20000.0, res))
+    //    {
+    //        tempColValues += AA::Vec3(res.col.r / 255.0, res.col.g / 255.0, res.col.b / 255.0);
+    //    }
+    //    else
+    //    {
+    //        tempColValues += BackgroundGradientCol(ray);
+    //    }
+    //}
 
-    tempColValues /= static_cast<double>(_perPixelAA);
-    colOut = tempColValues.Vec3ToCol();
+    //tempColValues /= static_cast<double>(_perPixelAA);
+    //colOut = tempColValues.Vec3ToCol();
 }
 
 AA::Vec3 App::BackgroundGradientCol(const AA::Ray& ray)

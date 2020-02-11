@@ -1,5 +1,9 @@
 #include "..\include\Hittables.h"
-#include "BvhNode.h"
+
+Hittables::Hittables(bool isHittableStatic, bool useBvh) : Hittable(isHittableStatic, sf::Color(255,255,255,255), false), _bvhEnabled(useBvh)
+{
+	_bvh = std::make_unique<BvhNode>();
+}
 
 Hittables::~Hittables()
 {
@@ -19,8 +23,14 @@ bool Hittables::IntersectedRay(const AA::Ray& ray, double tmin, double tmax, Hit
 	//Create a bvh of the hittables, then do the iterations of the ray against the bvh intersect ray
 	if (_bvhEnabled)
 	{
-		BvhNode treeStart = BvhNode(_hittableObjects, 0, 0);
-		didHit = treeStart.IntersectedRay(ray, tmin, tmax, tempRes);
+		//If the objects can move then we need to remake the bvh, TODO Set a dirty flag later so this isnt done everyyyyy update
+		if(!_isStatic || !_bvh->IsConstructed()) { ConstructBvh(); }
+		didHit = _bvh->IntersectedRay(ray, tmin, tmax, tempRes);
+
+		if (didHit)
+		{
+			res = tempRes;
+		}
 	}
 
 	//// Without BVH
@@ -68,4 +78,9 @@ bool Hittables::BoundingBox(double t0, double t1, AABB& outBox) const
 
 	//If the box never expanded just the box for the first object will do for later calcs, a full scene wide one isnt needed
 	return didExpand;
+}
+
+void Hittables::ConstructBvh()
+{
+	_bvh->ConstructBVH(_hittableObjects, 0.0, 0.0);
 }

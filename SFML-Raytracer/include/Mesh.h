@@ -8,7 +8,7 @@ public:
 	Mesh() = delete;
 	Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic);
 	Mesh(AA::Vec3 position, AA::Vec3 scale);
-	~Mesh() = default;
+	~Mesh() override = default;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool BoundingBox(double t0, double t1, AABB& outBox) const override;

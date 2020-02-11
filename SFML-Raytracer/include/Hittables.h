@@ -1,18 +1,26 @@
 #pragma once
 #include "Hittable.h"
+#include "BvhNode.h"
 
-//TODO BVH calculations will most likely be done here in the near future
 class Hittables : public Hittable
 {
 public:
-	Hittables() = default;
-	~Hittables();
+	Hittables() = delete;
+	Hittables(bool isHittableStatic, bool useBvh);
+	~Hittables() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double tmin, double tmax, Hittable::HitResult& res) override;
 	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
+	void ConstructBvh();
 
-	bool _bvhEnabled = false;
+	//Need to be implemented due to inheritance
+	inline void Move(AA::Vec3 pos) override { return; }
+	inline void Scale(AA::Vec3 scale) override { return; }
 
 	std::vector<Hittable*> _hittableObjects;
+
+private:
+	bool _bvhEnabled = true;
+	std::unique_ptr<BvhNode> _bvh;
 };
 

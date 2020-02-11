@@ -41,8 +41,11 @@ private:
 
 	int _width = 800;
 	int _height = 600;
+
 	bool _antiAliasing = false;
 	int _perPixelAA = 10;
+
+	bool _useBvh = true;
 	
 	double _cameraXBound = 8.0;
 	double _cameraPanSpeed = 4.0;
@@ -54,14 +57,12 @@ private:
 
 	Box* _testBox = nullptr;
 
-	bool _bvhEnabled = false;
-	std::unique_ptr<BvhNode> _sceneBvh;
-
 	sf::RectangleShape _renderTarget;
 	std::unique_ptr<sf::Texture> _renderTexture;
 
 	std::unique_ptr<AA::ColourArray> _pixelColourBuffer;
 	std::unique_ptr<Camera> _cam;
-	std::unique_ptr<Hittables> _world;
+	std::unique_ptr<Hittables> _staticHittables;
+	std::unique_ptr<Hittables> _dynamicHittables;
 };
 

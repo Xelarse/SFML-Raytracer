@@ -6,7 +6,7 @@ class Box : public Hittable
 public:
 	Box() = delete;
 	Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, sf::Color col, bool useColour);
-	~Box();
+	~Box() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
