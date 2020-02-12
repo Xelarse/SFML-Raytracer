@@ -51,6 +51,7 @@ bool BvhNode::BoundingBox(double t0, double t1, AABB& outBox) const
 
 void BvhNode::ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart)
 {
+	//TODO Fix the smart construction or just leave it 
 	if (useSmart)
 	{
 		SmartConstruction(hittables, t0, t1);
@@ -171,8 +172,9 @@ void BvhNode::SmartConstruction(std::vector<Hittable*> hittables, double t0, dou
 
 		//Safety check to set a default split of center if something messed up from earlier
 		inds[lowestInd] = inds[lowestInd] == -1 ? hittables.size() / 2 : inds[lowestInd];
+		int popOffs = hittables.size() - (inds[lowestInd] + 1);
 
-		for (int i = 0; i < inds[lowestInd]; ++i)
+		for (int i = 0; i < popOffs; ++i)
 		{
 			rhs.push_back(hittables.back());
 			hittables.pop_back();
@@ -223,31 +225,12 @@ void BvhNode::CalculateAxisCost(std::vector<Hittable*> hittables, AxisSort axis,
 	hittables.back()->BoundingBox(0, 0, minBox);
 	min = minBox.Min()[axisInd];
 	max = maxBox.Max()[axisInd];
-	//auto minElement = std::min_element(hittables.begin(), hittables.end(), [=](Hittable* lhs, Hittable* rhs)
-	//	{
-	//		AABB lhsBox, rhsBox;
-	//		lhs->BoundingBox(0, 0, lhsBox);
-	//		rhs->BoundingBox(0, 0, rhsBox);
 
-	//		return lhsBox.Min()[static_cast<int>(axis)] < rhsBox.Min()[static_cast<int>(axis)];
-	//	}
-	//);
-	//auto maxElement = std::max_element(hittables.begin(), hittables.end(), [=](Hittable* lhs, Hittable* rhs)
-	//	{
-	//		AABB lhsBox, rhsBox;
-	//		lhs->BoundingBox(0, 0, lhsBox);
-	//		rhs->BoundingBox(0, 0, rhsBox);
-
-	//		return lhsBox.Max()[static_cast<int>(axis)] < rhsBox.Max()[static_cast<int>(axis)];
-	//	}
-	//);
-
-	//TODO split on the min current, potentially change to obj origin?
 	for (int i = 0; i < hittables.size(); ++i)
 	{
 		//Get the current percentage along at this index
 		hittables[i]->BoundingBox(0, 0, tempBox);
-		double percent = AA::InverseLerp(min, max, tempBox.Min()[axisInd]);
+		double percent = 1 - AA::InverseLerp(min, max, tempBox.Min()[axisInd]);
 
 		//Math
 		// Cost of a split = (Probab of hitting box A  * Tris in box A) + (Probab of hitting box B * tris in box B)
