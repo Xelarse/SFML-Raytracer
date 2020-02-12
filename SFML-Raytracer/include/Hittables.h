@@ -6,7 +6,7 @@ class Hittables : public Hittable
 {
 public:
 	Hittables() = delete;
-	Hittables(bool isHittableStatic, bool useBvh);
+	Hittables(bool isHittableStatic, bool useBvh, bool useSAH);
 	~Hittables() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double tmin, double tmax, Hittable::HitResult& res) override;
@@ -21,6 +21,7 @@ public:
 
 private:
 	bool _bvhEnabled = true;
+	bool _sahEnabled = false;
 	std::unique_ptr<BvhNode> _bvh;
 };
 

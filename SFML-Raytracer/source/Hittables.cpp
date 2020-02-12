@@ -1,6 +1,6 @@
 #include "..\include\Hittables.h"
 
-Hittables::Hittables(bool isHittableStatic, bool useBvh) : Hittable(isHittableStatic, sf::Color(255,255,255,255), false), _bvhEnabled(useBvh)
+Hittables::Hittables(bool isHittableStatic, bool useBvh, bool useSAH) : Hittable(isHittableStatic, sf::Color(255,255,255,255), false), _bvhEnabled(useBvh), _sahEnabled(useSAH)
 {
 	_bvh = std::make_unique<BvhNode>();
 }
@@ -82,5 +82,5 @@ bool Hittables::BoundingBox(double t0, double t1, AABB& outBox) const
 
 void Hittables::ConstructBvh()
 {
-	_bvh->ConstructBVH(_hittableObjects, 0.0, 0.0, _isStatic);
+	_bvh->ConstructBVH(_hittableObjects, 0.0, 0.0, _sahEnabled);
 }

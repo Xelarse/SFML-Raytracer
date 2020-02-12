@@ -41,8 +41,8 @@ void App::InitCoreSystems()
 
     //Raytracer related inits
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
-    _staticHittables = std::make_unique<Hittables>(true, _useBvh);
-    _dynamicHittables = std::make_unique<Hittables>(false, _useBvh);
+    _staticHittables = std::make_unique<Hittables>(true, _useBvh, true);
+    _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
     
 
     AA::Vec3 lookFrom = AA::Vec3(0, 3, 5);
