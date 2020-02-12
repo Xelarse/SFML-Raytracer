@@ -82,5 +82,5 @@ bool Hittables::BoundingBox(double t0, double t1, AABB& outBox) const
 
 void Hittables::ConstructBvh()
 {
-	_bvh->ConstructBVH(_hittableObjects, 0.0, 0.0);
+	_bvh->ConstructBVH(_hittableObjects, 0.0, 0.0, _isStatic);
 }

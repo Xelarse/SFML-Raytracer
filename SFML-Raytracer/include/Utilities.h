@@ -453,6 +453,16 @@ namespace AA
 	{
 		return a > b ? a : b;
 	}
+
+	static double InverseLerp(double a, double b, double v)
+	{
+		return (v - a) / (b - a);
+	}
+
+	static double Lerp(double a, double b, double t)
+	{
+		return (1.0f - t) * a + b * t;
+	}
 }
 
 //Hash for Vec2

@@ -9,13 +9,25 @@ class BvhNode : public Hittable
 {
 public:
 	BvhNode() = default;
-	BvhNode(std::vector<Hittable*> dataPtr, double t0, double t1);
+	BvhNode(std::vector<Hittable*> dataPtr, double t0, double t1, bool useSmart);
 	~BvhNode() = default;
+
+	enum class AxisSort
+	{
+		X_AXIS = 0,
+		Y_AXIS = 1,
+		Z_AXIS = 2
+	};
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
-	void ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1);
-	
+	void ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart);
+
+	void DumbConstruction(std::vector<Hittable*> hittables, double t0, double t1);
+	void SmartConstruction(std::vector<Hittable*> hittables, double t0, double t1);
+
+	void CalculateAxisCost(std::vector<Hittable*> hittables, AxisSort axis, double& outCost, int& outIndex);
+
 	//Need to be implemented due to inheritance
 	inline void Move(AA::Vec3 pos) override { return; }
 	inline void Scale(AA::Vec3 scale) override { return; }
