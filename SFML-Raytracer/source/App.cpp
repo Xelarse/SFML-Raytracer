@@ -42,7 +42,7 @@ void App::InitCoreSystems()
 
     //Raytracer related inits
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
-    _staticHittables = std::make_unique<Hittables>(true, _useBvh, true);
+    _staticHittables = std::make_unique<Hittables>(true, _useBvh, false);
     _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
 
     AA::Vec3 lookFrom = AA::Vec3(0, 3, 5);
@@ -282,13 +282,23 @@ void App::CreateImageSegment()
     for (int i = startInd; i < endInd; ++i)
     {
         //Take the current i, translate it into X and Y
-        int x = _totalPixels % _width;
-        int y = floor(_totalPixels / _width);
-        
+        int x, y;
+
+        if (i == 0)
+        {
+            x = y = 0;
+        }
+        else
+        {
+            x = i % _width;
+            y = floor(i / _width);
+        }
+
         //Do the normal Calc from before
         double u = double(x / double(_width));
         double v = double(y / double(_height));
-        _pixelColourBuffer->ColourPixelAtPosition(x, y, CalculatePixel(u, v));
+        //std::cout << "Pixel Positions: " << x << ", " << y << std::endl;
+        _pixelColourBuffer->ColourPixelAtIndex(i, CalculatePixel(u, v));
     }
 }
 

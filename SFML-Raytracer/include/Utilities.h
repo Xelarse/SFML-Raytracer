@@ -400,6 +400,11 @@ namespace AA
 			_colours.at(y * _columns + x) = col;
 		}
 
+		void ColourPixelAtIndex(int ind, sf::Color col)
+		{
+			_colours.at(ind) = col;
+		}
+
 		void* GetDataBasePointer()
 		{
 			return reinterpret_cast<void*>(_colours.data());
