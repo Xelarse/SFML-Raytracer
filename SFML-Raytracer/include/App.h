@@ -8,6 +8,7 @@
 #include "Hittables.h"
 #include "Mesh.h"
 #include "BvhNode.h"
+#include "JobManager.h"
 
 class App
 {
@@ -17,7 +18,6 @@ public:
 	~App();
 	
 	void Run();
-
 
 private:
 
@@ -38,31 +38,32 @@ private:
 
 	AA::Vec3 BackgroundGradientCol(const AA::Ray& ray);
 
-
+	//SFML Stuff
 	int _width = 800;
 	int _height = 600;
+	std::unique_ptr<sf::RenderWindow> _pWindow;
+	std::unique_ptr<EventHandler> _pEventHander;
+	std::unique_ptr<sf::Clock> _pAppClock;
+	std::unique_ptr<sf::Texture> _renderTexture;
+	sf::RectangleShape _renderTarget;
 
+
+	//Ray Stuff
 	bool _antiAliasing = false;
 	int _perPixelAA = 10;
 
 	bool _useBvh = true;
-	
+
 	double _cameraXBound = 8.0;
 	double _cameraPanSpeed = 4.0;
 	bool _camLeft = true;
 
-	std::unique_ptr<sf::RenderWindow> _pWindow;
-	std::unique_ptr<EventHandler> _pEventHander;
-	std::unique_ptr<sf::Clock> _pAppClock;
 
 	Box* _testBox = nullptr;
-
-	sf::RectangleShape _renderTarget;
-	std::unique_ptr<sf::Texture> _renderTexture;
-
 	std::unique_ptr<AA::ColourArray> _pixelColourBuffer;
 	std::unique_ptr<Camera> _cam;
 	std::unique_ptr<Hittables> _staticHittables;
 	std::unique_ptr<Hittables> _dynamicHittables;
+	std::unique_ptr<JobManager> _jobManager;
 };
 
