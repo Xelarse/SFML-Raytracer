@@ -77,7 +77,7 @@ void App::InitScene()
     std::uniform_real_distribution<double> zDist(-12.0, -5.0);
     std::uniform_real_distribution<double> rad(0.1, 0.8);
 
-    for (int i = 0; i < 2000; ++i)
+    for (int i = 0; i < 3000; ++i)
     {
         _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false));
     }
