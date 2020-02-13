@@ -1,11 +1,12 @@
 #include "..\include\App.h"
 #include <iostream>
 #include <random>
+#include <functional>
 
 //https://raytracing.github.io/books/RayTracingInOneWeekend.html up to antialisaing
 //https://github.com/RayTracing/raytracing.github.io
 
-App::App()
+App::App() : _calcsPerDivision((_width * _height) / _totalThreads), _totalPixels(_width * _height)
 {
 }
 
@@ -43,12 +44,17 @@ void App::InitCoreSystems()
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
     _staticHittables = std::make_unique<Hittables>(true, _useBvh, true);
     _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
-    
 
     AA::Vec3 lookFrom = AA::Vec3(0, 3, 5);
     AA::Vec3 lookAt = AA::Vec3(0, 0.5, 0);
     double vFov = 70;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0, 1, 0), vFov, (_width / _height));
+
+    //Job system Inits
+    if (_isThreaded)
+    {
+        _jobManager = std::make_unique<JobManager>(_totalThreads);
+    }
 }
 
 void App::InitScene()
@@ -177,7 +183,25 @@ void App::Update(float dt)
         _cam->SetLookFrom(newPos);
     }
 
-    CreateImage();
+
+    if (_isThreaded)
+    {
+        _currentDivision = _totalThreads;
+        std::function<void()> call = std::bind(&App::CreateImageSegment, this);
+
+        for (int i = 0; i < _totalThreads; ++i)
+        {
+            _jobManager->AddJobToQueue(JobManager::Job(call));
+        }
+
+        _jobManager->ProcessJobs();
+        UpdateRenderTexture();
+    }
+    else
+    {
+        CreateImage();
+        UpdateRenderTexture();
+    }
 }
 
 void App::Draw()
@@ -237,9 +261,35 @@ void App::CreateImage()
             _pixelColourBuffer->ColourPixelAtPosition(x, y, CalculatePixel(u, v));
         }
     }
+}
 
-    //Write to the texture to display
-    UpdateRenderTexture();
+void App::CreateImageSegment()
+{
+    //Use the current division to work of a section to iterate through based from width * height and the total thread count
+    //Translate the total value back into an X and Y
+    int startInd, endInd, currentDiv;
+
+    //Scope to lock the mutex whilst grabbing current div
+    {
+        std::lock_guard<std::mutex> lock(_divisionMutex);
+        currentDiv = _currentDivision;
+        --_currentDivision;
+    }
+    
+    startInd = (currentDiv - 1) * _calcsPerDivision;
+    endInd = currentDiv * _calcsPerDivision;
+
+    for (int i = startInd; i < endInd; ++i)
+    {
+        //Take the current i, translate it into X and Y
+        int x = _totalPixels % _width;
+        int y = floor(_totalPixels / _width);
+        
+        //Do the normal Calc from before
+        double u = double(x / double(_width));
+        double v = double(y / double(_height));
+        _pixelColourBuffer->ColourPixelAtPosition(x, y, CalculatePixel(u, v));
+    }
 }
 
 void App::GetColour(const double& u, const double& v, sf::Color& colOut)

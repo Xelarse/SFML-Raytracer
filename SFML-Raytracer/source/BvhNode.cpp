@@ -120,6 +120,7 @@ void BvhNode::DumbConstruction(std::vector<Hittable*> hittables, double t0, doub
 void BvhNode::SmartConstruction(std::vector<Hittable*> hittables, double t0, double t1)
 {
 	//If theres only one or two hittables deal with the exceptions, otherwise recursively make another set of bvh's
+	//TODO Add cost for making a leaf cause currently its not better
 	if (hittables.size() == 1)
 	{
 		_left = _right = hittables[0];

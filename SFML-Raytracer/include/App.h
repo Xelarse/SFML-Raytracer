@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <atomic>
+#include <mutex>
 #include "EventHandler.h"
 #include "Utilities.h"
 #include "Camera.h"
@@ -33,14 +35,16 @@ private:
 	sf::Color CalculatePixel(const double& u, const double& v);
 	void UpdateRenderTexture();
 	void CreateImage();
+	void CreateImageSegment();
 	void GetColour(const double& u, const double& v, sf::Color& colOut);
 	void GetColourAntiAliasing(const double& u, const double& v, sf::Color& colOut);
 
 	AA::Vec3 BackgroundGradientCol(const AA::Ray& ray);
 
 	//SFML Stuff
-	int _width = 800;
-	int _height = 600;
+	const int _width = 800;
+	const int _height = 600;
+	const int _totalPixels;
 	std::unique_ptr<sf::RenderWindow> _pWindow;
 	std::unique_ptr<EventHandler> _pEventHander;
 	std::unique_ptr<sf::Clock> _pAppClock;
@@ -64,6 +68,13 @@ private:
 	std::unique_ptr<Camera> _cam;
 	std::unique_ptr<Hittables> _staticHittables;
 	std::unique_ptr<Hittables> _dynamicHittables;
+
+	//Job system stuff
+	const bool _isThreaded = true;
+	std::mutex _divisionMutex;
+	int _currentDivision;
+	const int _calcsPerDivision;
+	const int _totalThreads = 10;
 	std::unique_ptr<JobManager> _jobManager;
 };
 

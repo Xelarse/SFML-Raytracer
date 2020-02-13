@@ -167,8 +167,10 @@
     <ClCompile Include="source\EventHandler.cpp" />
     <ClCompile Include="source\Hittable.cpp" />
     <ClCompile Include="source\Hittables.cpp" />
+    <ClCompile Include="source\JobManager.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Mesh.cpp" />
+    <ClCompile Include="source\PoolableThread.cpp" />
     <ClCompile Include="source\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -180,8 +182,10 @@
     <ClInclude Include="include\EventHandler.h" />
     <ClInclude Include="include\Hittable.h" />
     <ClInclude Include="include\Hittables.h" />
+    <ClInclude Include="include\JobManager.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\ObjLoader.h" />
+    <ClInclude Include="include\PoolableThread.h" />
     <ClInclude Include="include\Sphere.h" />
     <ClInclude Include="include\Utilities.h" />
   </ItemGroup>
