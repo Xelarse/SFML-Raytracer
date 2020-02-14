@@ -26,7 +26,6 @@ private:
 	AA::Vec3 _scale = AA::Vec3();
 	
 	std::vector<Hittable*> _tris;
-	std::array<AA::Vec3, 2> _bounds;
 
 	sf::Texture _texture;
 

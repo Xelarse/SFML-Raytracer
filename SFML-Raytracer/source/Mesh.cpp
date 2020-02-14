@@ -7,7 +7,6 @@
 Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart) 
 	: Hittable(isStatic, sf::Color(255,255,255,255), false),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
 {
-	_bounds.fill(AA::Vec3(0, 0, 0));
 	LoadModel(path);
 	UpdateTrisPosition();
 	UpdateTrisScale();
@@ -149,21 +148,6 @@ bool Mesh::LoadModel(const char* path)
 
 			////Create the Tri and push it back onto vector
 			_tris.push_back(new Triangle(verts, _position, _scale, _isStatic));
-
-			////Check the bounds with the current set of tris and cache them if they're more min or max
-			for (const auto& v : verts)
-			{
-				//Min
-				_bounds[0][0] = v._position.X() < _bounds[0][0] ? v._position.X() : _bounds[0][0];
-				_bounds[0][1] = v._position.Y() < _bounds[0][1] ? v._position.Y() : _bounds[0][1];
-				_bounds[0][2] = v._position.Y() < _bounds[0][2] ? v._position.Z() : _bounds[0][2];
-
-				//Max
-				_bounds[1][0] = v._position.X() > _bounds[1][0] ? v._position.X() : _bounds[1][0];
-				_bounds[1][1] = v._position.Y() > _bounds[1][1] ? v._position.Y() : _bounds[1][1];
-				_bounds[1][2] = v._position.Z() > _bounds[1][2] ? v._position.Z() : _bounds[1][2];
-			}
-
 		}
 	}
 
@@ -188,12 +172,34 @@ void Mesh::UpdateTrisScale()
 
 bool Mesh::BoundingBox(double t0, double t1, AABB& outBox) const
 {
-	outBox = AABB(
-		(_bounds[0] * _scale) + _position,
-		(_bounds[1] * _scale) + _position
-	);
+	if (_tris.size() < 1)
+	{
+		return false;
+	}
 
-	return true;
+	AABB tempBox;
+	bool didExpand = false;
+
+	if (!_tris.front()->BoundingBox(t0, t1, tempBox))
+	{
+		return false;
+	}
+	else
+	{
+		//Loop over all objects in the scene and expand the surrounding bounding box
+		outBox = tempBox;
+		for (int i = 1; i < _tris.size(); i++)
+		{
+			if (_tris[i]->BoundingBox(t0, t1, tempBox))
+			{
+				didExpand = true;
+				outBox = AABB::SurroundingBox(outBox, tempBox);
+			}
+		}
+	}
+
+	//If the box never expanded just the box for the first object will do for later calcs, a full scene wide one isnt needed
+	return didExpand;
 }
 
 void Mesh::Move(AA::Vec3 newPos)

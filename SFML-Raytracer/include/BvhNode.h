@@ -9,7 +9,7 @@ class BvhNode : public Hittable
 {
 public:
 	BvhNode() = default;
-	BvhNode(std::vector<Hittable*> dataPtr, double t0, double t1, bool useSmart);
+	BvhNode(std::vector<Hittable*> dataPtr, double t0, double t1, bool useSmart, AA::Vec3 positionMod = AA::Vec3(0,0,0), AA::Vec3 scaleMod = AA::Vec3(1,1,1));
 	~BvhNode() = default;
 
 	enum class AxisSort
@@ -43,6 +43,8 @@ public:
 	//Nodes of the trees, could either lead down to move BvhNodes or stop at a Hittable
 	Hittable* _left = nullptr;
 	Hittable* _right = nullptr;
+	AA::Vec3 _positionMod;
+	AA::Vec3 _scaleMod;
 	AABB _box;
 };
 

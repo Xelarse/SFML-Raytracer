@@ -85,14 +85,13 @@ void App::InitScene()
     _staticHittables->_hittableObjects.push_back(new Mesh(
         "assets/cube.obj",
         //"assets/KennyPirate/pirate_captain.obj",
-        AA::Vec3(-2, 0.5, 0),
-        AA::Vec3(0.3, 0.3, 0.3),
+        AA::Vec3(-1.0, 1, 0),
+        AA::Vec3(1.0, 1.0, 1.0),
         true,
         _useBvh,
         false
         )
     );
-    //const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)

@@ -1,7 +1,7 @@
 #include "..\include\BvhNode.h"
 #include <iostream>
 
-BvhNode::BvhNode(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart)
+BvhNode::BvhNode(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart, AA::Vec3 positionMod, AA::Vec3 scaleMod) : _positionMod(positionMod), _scaleMod(scaleMod)
 {
 	ConstructBVH(hittables, t0, t1, useSmart);
 }
@@ -52,6 +52,7 @@ bool BvhNode::BoundingBox(double t0, double t1, AABB& outBox) const
 void BvhNode::ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart)
 {
 	//TODO Fix the smart construction or just leave it 
+	if (hittables.size() == 0) { return; }
 	if (useSmart)
 	{
 		SmartConstruction(hittables, t0, t1);
@@ -101,8 +102,8 @@ void BvhNode::DumbConstruction(std::vector<Hittable*> hittables, double t0, doub
 			hittables.pop_back();
 		}
 
-		_left = new BvhNode(hittables, t0, t1, false);
-		_right = new BvhNode(right, t0, t1, false);
+		_left = new BvhNode(hittables, t0, t1, false, _positionMod, _scaleMod);
+		_right = new BvhNode(right, t0, t1, false, _positionMod, _scaleMod);
 	}
 
 
@@ -256,7 +257,12 @@ int BvhNode::CompareXBox(Hittable* lhs, Hittable* rhs)
 		std::cout << "No AABB in the BvhNode Constructor" << std::endl;
 	}
 
-	return !(leftBox.Min().X() - rightBox.Min().X() < 0.0);
+	if (leftBox.Min().X() == rightBox.Min().X())
+	{
+		return false;
+	}
+
+	return leftBox.Min().X() < rightBox.Min().X();
 }
 
 int BvhNode::CompareYBox(Hittable* lhs, Hittable* rhs)
@@ -268,7 +274,12 @@ int BvhNode::CompareYBox(Hittable* lhs, Hittable* rhs)
 		std::cout << "No AABB in the BvhNode Constructor" << std::endl;
 	}
 
-	return !(leftBox.Min().Y() - rightBox.Min().Y() < 0.0);
+	if (leftBox.Min().X() == rightBox.Min().X())
+	{
+		return false;
+	}
+
+	return leftBox.Min().X() < rightBox.Min().X();
 }
 
 int BvhNode::CompareZBox(Hittable* lhs, Hittable* rhs)
@@ -280,5 +291,10 @@ int BvhNode::CompareZBox(Hittable* lhs, Hittable* rhs)
 		std::cout << "No AABB in the BvhNode Constructor" << std::endl;
 	}
 
-	return !(leftBox.Min().Z() - rightBox.Min().Z() < 0.0);
+	if (leftBox.Min().X() == rightBox.Min().X())
+	{
+		return false;
+	}
+
+	return leftBox.Min().X() < rightBox.Min().X();
 }
