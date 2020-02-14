@@ -366,23 +366,6 @@ namespace AA
 			return _position == other._position && _normal == other._normal && _texCord == other._texCord;
 		}
 	};
-	class Tri
-	{
-	public:
-		Tri() = delete;
-		Tri(std::array<Vertex, 3> verts) :  _verts(verts) {};
-		~Tri() = default;
-		std::array<Vertex, 3> _verts;
-	};
-
-	class Model
-	{
-	public:
-		Model() = default;
-		Model(std::vector<Tri> tris) : _tris( std::vector<Tri>(tris.begin(), tris.end() ) ) {}
-		~Model() = default;
-		std::vector<Tri> _tris;
-	};
 
 	class ColourArray
 	{

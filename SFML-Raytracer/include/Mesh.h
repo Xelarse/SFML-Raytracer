@@ -1,13 +1,14 @@
 #pragma once
 #include "Hittable.h"
+#include "Triangle.h"
 #include "Utilities.h"
+#include "BvhNode.h"
 
 class Mesh : public Hittable
 {
 public:
 	Mesh() = delete;
 	Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic);
-	Mesh(AA::Vec3 position, AA::Vec3 scale);
 	~Mesh() override = default;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
@@ -22,9 +23,11 @@ private:
 	AA::Vec3 _position = AA::Vec3();
 	AA::Vec3 _scale = AA::Vec3();
 	
-	std::vector<AA::Vertex> _verts;
-	std::vector<uint32_t> _inds;
+	std::vector<Triangle> _tris;
+	std::array<AA::Vec3, 2> _bounds;
 
 	sf::Texture _texture;
+
+	std::unique_ptr<BvhNode> _meshBvh;
 };
 
