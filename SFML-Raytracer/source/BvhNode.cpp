@@ -256,14 +256,7 @@ int BvhNode::CompareXBox(Hittable* lhs, Hittable* rhs)
 		std::cout << "No AABB in the BvhNode Constructor" << std::endl;
 	}
 
-	if (leftBox.Min().X() - rightBox.Min().X() < 0.0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return !(leftBox.Min().X() - rightBox.Min().X() < 0.0);
 }
 
 int BvhNode::CompareYBox(Hittable* lhs, Hittable* rhs)
@@ -275,14 +268,7 @@ int BvhNode::CompareYBox(Hittable* lhs, Hittable* rhs)
 		std::cout << "No AABB in the BvhNode Constructor" << std::endl;
 	}
 
-	if (leftBox.Min().Y() - rightBox.Min().Y() < 0.0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return !(leftBox.Min().Y() - rightBox.Min().Y() < 0.0);
 }
 
 int BvhNode::CompareZBox(Hittable* lhs, Hittable* rhs)
@@ -294,12 +280,5 @@ int BvhNode::CompareZBox(Hittable* lhs, Hittable* rhs)
 		std::cout << "No AABB in the BvhNode Constructor" << std::endl;
 	}
 
-	if (leftBox.Min().Z() - rightBox.Min().Z() < 0.0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return !(leftBox.Min().Z() - rightBox.Min().Z() < 0.0);
 }

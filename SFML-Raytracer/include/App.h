@@ -73,7 +73,7 @@ private:
 	const bool _isThreaded = true;
 	std::mutex _divisionMutex;
 	int _currentDivision;
-	const int _totalThreads = 160;	//MUST BE A CLEAN DIVISION OF _width * _height //30 max for laptop 160 for desktop
+	const int _totalThreads = 30;	//MUST BE A CLEAN DIVISION OF _width * _height //30 max for laptop 160 for desktop
 	const int _calcsPerDivision;
 	std::unique_ptr<JobManager> _jobManager;
 };
