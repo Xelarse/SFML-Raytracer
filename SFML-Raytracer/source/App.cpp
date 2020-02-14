@@ -59,41 +59,47 @@ void App::InitCoreSystems()
 
 void App::InitScene()
 {
-    //Add a static sphere with no specific colour and one with a colour for backdrop
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
+    ////Add a static sphere with no specific colour and one with a colour for backdrop
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
 
-    //Add a box that can be moved with WASD, TODO potentially remove later
-    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
-    _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
+    ////Add a box that can be moved with WASD, TODO potentially remove later
+    //_dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
+    //_testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
 
 
 
-    //Add a bunch of spheres using random dist
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> xDist(-5.0, 5.0);
-    std::uniform_real_distribution<double> yDist(0.0, 5.0);
-    std::uniform_real_distribution<double> zDist(-12.0, -5.0);
-    std::uniform_real_distribution<double> rad(0.1, 0.8);
+    ////Add a bunch of spheres using random dist
+    //std::random_device rd;
+    //std::mt19937 gen(rd());
+    //std::uniform_real_distribution<double> xDist(-5.0, 5.0);
+    //std::uniform_real_distribution<double> yDist(0.0, 5.0);
+    //std::uniform_real_distribution<double> zDist(-12.0, -5.0);
+    //std::uniform_real_distribution<double> rad(0.1, 0.8);
 
-    for (int i = 0; i < 3000; ++i)
-    {
-        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false));
-    }
+    //for (int i = 0; i < 3000; ++i)
+    //{
+    //    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false));
+    //}
 
-    //_world->_hittableObjects.push_back(new Mesh(
-    //    "assets/cube.obj",
-    //    //"assets/KennyPirate/pirate_captain.obj",
-    //    AA::Vec3(-2, 0.5, 0),
-    //    AA::Vec3(0.3, 0.3, 0.3)
-    //    )
-    //);
-
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+        "assets/cube.obj",
+        //"assets/KennyPirate/pirate_captain.obj",
+        AA::Vec3(-2, 0.5, 0),
+        AA::Vec3(0.3, 0.3, 0.3),
+        true,
+        _useBvh,
+        false
+        )
+    );
+    //const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart
 
     //Prompt the hittables to construt their BVH's
-    _staticHittables->ConstructBvh();
-    _dynamicHittables->ConstructBvh();
+    if (_useBvh)
+    {
+        _staticHittables->ConstructBvh();
+        _dynamicHittables->ConstructBvh();
+    }
 }
 
 void App::Tick(float dt)

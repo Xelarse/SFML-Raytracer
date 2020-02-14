@@ -15,6 +15,8 @@ Hittables::~Hittables()
 
 bool Hittables::IntersectedRay(const AA::Ray& ray, double tmin, double tmax, Hittable::HitResult& res)
 {
+	if(_hittableObjects.size() == 0) { return false; }
+
 	Hittable::HitResult tempRes;
 	bool didHit = false;
 	double closestHit = tmax;
