@@ -32,5 +32,6 @@ private:
 
 	std::unique_ptr<BvhNode> _meshBvh;
 	const bool _useBvh;
+	const bool _useSah;
 };
 

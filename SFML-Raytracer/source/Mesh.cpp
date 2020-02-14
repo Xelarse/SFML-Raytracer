@@ -5,15 +5,16 @@
 #include <unordered_map>
 
 Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart) 
-	: Hittable(isStatic, sf::Color(255,255,255,255), false),  _position(position), _scale(scale), _useBvh(useBvh)
+	: Hittable(isStatic, sf::Color(255,255,255,255), false),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
 {
+	_bounds.fill(AA::Vec3(0, 0, 0));
 	LoadModel(path);
 	UpdateTrisPosition();
 	UpdateTrisScale();
 
 	if (_useBvh)
 	{
-		_meshBvh = std::make_unique<BvhNode>(_tris, 0.0, 0.0, useSmart);
+		_meshBvh = std::make_unique<BvhNode>(_tris, 0.0, 0.0, _useSah);
 	}
 }
 
@@ -27,13 +28,51 @@ Mesh::~Mesh()
 
 bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
 {
-	//TODO use the BVH built around the model for intersections, Potentialy extend BVH to include an offset so all nodes are applied with that offset
+	if (_tris.size() == 0)
+	{
+		return false;
+	}
+
+	Hittable::HitResult tempRes;
+	bool didHit = false;
+	double closestHit = t_max;
+
+	////With BVH
+	//Create a bvh of the hittables, then do the iterations of the ray against the bvh intersect ray
+	if (_useBvh)
+	{
+		//If the objects can move then we need to remake the bvh, TODO Set a dirty flag later so this isnt done everyyyyy update
+		if (!_isStatic || !_meshBvh->IsConstructed())
+		{
+			_meshBvh->ConstructBVH(_tris, 0.0, 0.0, _useSah);
+		}
+		didHit = _meshBvh->IntersectedRay(ray, t_min, t_max, tempRes);
+
+		if (didHit)
+		{
+			res = tempRes;
+		}
+	}
+
+	//// Without BVH
+	else
+	{
+		for (auto& hitt : _tris)
+		{
+			if (hitt->IntersectedRay(ray, t_min, closestHit, tempRes))
+			{
+				didHit = true;
+				closestHit = tempRes.t;
+				res = tempRes;
+			}
+		}
+	}
+
+	return didHit;
 }
 
 bool Mesh::LoadModel(const char* path)
 {
-	//TODO make sure you cache the lowest and highest values for bounds of the whole model
-
 	tinyobj::attrib_t attributes;
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
@@ -110,6 +149,21 @@ bool Mesh::LoadModel(const char* path)
 
 			////Create the Tri and push it back onto vector
 			_tris.push_back(new Triangle(verts, _position, _scale, _isStatic));
+
+			////Check the bounds with the current set of tris and cache them if they're more min or max
+			for (const auto& v : verts)
+			{
+				//Min
+				_bounds[0][0] = v._position.X() < _bounds[0][0] ? v._position.X() : _bounds[0][0];
+				_bounds[0][1] = v._position.Y() < _bounds[0][1] ? v._position.Y() : _bounds[0][1];
+				_bounds[0][2] = v._position.Y() < _bounds[0][2] ? v._position.Z() : _bounds[0][2];
+
+				//Max
+				_bounds[1][0] = v._position.X() > _bounds[1][0] ? v._position.X() : _bounds[1][0];
+				_bounds[1][1] = v._position.Y() > _bounds[1][1] ? v._position.Y() : _bounds[1][1];
+				_bounds[1][2] = v._position.Z() > _bounds[1][2] ? v._position.Z() : _bounds[1][2];
+			}
+
 		}
 	}
 
