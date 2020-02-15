@@ -4,10 +4,11 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart) 
+Mesh::Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart)
 	: Hittable(isStatic, sf::Color(255,255,255,255), false),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
 {
-	LoadModel(path);
+	LoadTexture(texturePath);
+	LoadModel(modelPath);
 	UpdateTrisPosition();
 	UpdateTrisScale();
 
@@ -147,11 +148,22 @@ bool Mesh::LoadModel(const char* path)
 			verts[2]._texCord[1] = attributes.texcoords[2 * index[i + 2].texcoord_index + 1];
 
 			////Create the Tri and push it back onto vector
-			_tris.push_back(new Triangle(verts, _position, _scale, _isStatic));
+			_tris.push_back(new Triangle(verts, _position, _scale, _meshTexture.get(), _isStatic));
 		}
 	}
 
 	return true;
+}
+
+bool Mesh::LoadTexture(const char* path)
+{
+	sf::Image texture;
+	if (texture.loadFromFile(path))
+	{
+		_meshTexture = std::make_unique<sf::Image>(std::move(texture));
+		return true;
+	}
+	return false;
 }
 
 void Mesh::UpdateTrisPosition()

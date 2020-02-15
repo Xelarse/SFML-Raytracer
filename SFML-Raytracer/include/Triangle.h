@@ -6,7 +6,7 @@ class Triangle : public Hittable
 {
 public:
 	Triangle() = delete;
-	Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, bool isStatic, sf::Color col = sf::Color(255, 255, 255, 255), bool useColour = false);
+	Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, sf::Color col = sf::Color(255, 255, 255, 255), bool useColour = false);
 	~Triangle() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
@@ -16,9 +16,13 @@ public:
 	void Scale(AA::Vec3 newScale) override;
 
 private:
+
+	sf::Color GetPixelColour(AA::Vec3 normal, AA::Vec2 texCord, double u, double v);
+
 	const std::array<AA::Vertex, 3> _verts;
 	AA::Vec3 _pos;
 	AA::Vec3 _scale;
+	sf::Image* _texturePtr;
 	std::array<AA::Vec3, 2> _bounds;
 };
 

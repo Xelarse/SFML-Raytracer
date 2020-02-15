@@ -1,7 +1,7 @@
 #include "..\include\Triangle.h"
 
-Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, bool isStatic, sf::Color col, bool useColour) 
-	: Hittable(isStatic, col, useColour), _verts(verts), _pos(position), _scale(scale)
+Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, sf::Color col, bool useColour)
+	: Hittable(isStatic, col, useColour), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
 {
 	//Set up the bounds for the Tri
 	_bounds[0] = _verts[0]._position;
@@ -100,7 +100,7 @@ bool Triangle::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hi
 	res.t = v0v2.DotProduct(qvec) * invDet;
 	res.p = ray.GetPointAlongRay(res.t);
 	res.normal = v0._normal;
-	res.col = AA::NormalToColour(res.normal);
+	res.col = GetPixelColour(res.normal, _verts[0]._texCord, u, v);
 	return true;
 }
 
@@ -124,4 +124,12 @@ void Triangle::Scale(AA::Vec3 newScale)
 {
     if(_isStatic) { return; }
     _scale = newScale;
+}
+
+sf::Color Triangle::GetPixelColour(AA::Vec3 normal, AA::Vec2 texCord, double u, double v)
+{
+	if(_texturePtr == nullptr) { return AA::NormalToColour(normal); }
+
+	//TODO actually implement the texture iterpolation using the barycentric co ords
+	return AA::NormalToColour(normal);
 }

@@ -65,8 +65,8 @@ void App::InitScene()
     //SpawnBase();
     //SpawnMovable();
     //SpawnSphereStress();
-    //SpawnMeshes();
-    SpawnMeshStress();
+    SpawnMeshes();
+    //SpawnMeshStress();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -102,6 +102,7 @@ void App::SpawnMeshes()
     ////12 Tri Cube
     //_staticHittables->_hittableObjects.push_back(new Mesh(
     //        "assets/cube.obj",
+    //        "NO_TEXTURE",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(1.5, 1.5, 1.5),
     //        true,
@@ -113,6 +114,7 @@ void App::SpawnMeshes()
     ////104 Tri boat
     //_staticHittables->_hittableObjects.push_back(new Mesh(
     //        "assets/KennyPirate/boat_small.obj",
+    //        "NO_TEXTURE",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
     //        true,
@@ -124,6 +126,7 @@ void App::SpawnMeshes()
     ////194 Tri palm tree
     //_staticHittables->_hittableObjects.push_back(new Mesh(
     //        "assets/KennyPirate/palm_long.obj",
+    //        "NO_TEXTURE",
     //        AA::Vec3(1.5, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
     //        true,
@@ -132,20 +135,34 @@ void App::SpawnMeshes()
     //    )
     //);
 
-    //428 Tri Pirate Captain
+    ////428 Tri Pirate Captain
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/KennyPirate/pirate_captain.obj",
+    //        "NO_TEXTURE",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(0.2, 0.2, 0.2),
+    //        true,
+    //        _useMeshBvh,
+    //        false
+    //    )
+    //);
+
+    //716 Tri Plant pot
     _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/KennyPirate/pirate_captain.obj",
-            AA::Vec3(0.0, 0.5, 0.0),
-            AA::Vec3(0.2, 0.2, 0.2),
-            true,
-            _useMeshBvh,
-            false
-        )
+        "assets/Plantpot/Pot.obj",
+        "assets/Plantpot/textures/PotCol.jpg",
+        AA::Vec3(0.0, 0.5, 0.0),
+        AA::Vec3(4.0, 4.0, 4.0),
+        true,
+        _useMeshBvh,
+        false
+    )
     );
 
     ////1004 Tri Tower
     //_staticHittables->_hittableObjects.push_back(new Mesh(
     //        "assets/KennyPirate/tower.obj",
+    //        "NO_TEXTURE",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(0.1, 0.1, 0.1),
     //        true,
@@ -160,6 +177,7 @@ void App::SpawnMeshStress()
     //428 Tri Pirate Captain
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/KennyPirate/pirate_captain.obj",
+            "NO_TEXTURE",
             AA::Vec3(1.0, 0.5, 0.0),
             AA::Vec3(0.175, 0.175, 0.175),
             true,
@@ -171,6 +189,7 @@ void App::SpawnMeshStress()
     //104 Tri boat
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/KennyPirate/boat_small.obj",
+            "NO_TEXTURE",
             AA::Vec3(-1.0, 0.5, 0.0),
             AA::Vec3(0.15, 0.15, 0.15),
             true,
@@ -182,6 +201,7 @@ void App::SpawnMeshStress()
     //194 Tri palm tree
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/KennyPirate/palm_long.obj",
+            "NO_TEXTURE",
             AA::Vec3(1.75, 0.5, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
             true,

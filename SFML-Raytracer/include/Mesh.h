@@ -8,7 +8,7 @@ class Mesh : public Hittable
 {
 public:
 	Mesh() = delete;
-	Mesh(const char* path, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh = false, bool useSmart = false);
+	Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh = false, bool useSmart = false);
 	~Mesh() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
@@ -19,6 +19,7 @@ public:
 
 private:
 	bool LoadModel(const char* path);
+	bool LoadTexture(const char* path);
 	void UpdateTrisPosition();
 	void UpdateTrisScale();
 	
@@ -27,7 +28,7 @@ private:
 	
 	std::vector<Hittable*> _tris;
 
-	sf::Texture _texture;
+	std::unique_ptr<sf::Image> _meshTexture;
 
 	std::unique_ptr<BvhNode> _meshBvh;
 	const bool _useBvh;
