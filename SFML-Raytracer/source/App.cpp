@@ -132,16 +132,16 @@ void App::SpawnMeshes()
     //    )
     //);
 
-    ////428 Tri Pirate Captain
-    //_staticHittables->_hittableObjects.push_back(new Mesh(
-    //        "assets/KennyPirate/pirate_captain.obj",
-    //        AA::Vec3(0.0, 0.5, 0.0),
-    //        AA::Vec3(0.2, 0.2, 0.2),
-    //        true,
-    //        _useMeshBvh,
-    //        false
-    //    )
-    //);
+    //428 Tri Pirate Captain
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/KennyPirate/pirate_captain.obj",
+            AA::Vec3(0.0, 0.5, 0.0),
+            AA::Vec3(0.2, 0.2, 0.2),
+            true,
+            _useMeshBvh,
+            false
+        )
+    );
 
     ////1004 Tri Tower
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -214,28 +214,28 @@ void App::Update(float dt)
 {
     if (_testBox != nullptr)
     {
-        if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
+        if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
         {
             AA::Vec3 previous = _testBox->GetPosition();
             previous[2] -= 0.25;
             previous[2] = previous.Z() < -3.0 ? -3.0 : previous.Z();
             _testBox->Move(previous);
         }
-        else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
+        else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
         {
             AA::Vec3 previous = _testBox->GetPosition();
             previous[2] += 0.25;
             previous[2] = previous.Z() > 3 ? 3 : previous.Z();
             _testBox->Move(previous);
         }
-        if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
+        if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
         {
             AA::Vec3 previous = _testBox->GetPosition();
             previous[0] -= 0.25;
             previous[0] = previous.X() < -4.0 ? -4.0 : previous.X();
             _testBox->Move(previous);
         }
-        else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
+        else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
         {
             AA::Vec3 previous = _testBox->GetPosition();
             previous[0] += 0.25;
@@ -345,9 +345,6 @@ void App::UpdateRenderTexture()
     sf::Image renderData;
     renderData.create(_width, _height, reinterpret_cast<sf::Uint8*>(_pixelColourBuffer->GetDataBasePointer()));
 
-    //renderData.saveToFile("C:\\Users\\Xelarse\\Desktop\\test.png");
-
-    //TODO potentially update instead of loading every tick for better performance
     if (_renderTexture->loadFromImage(renderData))
     {
         _renderTarget.setTexture(_renderTexture.get());
