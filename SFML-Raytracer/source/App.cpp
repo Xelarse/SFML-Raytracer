@@ -171,7 +171,7 @@ void App::SpawnMeshStress()
     //104 Tri boat
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/KennyPirate/boat_small.obj",
-            AA::Vec3(0.0, 0.5, 0.0),
+            AA::Vec3(-1.0, 0.5, 0.0),
             AA::Vec3(0.15, 0.15, 0.15),
             true,
             _useMeshBvh,
@@ -182,7 +182,7 @@ void App::SpawnMeshStress()
     //194 Tri palm tree
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/KennyPirate/palm_long.obj",
-            AA::Vec3(1.5, 0.5, 0.0),
+            AA::Vec3(1.75, 0.5, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
             true,
             _useMeshBvh,
@@ -212,33 +212,36 @@ void App::Tick(float dt)
 
 void App::Update(float dt)
 {
-    if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
+    if (_testBox != nullptr)
     {
-        AA::Vec3 previous = _testBox->GetPosition();
-        previous[2] -= 0.25;
-        previous[2] = previous.Z() < -3.0 ? -3.0 : previous.Z();
-        _testBox->Move(previous);
-    }
-    else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
-    {
-        AA::Vec3 previous = _testBox->GetPosition();
-        previous[2] += 0.25;
-        previous[2] = previous.Z() > 3 ? 3 : previous.Z();
-        _testBox->Move(previous);
-    }
-    if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
-    {
-        AA::Vec3 previous = _testBox->GetPosition();
-        previous[0] -= 0.25;
-        previous[0] = previous.X() < -4.0 ? -4.0 : previous.X();
-        _testBox->Move(previous);
-    }
-    else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
-    {
-        AA::Vec3 previous = _testBox->GetPosition();
-        previous[0] += 0.25;
-        previous[0] = previous.X() > 4.0 ? 4.0 : previous.X();
-        _testBox->Move(previous);
+        if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
+        {
+            AA::Vec3 previous = _testBox->GetPosition();
+            previous[2] -= 0.25;
+            previous[2] = previous.Z() < -3.0 ? -3.0 : previous.Z();
+            _testBox->Move(previous);
+        }
+        else if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
+        {
+            AA::Vec3 previous = _testBox->GetPosition();
+            previous[2] += 0.25;
+            previous[2] = previous.Z() > 3 ? 3 : previous.Z();
+            _testBox->Move(previous);
+        }
+        if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
+        {
+            AA::Vec3 previous = _testBox->GetPosition();
+            previous[0] -= 0.25;
+            previous[0] = previous.X() < -4.0 ? -4.0 : previous.X();
+            _testBox->Move(previous);
+        }
+        else if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
+        {
+            AA::Vec3 previous = _testBox->GetPosition();
+            previous[0] += 0.25;
+            previous[0] = previous.X() > 4.0 ? 4.0 : previous.X();
+            _testBox->Move(previous);
+        }
     }
 
     if (_pEventHander->IsKeyPressed(sf::Keyboard::Up))
