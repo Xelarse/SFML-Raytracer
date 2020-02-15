@@ -77,7 +77,7 @@ private:
 	std::unique_ptr<Hittables> _dynamicHittables;
 
 	//Job system stuff
-	const bool _isThreaded = false;
+	const bool _isThreaded = true;
 	std::mutex _divisionMutex;
 	int _currentDivision;
 	const int _totalThreads = 160;	//MUST BE A CLEAN DIVISION OF _width * _height //30 max for laptop 160 for desktop
