@@ -21,19 +21,23 @@ Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 
 	}
 
 	//Checks to space the box slightly, think its breaking calcs further down
+	//TODO fix the bounds properly instead of the current band aid fix
 	if (_bounds[0][0] == _bounds[1][0])
 	{
-		_bounds[0][0] -= 0.025;
+		_bounds[0][0] -= 4.464;
+		_bounds[1][0] += 4.464;
 	}
 
 	if (_bounds[0][1] == _bounds[1][1])
 	{
-		_bounds[0][1] -= 0.025;
+		_bounds[0][1] -= 4.464;
+		_bounds[1][1] += 4.464;
 	}
 
 	if (_bounds[0][2] == _bounds[1][2])
 	{
-		_bounds[0][2] -= 0.025;
+		_bounds[0][2] -= 4.464;
+		_bounds[1][2] += 4.464;
 	}
 }
 

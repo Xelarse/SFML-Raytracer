@@ -45,8 +45,8 @@ void App::InitCoreSystems()
     _staticHittables = std::make_unique<Hittables>(true, _useBvh, false);
     _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
 
-    AA::Vec3 lookFrom = AA::Vec3(0, 3, 5);
-    AA::Vec3 lookAt = AA::Vec3(0, 0.5, 0);
+    AA::Vec3 lookFrom = AA::Vec3(0, 3, -5);
+    AA::Vec3 lookAt = AA::Vec3(0, 1, 0);
     double vFov = 70;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0, 1, 0), vFov, (_width / _height));
 
@@ -59,39 +59,14 @@ void App::InitCoreSystems()
 
 void App::InitScene()
 {
-    ////Add a static sphere with no specific colour and one with a colour for backdrop
-    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
-    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
+    //Add a static sphere with no specific colour and one with a colour for backdrop
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
 
-    ////Add a box that can be moved with WASD, TODO potentially remove later
-    //_dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
-    //_testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
-
-
-
-    ////Add a bunch of spheres using random dist
-    //std::random_device rd;
-    //std::mt19937 gen(rd());
-    //std::uniform_real_distribution<double> xDist(-5.0, 5.0);
-    //std::uniform_real_distribution<double> yDist(0.0, 5.0);
-    //std::uniform_real_distribution<double> zDist(-12.0, -5.0);
-    //std::uniform_real_distribution<double> rad(0.1, 0.8);
-
-    //for (int i = 0; i < 3000; ++i)
-    //{
-    //    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false));
-    //}
-
-    _staticHittables->_hittableObjects.push_back(new Mesh(
-        "assets/cube.obj",
-        //"assets/KennyPirate/pirate_captain.obj",
-        AA::Vec3(-1.0, 1, 0),
-        AA::Vec3(1.0, 1.0, 1.0),
-        true,
-        _useBvh,
-        false
-        )
-    );
+    //SpawnBase();
+    //SpawnMovable();
+    //SpawnSphereStress();
+    //SpawnMeshes();
+    SpawnMeshStress();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -99,6 +74,128 @@ void App::InitScene()
         _staticHittables->ConstructBvh();
         _dynamicHittables->ConstructBvh();
     }
+}
+
+void App::SpawnBase()
+{
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
+}
+
+void App::SpawnSphereStress()
+{
+    //Add a bunch of spheres using random dist
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> xDist(-5.0, 5.0);
+    std::uniform_real_distribution<double> yDist(0.0, 5.0);
+    std::uniform_real_distribution<double> zDist(12.0, 5.0);
+    std::uniform_real_distribution<double> rad(0.1, 0.8);
+
+    for (int i = 0; i < 3000; ++i)
+    {
+        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false));
+    }
+}
+
+void App::SpawnMeshes()
+{
+    ////12 Tri Cube
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/cube.obj",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(1.5, 1.5, 1.5),
+    //        true,
+    //        _useMeshBvh,
+    //        false
+    //    )
+    //);
+
+    ////104 Tri boat
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/KennyPirate/boat_small.obj",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(0.2, 0.2, 0.2),
+    //        true,
+    //        _useMeshBvh,
+    //        false
+    //    )
+    //);
+
+    ////194 Tri palm tree
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/KennyPirate/palm_long.obj",
+    //        AA::Vec3(1.5, 0.5, 0.0),
+    //        AA::Vec3(0.2, 0.2, 0.2),
+    //        true,
+    //        _useMeshBvh,
+    //        false
+    //    )
+    //);
+
+    ////428 Tri Pirate Captain
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/KennyPirate/pirate_captain.obj",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(0.2, 0.2, 0.2),
+    //        true,
+    //        _useMeshBvh,
+    //        false
+    //    )
+    //);
+
+    ////1004 Tri Tower
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/KennyPirate/tower.obj",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(0.1, 0.1, 0.1),
+    //        true,
+    //        _useMeshBvh,
+    //        false
+    //    )
+    //);
+}
+
+void App::SpawnMeshStress()
+{
+    //428 Tri Pirate Captain
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/KennyPirate/pirate_captain.obj",
+            AA::Vec3(1.0, 0.5, 0.0),
+            AA::Vec3(0.175, 0.175, 0.175),
+            true,
+            _useMeshBvh,
+            false
+        )
+    );
+
+    //104 Tri boat
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/KennyPirate/boat_small.obj",
+            AA::Vec3(0.0, 0.5, 0.0),
+            AA::Vec3(0.15, 0.15, 0.15),
+            true,
+            _useMeshBvh,
+            false
+        )
+    );
+
+    //194 Tri palm tree
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/KennyPirate/palm_long.obj",
+            AA::Vec3(1.5, 0.5, 0.0),
+            AA::Vec3(0.2, 0.2, 0.2),
+            true,
+            _useMeshBvh,
+            false
+        )
+    );
+}
+
+void App::SpawnMovable()
+{
+    //Spawns a box that can be controlled with wasd
+    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
+    _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
 }
 
 void App::Tick(float dt)

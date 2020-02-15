@@ -26,6 +26,12 @@ private:
 	void InitCoreSystems();
 	void InitScene();
 
+	void SpawnBase();
+	void SpawnSphereStress();
+	void SpawnMeshes();
+	void SpawnMeshStress();
+	void SpawnMovable();
+
 	//dt in milliseconds
 	void Tick(float dt);
 
@@ -57,6 +63,7 @@ private:
 	int _perPixelAA = 10;
 
 	bool _useBvh = true;
+	bool _useMeshBvh = true;
 
 	double _cameraXBound = 8.0;
 	double _cameraPanSpeed = 4.0;
@@ -73,7 +80,7 @@ private:
 	const bool _isThreaded = true;
 	std::mutex _divisionMutex;
 	int _currentDivision;
-	const int _totalThreads = 10;	//MUST BE A CLEAN DIVISION OF _width * _height //30 max for laptop 160 for desktop
+	const int _totalThreads = 160;	//MUST BE A CLEAN DIVISION OF _width * _height //30 max for laptop 160 for desktop
 	const int _calcsPerDivision;
 	std::unique_ptr<JobManager> _jobManager;
 };
