@@ -7,8 +7,17 @@
 class Mesh : public Hittable
 {
 public:
+	enum class ModelParams
+	{
+		FLIP_X,
+		FLIP_Y,
+		FLIP_Z,
+		DEFAULT
+	};
+
+
 	Mesh() = delete;
-	Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh = false, bool useSmart = false);
+	Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh = false, bool useSmart = false, ModelParams param = ModelParams::DEFAULT);
 	~Mesh() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
@@ -18,7 +27,7 @@ public:
 	void Scale(AA::Vec3 newScale) override;
 
 private:
-	bool LoadModel(const char* path);
+	bool LoadModel(const char* path, ModelParams param);
 	bool LoadTexture(const char* path);
 	void UpdateTrisPosition();
 	void UpdateTrisScale();

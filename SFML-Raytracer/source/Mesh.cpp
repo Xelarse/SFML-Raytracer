@@ -4,11 +4,11 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart)
+Mesh::Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart, ModelParams param)
 	: Hittable(isStatic, sf::Color(255,255,255,255), false),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
 {
 	LoadTexture(texturePath);
-	LoadModel(modelPath);
+	LoadModel(modelPath, param);
 	UpdateTrisPosition();
 	UpdateTrisScale();
 
@@ -71,7 +71,7 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 	return didHit;
 }
 
-bool Mesh::LoadModel(const char* path)
+bool Mesh::LoadModel(const char* path, ModelParams param)
 {
 	tinyobj::attrib_t attributes;
 	std::vector<tinyobj::shape_t> shapes;
@@ -147,6 +147,28 @@ bool Mesh::LoadModel(const char* path)
 			verts[2]._texCord[0] = attributes.texcoords[2 * index[i + 2].texcoord_index + 0];
 			verts[2]._texCord[1] = attributes.texcoords[2 * index[i + 2].texcoord_index + 1];
 
+			for (auto& vert : verts)
+			{
+				switch (param)
+				{
+					case Mesh::ModelParams::FLIP_X:
+						vert._position[0] *= -1;
+						vert._normal[0] *= -1;
+						break;
+					case Mesh::ModelParams::FLIP_Y:
+						vert._position[1] *= -1;
+						vert._normal[1] *= -1;
+						break;
+					case Mesh::ModelParams::FLIP_Z:
+						vert._position[2] *= -1;
+						break;
+				}
+			}
+
+			if (param != ModelParams::DEFAULT)
+			{
+				verts = std::array<AA::Vertex, 3>({ verts[2], verts[1], verts[0] });
+			}
 			////Create the Tri and push it back onto vector
 			_tris.push_back(new Triangle(verts, _position, _scale, _meshTexture.get(), _isStatic));
 		}

@@ -65,8 +65,8 @@ void App::InitScene()
     //SpawnBase();
     //SpawnMovable();
     //SpawnSphereStress();
-    //SpawnMeshes();
-    SpawnMeshStress();
+    SpawnMeshes();
+    //SpawnMeshStress();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -146,6 +146,19 @@ void App::SpawnMeshes()
     //        false
     //    )
     //);
+
+    //672 Tri Fox
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/Shibe/Shibe.obj",
+            "assets/Shibe/Shibe.png",
+            AA::Vec3(0.0, 0.5, 0.0),
+            AA::Vec3(0.4, 0.4, 0.4),
+            true,
+            _useMeshBvh,
+            false,
+            Mesh::ModelParams::FLIP_Z
+        )
+    );
 
     ////716 Tri Plant pot
     //_staticHittables->_hittableObjects.push_back(new Mesh(
