@@ -147,7 +147,7 @@ void App::SpawnMeshes()
     //    )
     //);
 
-    //672 Tri Fox
+    //672 Tri Shibe
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/Shibe/Shibe.obj",
             "assets/Shibe/Shibe.png",
