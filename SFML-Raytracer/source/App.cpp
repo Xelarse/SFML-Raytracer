@@ -45,7 +45,7 @@ void App::InitCoreSystems()
     _staticHittables = std::make_unique<Hittables>(true, _useBvh, false);
     _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
 
-    AA::Vec3 lookFrom = AA::Vec3(0, 3, -5);
+    AA::Vec3 lookFrom = AA::Vec3(0, 4, -5);
     AA::Vec3 lookAt = AA::Vec3(0, 1, 0);
     double vFov = 70;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0, 1, 0), vFov, (_width / _height));
@@ -102,9 +102,9 @@ void App::SpawnMeshes()
     ////12 Tri Cube
     //_staticHittables->_hittableObjects.push_back(new Mesh(
     //        "assets/cube.obj",
-    //        "NO_TEXTURE",
+    //        "assets/cubeHori.tga",
     //        AA::Vec3(0.0, 0.5, 0.0),
-    //        AA::Vec3(1.5, 1.5, 1.5),
+    //        AA::Vec3(2.5, 2.5, 2.5),
     //        true,
     //        _useMeshBvh,
     //        false
@@ -135,17 +135,17 @@ void App::SpawnMeshes()
     //    )
     //);
 
-    //428 Tri Pirate Captain
-    _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/KennyPirate/pirate_captain.obj",
-            "NO_TEXTURE",
-            AA::Vec3(0.0, 0.5, 0.0),
-            AA::Vec3(0.2, 0.2, 0.2),
-            true,
-            _useMeshBvh,
-            false
-        )
-    );
+    ////428 Tri Pirate Captain
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/KennyPirate/pirate_captain.obj",
+    //        "NO_TEXTURE",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(0.2, 0.2, 0.2),
+    //        true,
+    //        _useMeshBvh,
+    //        false
+    //    )
+    //);
 
     ////716 Tri Plant pot
     //_staticHittables->_hittableObjects.push_back(new Mesh(

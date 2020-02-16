@@ -17,7 +17,7 @@ public:
 
 private:
 
-	sf::Color GetPixelColour(AA::Vec3 normal, AA::Vec2 texCord, double u, double v);
+	sf::Color GetPixelColour(double u, double v);
 
 	const std::array<AA::Vertex, 3> _verts;
 	AA::Vec3 _pos;

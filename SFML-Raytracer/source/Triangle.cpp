@@ -100,7 +100,7 @@ bool Triangle::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hi
 	res.t = v0v2.DotProduct(qvec) * invDet;
 	res.p = ray.GetPointAlongRay(res.t);
 	res.normal = v0._normal;
-	res.col = GetPixelColour(res.normal, _verts[0]._texCord, u, v);
+	res.col = GetPixelColour(u, v);
 	return true;
 }
 
@@ -126,10 +126,17 @@ void Triangle::Scale(AA::Vec3 newScale)
     _scale = newScale;
 }
 
-sf::Color Triangle::GetPixelColour(AA::Vec3 normal, AA::Vec2 texCord, double u, double v)
+sf::Color Triangle::GetPixelColour(double u, double v)
 {
-	if(_texturePtr == nullptr) { return AA::NormalToColour(normal); }
+	if(_texturePtr == nullptr) { return AA::NormalToColour(_verts[0]._normal); }
 
-	//TODO actually implement the texture iterpolation using the barycentric co ords
-	return AA::NormalToColour(normal);
+	double w = 1 - u - v;
+
+	//Times the uvw by the tex cords of each point to get the UV of the point blended between them
+	AA::Vec2 texCoord = AA::Vec2((_verts[1]._texCord * u) + (_verts[2]._texCord * v) + (_verts[0]._texCord * w));
+
+	//Translate this normalised value to a pixel value from the texture
+	int x = (_texturePtr->getSize().x) * texCoord.X();
+	int y = (_texturePtr->getSize().y) * ( 1.0f - texCoord.Y());	//Y might need flipping
+	return _texturePtr->getPixel(x, y);
 }
