@@ -65,8 +65,8 @@ void App::InitScene()
     //SpawnBase();
     //SpawnMovable();
     //SpawnSphereStress();
-    SpawnMeshes();
-    //SpawnMeshStress();
+    //SpawnMeshes();
+    SpawnMeshStress();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -135,30 +135,30 @@ void App::SpawnMeshes()
     //    )
     //);
 
-    ////428 Tri Pirate Captain
-    //_staticHittables->_hittableObjects.push_back(new Mesh(
-    //        "assets/KennyPirate/pirate_captain.obj",
-    //        "NO_TEXTURE",
-    //        AA::Vec3(0.0, 0.5, 0.0),
-    //        AA::Vec3(0.2, 0.2, 0.2),
-    //        true,
-    //        _useMeshBvh,
-    //        false
-    //    )
-    //);
-
-    //672 Tri Shibe
+    //428 Tri Pirate Captain
     _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/Shibe/Shibe.obj",
-            "assets/Shibe/Shibe.png",
+            "assets/KennyPirate/pirate_captain.obj",
+            "NO_TEXTURE",
             AA::Vec3(0.0, 0.5, 0.0),
-            AA::Vec3(0.4, 0.4, 0.4),
+            AA::Vec3(0.2, 0.2, 0.2),
             true,
             _useMeshBvh,
-            false,
-            Mesh::ModelParams::FLIP_Z
+            false
         )
     );
+
+    ////672 Tri Shibe
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/Shibe/Shibe.obj",
+    //        "assets/Shibe/Shibe.png",
+    //        AA::Vec3(0.0, 1.0, 0.0),
+    //        AA::Vec3(0.4, 0.4, 0.4),
+    //        true,
+    //        _useMeshBvh,
+    //        false,
+    //        Mesh::ModelParams::FLIP_Z
+    //    )
+    //);
 
     ////716 Tri Plant pot
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -166,18 +166,6 @@ void App::SpawnMeshes()
     //        "assets/Plantpot/textures/PotCol.jpg",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(4.0, 4.0, 4.0),
-    //        true,
-    //        _useMeshBvh,
-    //        false
-    //    )
-    //);
-
-    ////1004 Tri Tower
-    //_staticHittables->_hittableObjects.push_back(new Mesh(
-    //        "assets/KennyPirate/tower.obj",
-    //        "NO_TEXTURE",
-    //        AA::Vec3(0.0, 0.5, 0.0),
-    //        AA::Vec3(0.1, 0.1, 0.1),
     //        true,
     //        _useMeshBvh,
     //        false

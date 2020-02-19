@@ -1,9 +1,26 @@
 #include "..\include\BvhNode.h"
 #include <iostream>
 
+BvhNode::BvhNode() : _positionMod(AA::Vec3(0,0,0)), _scaleMod(AA::Vec3(1,1,1))
+{
+}
+
 BvhNode::BvhNode(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart, AA::Vec3 positionMod, AA::Vec3 scaleMod) : _positionMod(positionMod), _scaleMod(scaleMod)
 {
 	ConstructBVH(hittables, t0, t1, useSmart);
+}
+
+BvhNode::~BvhNode()
+{
+	if (_left != nullptr)
+	{
+		delete _left;
+	}
+
+	if (_right != nullptr)
+	{
+		delete _right;
+	}
 }
 
 bool BvhNode::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
@@ -203,7 +220,7 @@ void BvhNode::CalculateAxisCost(std::vector<Hittable*> hittables, AxisSort axis,
 	AABB minBox, maxBox, tempBox;
 	double min, max;
 	int axisInd;
-	outCost = 20000.0;
+	outCost = INFINITY;
 
 	axisInd = static_cast<int>(axis);
 

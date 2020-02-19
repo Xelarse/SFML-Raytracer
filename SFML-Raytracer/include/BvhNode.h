@@ -8,9 +8,9 @@
 class BvhNode : public Hittable
 {
 public:
-	BvhNode() = default;
+	BvhNode();
 	BvhNode(std::vector<Hittable*> dataPtr, double t0, double t1, bool useSmart, AA::Vec3 positionMod = AA::Vec3(0,0,0), AA::Vec3 scaleMod = AA::Vec3(1,1,1));
-	~BvhNode() = default;
+	~BvhNode();
 
 	enum class AxisSort
 	{

@@ -20,24 +20,12 @@ Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 
 		_bounds[1][2] = _verts[i]._position.Z() > _bounds[1][2] ? _verts[i]._position.Z() : _bounds[1][2];
 	}
 
-	//Checks to space the box slightly, think its breaking calcs further down
-	//TODO fix the bounds properly instead of the current band aid fix
-	if (_bounds[0][0] == _bounds[1][0])
+	for (int i = 0; i < 2; i++)
 	{
-		_bounds[0][0] -= 4.464;
-		_bounds[1][0] += 4.464;
-	}
-
-	if (_bounds[0][1] == _bounds[1][1])
-	{
-		_bounds[0][1] -= 4.464;
-		_bounds[1][1] += 4.464;
-	}
-
-	if (_bounds[0][2] == _bounds[1][2])
-	{
-		_bounds[0][2] -= 4.464;
-		_bounds[1][2] += 4.464;
+		for (int j = 0; j < 3; j++)
+		{
+			_bounds[i][j] = i == 0 ? _bounds[i][j] - 1.25 : _bounds[i][j] + 1.25;
+		}
 	}
 }
 
