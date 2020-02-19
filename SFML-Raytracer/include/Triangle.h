@@ -1,12 +1,11 @@
 #pragma once
 #include "Hittable.h"
-#include "Utilities.h"
 
 class Triangle : public Hittable
 {
 public:
 	Triangle() = delete;
-	Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, Light* sceneLight, bool isStatic, sf::Color col = sf::Color(255, 255, 255, 255), bool useColour = false);
+	Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, sf::Color col = sf::Color(255, 255, 255, 255), bool useColour = false, Light* sceneLight = nullptr);
 	~Triangle() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;

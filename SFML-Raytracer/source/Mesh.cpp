@@ -4,8 +4,8 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, Light* sceneLight, bool isStatic, bool useBvh, bool useSmart, ModelParams param)
-	: Hittable(sceneLight, isStatic, sf::Color(255,255,255,255), false),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
+Mesh::Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart, ModelParams param, Light* sceneLight)
+	: Hittable(isStatic, sf::Color(255,255,255,255), false, sceneLight),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
 {
 	LoadTexture(texturePath);
 	LoadModel(modelPath, param);

@@ -1,9 +1,10 @@
 #include "..\include\Box.h"
 #include <cmath>
 #include <iostream>
+#include "Light.h"
 
-Box::Box(AA::Vec3 origin, AA::Vec3 scale, Light* sceneLight, bool isStatic, sf::Color col, bool useColour)
-    : Hittable(sceneLight, isStatic, col, useColour), _origin(origin), _scale(scale)
+Box::Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, sf::Color col, bool useColour, Light* sceneLight)
+    : Hittable(isStatic, col, useColour, sceneLight), _origin(origin), _scale(scale)
 {
 	UpdateBounds();
 }

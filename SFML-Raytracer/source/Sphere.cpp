@@ -1,6 +1,7 @@
 #include "..\include\Sphere.h"
+#include "Light.h"
 
-Sphere::Sphere(AA::Vec3 o, double r, Light* sceneLight, bool isStatic, sf::Color col, bool useColour) : Hittable(sceneLight, isStatic, col, useColour), _origin(o), _radius(r)
+Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, sf::Color col, bool useColour, Light* sceneLight) : Hittable(isStatic, col, useColour, sceneLight), _origin(o), _radius(r)
 {
 }
 

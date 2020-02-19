@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Utilities.h"
 #include "AABB.h"
-#include "Utilities.h"
-#include "Light.h"
+
+class Light;
 
 class Hittable
 {
@@ -18,7 +18,7 @@ public:
 	};
 
 	Hittable();
-	Hittable(Light* sceneLight, bool isStatic, sf::Color col, bool useColour);
+	Hittable(bool isStatic, sf::Color col, bool useColour, Light* sceneLight);
 	virtual ~Hittable();
 
 	//Override function for detecting if a ray has hit an object

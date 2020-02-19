@@ -61,7 +61,7 @@ void App::InitCoreSystems()
 void App::InitScene()
 {
     //Add a static sphere with no specific colour and one with a colour for backdrop
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, _sceneLight.get(), true, sf::Color(102, 0, 102, 255), true));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true, _sceneLight.get()));
 
     //SpawnBase();
     //SpawnMovable();
@@ -79,7 +79,7 @@ void App::InitScene()
 
 void App::SpawnBase()
 {
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, _sceneLight.get(), true, sf::Color(0, 0, 0, 255), false));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
 }
 
 void App::SpawnSphereStress()
@@ -94,7 +94,7 @@ void App::SpawnSphereStress()
 
     for (int i = 0; i < 3000; ++i)
     {
-        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), _sceneLight.get(), true, sf::Color(0, 0, 0, 255), false));
+        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
     }
 }
 
@@ -106,10 +106,11 @@ void App::SpawnMeshes()
     //        "assets/cubeHori.tga",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(2.5, 2.5, 2.5),
-    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
-    //        false
+    //        false,
+    //        Mesh::ModelParams::DEFAULT,
+    //        _sceneLight.get()
     //    )
     //);
 
@@ -119,10 +120,11 @@ void App::SpawnMeshes()
     //        "NO_TEXTURE",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
-    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
-    //        false
+    //        false,
+    //        Mesh::ModelParams::DEFAULT,
+    //        _sceneLight.get()
     //    )
     //);
 
@@ -132,10 +134,11 @@ void App::SpawnMeshes()
     //        "NO_TEXTURE",
     //        AA::Vec3(1.5, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
-    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
-    //        false
+    //        false,
+    //        Mesh::ModelParams::DEFAULT,
+    //        _sceneLight.get()
     //    )
     //);
 
@@ -145,10 +148,11 @@ void App::SpawnMeshes()
             "NO_TEXTURE",
             AA::Vec3(0.0, 0.5, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
-            _sceneLight.get(),
             true,
             _useMeshBvh,
-            false
+            false,
+            Mesh::ModelParams::DEFAULT,
+            _sceneLight.get()
         )
     );
 
@@ -158,11 +162,11 @@ void App::SpawnMeshes()
     //        "assets/Shibe/Shibe.png",
     //        AA::Vec3(0.0, 1.0, 0.0),
     //        AA::Vec3(0.4, 0.4, 0.4),
-    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
     //        false,
-    //        Mesh::ModelParams::FLIP_Z
+    //        Mesh::ModelParams::FLIP_Z,
+    //        _sceneLight.get()
     //    )
     //);
 
@@ -172,10 +176,11 @@ void App::SpawnMeshes()
     //        "assets/Plantpot/textures/PotCol.jpg",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(4.0, 4.0, 4.0),
-    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
-    //        false
+    //        false,
+    //        Mesh::ModelParams::DEFAULT,
+    //        _sceneLight.get()
     //    )
     //);
 }
@@ -188,10 +193,11 @@ void App::SpawnMeshStress()
             "NO_TEXTURE",
             AA::Vec3(1.0, 0.5, 0.0),
             AA::Vec3(0.175, 0.175, 0.175),
-            _sceneLight.get(),
             true,
             _useMeshBvh,
-            false
+            false,
+            Mesh::ModelParams::DEFAULT,
+            _sceneLight.get()
         )
     );
 
@@ -201,10 +207,11 @@ void App::SpawnMeshStress()
             "NO_TEXTURE",
             AA::Vec3(-1.0, 0.5, 0.0),
             AA::Vec3(0.15, 0.15, 0.15),
-            _sceneLight.get(),
             true,
             _useMeshBvh,
-            false
+            false,
+            Mesh::ModelParams::DEFAULT,
+            _sceneLight.get()
         )
     );
 
@@ -214,10 +221,11 @@ void App::SpawnMeshStress()
             "NO_TEXTURE",
             AA::Vec3(1.75, 0.5, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
-            _sceneLight.get(),
             true,
             _useMeshBvh,
-            false
+            false,
+            Mesh::ModelParams::DEFAULT,
+            _sceneLight.get()
         )
     );
 }
@@ -225,7 +233,7 @@ void App::SpawnMeshStress()
 void App::SpawnMovable()
 {
     //Spawns a box that can be controlled with wasd
-    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), _sceneLight.get(), false, sf::Color(0, 0, 0, 255), false));
+    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
     _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
 }
 

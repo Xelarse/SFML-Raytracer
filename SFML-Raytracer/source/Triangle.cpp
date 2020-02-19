@@ -1,7 +1,8 @@
 #include "..\include\Triangle.h"
+#include "Light.h"
 
-Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, Light* sceneLight, bool isStatic, sf::Color col, bool useColour)
-	: Hittable(sceneLight, isStatic, col, useColour), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
+Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, sf::Color col, bool useColour, Light* sceneLight)
+	: Hittable(isStatic, col, useColour, sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
 {
 	//Set up the bounds for the Tri
 	_bounds[0] = _verts[0]._position;
