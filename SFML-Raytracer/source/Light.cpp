@@ -19,12 +19,12 @@ void Light::CalculateLighting(const AA::Ray& ray, Hittable::HitResult& res)
 	AA::Ray tempRay = AA::Ray(_position, dirVec);
 	if (_statics != nullptr)
 	{
-		didHit = _statics->IntersectedRay(tempRay, 0.0, INFINITY, staticHit);
+		didHit = _statics->IntersectedRayOnly(tempRay, 0.0, INFINITY, staticHit);
 	}
 
 	if (_dynamics != nullptr)
 	{
-		didHit = _dynamics->IntersectedRay(tempRay, 0.0, staticHit.t, dynamicHit) ? true : didHit;
+		didHit = _dynamics->IntersectedRayOnly(tempRay, 0.0, staticHit.t, dynamicHit) ? true : didHit;
 	}
 
 

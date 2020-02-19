@@ -52,6 +52,51 @@ bool Hittables::IntersectedRay(const AA::Ray& ray, double tmin, double tmax, Hit
 	return didHit;
 }
 
+bool Hittables::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
+{
+	if (_hittableObjects.size() == 0)
+	{
+		return false;
+	}
+
+	Hittable::HitResult tempRes;
+	bool didHit = false;
+	double closestHit = t_max;
+
+	////With BVH
+	//Create a bvh of the hittables, then do the iterations of the ray against the bvh intersect ray
+	if (_bvhEnabled)
+	{
+		//If the objects can move then we need to remake the bvh, TODO Set a dirty flag later so this isnt done everyyyyy update
+		if (!_isStatic || !_bvh->IsConstructed())
+		{
+			ConstructBvh();
+		}
+		didHit = _bvh->IntersectedRayOnly(ray, t_min, t_max, tempRes);
+
+		if (didHit)
+		{
+			res = tempRes;
+		}
+	}
+
+	//// Without BVH
+	else
+	{
+		for (auto& hitt : _hittableObjects)
+		{
+			if (hitt->IntersectedRayOnly(ray, t_min, closestHit, tempRes))
+			{
+				didHit = true;
+				closestHit = tempRes.t;
+				res = tempRes;
+			}
+		}
+	}
+
+	return didHit;
+}
+
 //This function relies on the first object in the scene having a valid AABB, AKA FIRST OBJECT CANT BE AN INFITE PLANE
 bool Hittables::BoundingBox(double t0, double t1, AABB& outBox) const
 {

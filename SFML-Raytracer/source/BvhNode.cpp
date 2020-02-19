@@ -60,6 +60,42 @@ bool BvhNode::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hit
 	return false;
 }
 
+bool BvhNode::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
+{
+	if (_box.IntersectedRay(ray, t_min, t_max))
+	{
+		HitResult leftRes, rightRes;
+		bool hitLeft = _left->IntersectedRayOnly(ray, t_min, t_max, leftRes);
+		bool hitRight = _right->IntersectedRayOnly(ray, t_min, t_max, rightRes);
+
+		if (hitLeft && hitRight)
+		{
+			if (leftRes.t < rightRes.t)
+			{
+				res = leftRes;
+			}
+			else
+			{
+				res = rightRes;
+			}
+			return true;
+		}
+		else if (hitLeft)
+		{
+			res = leftRes;
+			return true;
+		}
+		else if (hitRight)
+		{
+			res = rightRes;
+			return true;
+		}
+
+		return false;
+	}
+	return false;
+}
+
 bool BvhNode::BoundingBox(double t0, double t1, AABB& outBox) const
 {
 	outBox = _box;

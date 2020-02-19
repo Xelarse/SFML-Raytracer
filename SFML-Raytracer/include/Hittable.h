@@ -23,6 +23,7 @@ public:
 
 	//Override function for detecting if a ray has hit an object
 	virtual bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) = 0;
+	virtual bool IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res) = 0;
 
 	//Override function for Drawing a AABB around an object, Bool as some things might not have one like infinite planes and wont be included in the BVH
 	//t0 and t1 used to ensure bounding box follows moving objects over a frame

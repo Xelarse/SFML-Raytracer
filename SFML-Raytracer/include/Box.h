@@ -9,6 +9,7 @@ public:
 	~Box() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
+	bool IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
 
 	void Move(AA::Vec3 newPos) override;
@@ -20,7 +21,6 @@ private:
 
 	void UpdateBounds();
 	void CalcNormal(HitResult& res);
-
 
 	AA::Vec3 _scale;
 	AA::Vec3 _origin;

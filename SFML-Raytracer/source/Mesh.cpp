@@ -71,6 +71,51 @@ bool Mesh::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRes
 	return didHit;
 }
 
+bool Mesh::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
+{
+	if (_tris.size() == 0)
+	{
+		return false;
+	}
+
+	Hittable::HitResult tempRes;
+	bool didHit = false;
+	double closestHit = t_max;
+
+	////With BVH
+	//Create a bvh of the hittables, then do the iterations of the ray against the bvh intersect ray
+	if (_useBvh)
+	{
+		//If the objects can move then we need to remake the bvh, TODO Set a dirty flag later so this isnt done everyyyyy update
+		if (!_isStatic || !_meshBvh->IsConstructed())
+		{
+			_meshBvh->ConstructBVH(_tris, 0.0, 0.0, _useSah);
+		}
+		didHit = _meshBvh->IntersectedRayOnly(ray, t_min, t_max, tempRes);
+
+		if (didHit)
+		{
+			res = tempRes;
+		}
+	}
+
+	//// Without BVH
+	else
+	{
+		for (auto& hitt : _tris)
+		{
+			if (hitt->IntersectedRayOnly(ray, t_min, closestHit, tempRes))
+			{
+				didHit = true;
+				closestHit = tempRes.t;
+				res = tempRes;
+			}
+		}
+	}
+
+	return didHit;
+}
+
 bool Mesh::LoadModel(const char* path, ModelParams param)
 {
 	tinyobj::attrib_t attributes;

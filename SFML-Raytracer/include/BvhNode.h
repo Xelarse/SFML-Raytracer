@@ -20,6 +20,7 @@ public:
 	};
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
+	bool IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool BoundingBox(double t0, double t1, AABB& outBox) const override;
 	void ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart);
 

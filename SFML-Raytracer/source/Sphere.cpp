@@ -65,6 +65,38 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
 	return false;
 }
 
+bool Sphere::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
+{
+    AA::Vec3 oc = ray._startPos - _origin;
+    double a = ray._dir.DotProduct(ray._dir);
+    double b = oc.DotProduct(ray._dir);
+    double c = oc.DotProduct(oc) - _radius * _radius;
+
+    double discrim = b * b - a * c;
+    if (discrim > 0)
+    {
+        double temp = (-b - sqrt(discrim)) / a;
+        if (temp < t_max && temp > t_min)
+        {
+            res.t = temp;
+            res.p = ray.GetPointAlongRay(res.t);
+            res.normal = (res.p - _origin) / _radius;
+            return true;
+        }
+
+        temp = (-b + sqrt(discrim)) / a;
+        if (temp < t_max && temp > t_min)
+        {
+            res.t = temp;
+            res.p = ray.GetPointAlongRay(res.t);
+            res.normal = (res.p - _origin) / _radius;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool Sphere::BoundingBox(double t0, double t1, AABB& outBox) const
 {
     outBox = AABB(

@@ -292,21 +292,21 @@ void App::Update(float dt)
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
     {
-        AA::Vec3 previous = _testBox->GetPosition();
+        AA::Vec3 previous = _sceneLight->GetPosition();
         previous[2] += 0.25;
         previous[2] = previous.Z() > 5 ? 5 : previous.Z();
         _sceneLight->SetPosition(previous);
     }
     if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
     {
-        AA::Vec3 previous = _testBox->GetPosition();
+        AA::Vec3 previous = _sceneLight->GetPosition();
         previous[0] -= 0.25;
         previous[0] = previous.X() < -6.0 ? -6.0 : previous.X();
         _sceneLight->SetPosition(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
     {
-        AA::Vec3 previous = _testBox->GetPosition();
+        AA::Vec3 previous = _sceneLight->GetPosition();
         previous[0] += 0.25;
         previous[0] = previous.X() > 6.0 ? 6.0 : previous.X();
         _sceneLight->SetPosition(previous);
