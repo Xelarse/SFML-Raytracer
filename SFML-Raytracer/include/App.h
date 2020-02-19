@@ -11,6 +11,7 @@
 #include "Mesh.h"
 #include "BvhNode.h"
 #include "JobManager.h"
+#include "Light.h"
 
 class App
 {
@@ -73,6 +74,7 @@ private:
 	Box* _testBox = nullptr;
 	std::unique_ptr<AA::ColourArray> _pixelColourBuffer;
 	std::unique_ptr<Camera> _cam;
+	std::unique_ptr<Light> _sceneLight;
 	std::unique_ptr<Hittables> _staticHittables;
 	std::unique_ptr<Hittables> _dynamicHittables;
 

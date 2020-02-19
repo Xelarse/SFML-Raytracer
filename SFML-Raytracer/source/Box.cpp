@@ -2,8 +2,8 @@
 #include <cmath>
 #include <iostream>
 
-Box::Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, sf::Color col, bool useColour) 
-    : Hittable(isStatic, col, useColour), _origin(origin), _scale(scale)
+Box::Box(AA::Vec3 origin, AA::Vec3 scale, Light* sceneLight, bool isStatic, sf::Color col, bool useColour)
+    : Hittable(sceneLight, isStatic, col, useColour), _origin(origin), _scale(scale)
 {
 	UpdateBounds();
 }
@@ -80,6 +80,11 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
         res.col = AA::NormalToColour(res.normal);
     }
 
+    if (_sceneLight != nullptr)
+    {
+        _sceneLight->CalculateLighting(ray, res);
+    }
+
     return true;
 }
 
@@ -109,45 +114,6 @@ void Box::UpdateBounds()
 
 void Box::CalcNormal(HitResult& res)
 {
-    //// for each of x y z check where it is in relation to the origin if its > origin, +1 if its < origin, -1
-    //AA::Vec3 hitMinusOrigin = res.p - _origin;
-    //AA::Vec3 absoluteHit = AA::Vec3(fabs(hitMinusOrigin._x), fabs(hitMinusOrigin._y), fabs(hitMinusOrigin._z));
-    ////One of the axis should be the scale of box if its hit a face
-
-    //if ((absoluteHit._x >= absoluteHit._y) && (absoluteHit._x >= absoluteHit._z))
-    //{
-    //    if (res.p._x < 0)
-    //    {
-    //        res.normal = AA::Vec3(-1, 0, 0);
-    //    }
-    //    else
-    //    {
-    //        res.normal = AA::Vec3(1, 0, 0);
-    //    }
-    //}
-    //else if ((absoluteHit._y >= absoluteHit._x) && (absoluteHit._y >= absoluteHit._z))
-    //{
-    //    if (res.p._y < 0)
-    //    {
-    //        res.normal = AA::Vec3(0, -1, 0);
-    //    }
-    //    else
-    //    {
-    //        res.normal = AA::Vec3(0, 1, 0);
-    //    }
-    //}
-    //else
-    //{
-    //    if (res.p._z < 0)
-    //    {
-    //        res.normal = AA::Vec3(0, 0, -1);
-    //    }
-    //    else
-    //    {
-    //        res.normal = AA::Vec3(0, 0, 1);
-    //    }
-    //}
-
     //Get vector from origin of cube to hit location use for Normal
     AA::Vec3 oToHit = res.p - _origin;
     res.normal = AA::Vec3::UnitVector(oToHit);

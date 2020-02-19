@@ -1,6 +1,6 @@
 #include "..\include\Sphere.h"
 
-Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, sf::Color col, bool useColour) : Hittable(isStatic, col, useColour), _origin(o), _radius(r)
+Sphere::Sphere(AA::Vec3 o, double r, Light* sceneLight, bool isStatic, sf::Color col, bool useColour) : Hittable(sceneLight, isStatic, col, useColour), _origin(o), _radius(r)
 {
 }
 
@@ -32,6 +32,10 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             {
                 res.col = AA::NormalToColour(res.normal);
             }
+            if (_sceneLight != nullptr)
+            {
+                _sceneLight->CalculateLighting(ray, res);
+            }
             return true;
         }
 
@@ -48,6 +52,10 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             else
             {
                 res.col = AA::NormalToColour(res.normal);
+            }
+            if (_sceneLight != nullptr)
+            {
+                _sceneLight->CalculateLighting(ray, res);
             }
             return true;
         }

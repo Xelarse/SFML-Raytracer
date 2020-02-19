@@ -1,7 +1,7 @@
 #include "..\include\Triangle.h"
 
-Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, sf::Color col, bool useColour)
-	: Hittable(isStatic, col, useColour), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
+Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, Light* sceneLight, bool isStatic, sf::Color col, bool useColour)
+	: Hittable(sceneLight, isStatic, col, useColour), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
 {
 	//Set up the bounds for the Tri
 	_bounds[0] = _verts[0]._position;
@@ -89,6 +89,11 @@ bool Triangle::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hi
 	res.p = ray.GetPointAlongRay(res.t);
 	res.normal = v0._normal;
 	res.col = GetPixelColour(u, v);
+
+	if (_sceneLight != nullptr)
+	{
+		_sceneLight->CalculateLighting(ray, res);
+	}
 	return true;
 }
 

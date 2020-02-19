@@ -3,6 +3,7 @@
 #include "Utilities.h"
 #include "AABB.h"
 #include "Utilities.h"
+#include "Light.h"
 
 class Hittable
 {
@@ -17,7 +18,7 @@ public:
 	};
 
 	Hittable();
-	Hittable(bool isStatic, sf::Color col, bool useColour);
+	Hittable(Light* sceneLight, bool isStatic, sf::Color col, bool useColour);
 	virtual ~Hittable();
 
 	//Override function for detecting if a ray has hit an object
@@ -39,5 +40,6 @@ protected:
 	sf::Color _col;
 	bool _useColour = false;
 	bool _isStatic = false;
+	Light* _sceneLight = nullptr;
 };
 

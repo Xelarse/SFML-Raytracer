@@ -17,7 +17,7 @@ public:
 
 
 	Mesh() = delete;
-	Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh = false, bool useSmart = false, ModelParams param = ModelParams::DEFAULT);
+	Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, Light* sceneLight, bool isStatic, bool useBvh = false, bool useSmart = false, ModelParams param = ModelParams::DEFAULT);
 	~Mesh() override;
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;

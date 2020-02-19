@@ -25,6 +25,12 @@
     <Filter Include="Source Files\JobSystem">
       <UniqueIdentifier>{cc342b0c-e1e1-4eb5-80ee-d08365210ea0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lights">
+      <UniqueIdentifier>{8e5baadd-1850-4652-8820-dd08d3616e91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lights">
+      <UniqueIdentifier>{589b244a-9fa6-4f1b-863d-99e535dd3810}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -68,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="source\Triangle.cpp">
       <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Light.cpp">
+      <Filter>Source Files\Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="include\Triangle.h">
       <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Light.h">
+      <Filter>Header Files\Lights</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -44,6 +44,7 @@ void App::InitCoreSystems()
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
     _staticHittables = std::make_unique<Hittables>(true, _useBvh, false);
     _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
+    _sceneLight = std::make_unique<Light>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 10, 5));
 
     AA::Vec3 lookFrom = AA::Vec3(0, 4, -5);
     AA::Vec3 lookAt = AA::Vec3(0, 1, 0);
@@ -60,7 +61,7 @@ void App::InitCoreSystems()
 void App::InitScene()
 {
     //Add a static sphere with no specific colour and one with a colour for backdrop
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, _sceneLight.get(), true, sf::Color(102, 0, 102, 255), true));
 
     //SpawnBase();
     //SpawnMovable();
@@ -78,7 +79,7 @@ void App::InitScene()
 
 void App::SpawnBase()
 {
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, _sceneLight.get(), true, sf::Color(0, 0, 0, 255), false));
 }
 
 void App::SpawnSphereStress()
@@ -93,7 +94,7 @@ void App::SpawnSphereStress()
 
     for (int i = 0; i < 3000; ++i)
     {
-        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false));
+        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), _sceneLight.get(), true, sf::Color(0, 0, 0, 255), false));
     }
 }
 
@@ -105,6 +106,7 @@ void App::SpawnMeshes()
     //        "assets/cubeHori.tga",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(2.5, 2.5, 2.5),
+    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
     //        false
@@ -117,6 +119,7 @@ void App::SpawnMeshes()
     //        "NO_TEXTURE",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
+    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
     //        false
@@ -129,6 +132,7 @@ void App::SpawnMeshes()
     //        "NO_TEXTURE",
     //        AA::Vec3(1.5, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
+    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
     //        false
@@ -141,6 +145,7 @@ void App::SpawnMeshes()
             "NO_TEXTURE",
             AA::Vec3(0.0, 0.5, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
+            _sceneLight.get(),
             true,
             _useMeshBvh,
             false
@@ -153,6 +158,7 @@ void App::SpawnMeshes()
     //        "assets/Shibe/Shibe.png",
     //        AA::Vec3(0.0, 1.0, 0.0),
     //        AA::Vec3(0.4, 0.4, 0.4),
+    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
     //        false,
@@ -166,6 +172,7 @@ void App::SpawnMeshes()
     //        "assets/Plantpot/textures/PotCol.jpg",
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(4.0, 4.0, 4.0),
+    //        _sceneLight.get(),
     //        true,
     //        _useMeshBvh,
     //        false
@@ -181,6 +188,7 @@ void App::SpawnMeshStress()
             "NO_TEXTURE",
             AA::Vec3(1.0, 0.5, 0.0),
             AA::Vec3(0.175, 0.175, 0.175),
+            _sceneLight.get(),
             true,
             _useMeshBvh,
             false
@@ -193,6 +201,7 @@ void App::SpawnMeshStress()
             "NO_TEXTURE",
             AA::Vec3(-1.0, 0.5, 0.0),
             AA::Vec3(0.15, 0.15, 0.15),
+            _sceneLight.get(),
             true,
             _useMeshBvh,
             false
@@ -205,6 +214,7 @@ void App::SpawnMeshStress()
             "NO_TEXTURE",
             AA::Vec3(1.75, 0.5, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
+            _sceneLight.get(),
             true,
             _useMeshBvh,
             false
@@ -215,7 +225,7 @@ void App::SpawnMeshStress()
 void App::SpawnMovable()
 {
     //Spawns a box that can be controlled with wasd
-    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false));
+    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), _sceneLight.get(), false, sf::Color(0, 0, 0, 255), false));
     _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
 }
 
@@ -233,36 +243,65 @@ void App::Tick(float dt)
 
 void App::Update(float dt)
 {
-    if (_testBox != nullptr)
+    //if (_testBox != nullptr)
+    //{
+    //    if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
+    //    {
+    //        AA::Vec3 previous = _testBox->GetPosition();
+    //        previous[2] -= 0.25;
+    //        previous[2] = previous.Z() < -3.0 ? -3.0 : previous.Z();
+    //        _testBox->Move(previous);
+    //    }
+    //    else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
+    //    {
+    //        AA::Vec3 previous = _testBox->GetPosition();
+    //        previous[2] += 0.25;
+    //        previous[2] = previous.Z() > 3 ? 3 : previous.Z();
+    //        _testBox->Move(previous);
+    //    }
+    //    if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
+    //    {
+    //        AA::Vec3 previous = _testBox->GetPosition();
+    //        previous[0] -= 0.25;
+    //        previous[0] = previous.X() < -4.0 ? -4.0 : previous.X();
+    //        _testBox->Move(previous);
+    //    }
+    //    else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
+    //    {
+    //        AA::Vec3 previous = _testBox->GetPosition();
+    //        previous[0] += 0.25;
+    //        previous[0] = previous.X() > 4.0 ? 4.0 : previous.X();
+    //        _testBox->Move(previous);
+    //    }
+    //}
+
+    if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
     {
-        if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
-        {
-            AA::Vec3 previous = _testBox->GetPosition();
-            previous[2] -= 0.25;
-            previous[2] = previous.Z() < -3.0 ? -3.0 : previous.Z();
-            _testBox->Move(previous);
-        }
-        else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
-        {
-            AA::Vec3 previous = _testBox->GetPosition();
-            previous[2] += 0.25;
-            previous[2] = previous.Z() > 3 ? 3 : previous.Z();
-            _testBox->Move(previous);
-        }
-        if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
-        {
-            AA::Vec3 previous = _testBox->GetPosition();
-            previous[0] -= 0.25;
-            previous[0] = previous.X() < -4.0 ? -4.0 : previous.X();
-            _testBox->Move(previous);
-        }
-        else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
-        {
-            AA::Vec3 previous = _testBox->GetPosition();
-            previous[0] += 0.25;
-            previous[0] = previous.X() > 4.0 ? 4.0 : previous.X();
-            _testBox->Move(previous);
-        }
+        AA::Vec3 previous = _sceneLight->GetPosition();
+        previous[2] -= 0.25;
+        previous[2] = previous.Z() < -5.0 ? -5.0 : previous.Z();
+        _sceneLight->SetPosition(previous);
+    }
+    else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
+    {
+        AA::Vec3 previous = _testBox->GetPosition();
+        previous[2] += 0.25;
+        previous[2] = previous.Z() > 5 ? 5 : previous.Z();
+        _sceneLight->SetPosition(previous);
+    }
+    if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
+    {
+        AA::Vec3 previous = _testBox->GetPosition();
+        previous[0] -= 0.25;
+        previous[0] = previous.X() < -6.0 ? -6.0 : previous.X();
+        _sceneLight->SetPosition(previous);
+    }
+    else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
+    {
+        AA::Vec3 previous = _testBox->GetPosition();
+        previous[0] += 0.25;
+        previous[0] = previous.X() > 6.0 ? 6.0 : previous.X();
+        _sceneLight->SetPosition(previous);
     }
 
     if (_pEventHander->IsKeyPressed(sf::Keyboard::Up))
