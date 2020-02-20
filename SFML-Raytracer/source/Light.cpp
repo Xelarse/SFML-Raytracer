@@ -1,6 +1,6 @@
 #include "..\include\Light.h"
 
-Light::Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos) : _statics(staticObjects), _dynamics(dynamicObjects), _position(pos)
+Light::Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, bool debugRender) : _statics(staticObjects), _dynamics(dynamicObjects), _position(pos), _debugRender(debugRender)
 {
     _col = sf::Color(212, 186, 42, 255);
 }

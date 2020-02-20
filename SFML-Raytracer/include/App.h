@@ -32,6 +32,7 @@ private:
 	void SpawnMeshes();
 	void SpawnMeshStress();
 	void SpawnMovable();
+	void SpawnLightTest();
 
 	//dt in milliseconds
 	void Tick(float dt);
@@ -67,8 +68,11 @@ private:
 	bool _useMeshBvh = true;
 
 	double _cameraXBound = 8.0;
-	double _cameraPanSpeed = 4.0;
+	double _cameraPanSpeed = 2.0;
 	bool _camLeft = true;
+
+	bool _lightingEnabled = true;
+	bool _lightingDebug = true;
 
 
 	Box* _testBox = nullptr;

@@ -7,7 +7,7 @@ class Light : public Hittable
 public:
 
 	Light() = delete;
-	Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos);
+	Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, bool debugRender);
 	~Light() override;
 
 	virtual void CalculateLighting(const AA::Ray& ray, Hittable::HitResult& res);
@@ -23,11 +23,15 @@ public:
 	inline const sf::Color GetLightColour() { return _col; }
 	inline void SetLightColour(sf::Color col) { _col = col; }
 
+	inline const bool IsDebugRendering() { return _debugRender; }
+	inline void SetDebugRendering(bool active) { _debugRender = active; }
+
 private:
 
 	AA::Vec3 _position;
 	double _sphereRadius = 0.5;
 	Hittable* _statics = nullptr;
 	Hittable* _dynamics = nullptr;
+	bool _debugRender = true;
 };
 

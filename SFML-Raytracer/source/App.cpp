@@ -44,11 +44,15 @@ void App::InitCoreSystems()
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
     _staticHittables = std::make_unique<Hittables>(true, _useBvh, false);
     _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
-    _sceneLight = std::make_unique<Light>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 5));
+
+    if (_lightingEnabled)
+    {
+        _sceneLight = std::make_unique<Light>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 5), _lightingDebug);
+    }
 
     AA::Vec3 lookFrom = AA::Vec3(0, 4, -5);
     AA::Vec3 lookAt = AA::Vec3(0, 1, 0);
-    double vFov = 70;
+    double vFov = 80;
     _cam = std::make_unique<Camera>(lookFrom, lookAt, AA::Vec3(0, 1, 0), vFov, (_width / _height));
 
     //Job system Inits
@@ -61,13 +65,14 @@ void App::InitCoreSystems()
 void App::InitScene()
 {
     //Add a static sphere with no specific colour and one with a colour for backdrop
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true, _sceneLight.get()));
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true, _sceneLight.get()));
 
     //SpawnBase();
     //SpawnMovable();
     //SpawnSphereStress();
-    SpawnMeshes();
+    //SpawnMeshes();
     //SpawnMeshStress();
+    SpawnLightTest();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -235,6 +240,13 @@ void App::SpawnMovable()
     //Spawns a box that can be controlled with wasd
     _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
     _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
+}
+
+void App::SpawnLightTest()
+{
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, sf::Color(42, 209, 212, 255), true, _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 0.8, true, sf::Color(194, 10, 10, 255), true, _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(27, 209, 10, 255), true, _sceneLight.get()));
 }
 
 void App::Tick(float dt)
@@ -500,7 +512,7 @@ void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 
     staticHit = _staticHittables->IntersectedRay(ray, 0.0, INFINITY, staticRes);
     dynamicHit = _dynamicHittables->IntersectedRay(ray, 0.0, INFINITY, dynamicRes);
-    if (_sceneLight)
+    if (_sceneLight && _sceneLight->IsDebugRendering())
     {
         lightHit = _sceneLight->IntersectedRay(ray, 0.0, INFINITY, lightRes);
         if (staticHit && dynamicHit && lightHit)
