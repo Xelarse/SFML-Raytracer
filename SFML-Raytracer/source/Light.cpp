@@ -3,7 +3,8 @@
 Light::Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, bool debugRender) 
     : _statics(staticObjects), _dynamics(dynamicObjects), _position(pos), _debugRender(debugRender), _rayCamera(Camera(pos, AA::Vec3(0,0,0), AA::Vec3(0,1,0), 80, (800 / 600) ))
 {
-    _col = sf::Color(212, 186, 42, 255);
+    _lightColour = sf::Color(212, 186, 42, 255);
+    _lightColorVec = AA::Vec3(_lightColour.r, _lightColour.g, _lightColour.b);
 }
 
 Light::~Light()

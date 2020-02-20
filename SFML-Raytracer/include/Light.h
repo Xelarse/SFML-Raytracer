@@ -21,8 +21,17 @@ public:
 	
 	inline const AA::Vec3 GetPosition() { return _position; }
 
-	inline const sf::Color GetLightColour() { return _col; }
-	inline void SetLightColour(sf::Color col) { _col = col; }
+	inline const sf::Color GetLightColour() { return _lightColour; }
+	inline const AA::Vec3 GetLightColourVec() { return _lightColorVec; }
+	inline void SetLightColour(sf::Color col) {
+		_lightColour = col;
+		_lightColorVec = AA::Vec3(_lightColour.r, _lightColour.g, _lightColour.b).UnitVector();
+	}
+	inline void SetLightColour(AA::Vec3 col)
+	{
+		_lightColour = sf::Color(col.R() * 255, col.G() * 255, col.B() * 255, 255);
+		_lightColorVec = col;
+	}
 
 	inline const bool IsDebugRendering() { return _debugRender; }
 	inline void SetDebugRendering(bool active) { _debugRender = active; }
@@ -35,5 +44,7 @@ protected:
 	Hittable* _dynamics = nullptr;
 	bool _debugRender = true;
 	Camera _rayCamera;
+	sf::Color _lightColour;
+	AA::Vec3 _lightColorVec;
 };
 

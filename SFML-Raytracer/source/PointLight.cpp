@@ -21,7 +21,7 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
 
     //Find the t of this ray
     IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
-
+     
     if (_statics != nullptr)
     {
         staticHit = _statics->IntersectedRayOnly(outRay, 0.0, lightRes.t, staticRes);
@@ -38,6 +38,14 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
     }
     else
     {
-        
+        //For now just take the color from the material, later there will be functions related to doin a calc to get the right value out
+        double nDotDRSquared = res.normal.DotProduct(outRay._dir) / (lightRes.t * lightRes.t);
+
+        //Basic diffuse for mat
+        AA::Vec3 hitColourPid = res.mat->GetColourVecNormalised() / AA::PI;
+
+        //Calc final colour
+        AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec;
+        res.col = finalColourVec.Vec3ToCol();
     }
 }
