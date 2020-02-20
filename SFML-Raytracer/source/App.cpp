@@ -47,7 +47,7 @@ void App::InitCoreSystems()
 
     if (_lightingEnabled)
     {
-        _sceneLight = std::make_unique<Light>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), _lightingDebug);
+        _sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), _lightingDebug);
     }
 
     AA::Vec3 lookFrom = AA::Vec3(0, 4, -5);
@@ -65,7 +65,7 @@ void App::InitCoreSystems()
 void App::InitScene()
 {
     //Add a static sphere with no specific colour and one with a colour for backdrop
-    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, sf::Color(102, 0, 102, 255), true, _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, Material(sf::Color(102, 0, 102, 255), true), _sceneLight.get()));
 
     //SpawnBase();
     //SpawnMovable();

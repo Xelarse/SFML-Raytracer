@@ -12,6 +12,7 @@
 #include "BvhNode.h"
 #include "JobManager.h"
 #include "Light.h"
+#include "PointLight.h"
 
 class App
 {

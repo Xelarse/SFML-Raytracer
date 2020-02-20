@@ -18,6 +18,7 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
     //Build a ray that fires from the point of collision to the light
     AA::Vec3 collisionPoint = inRay.GetPointAlongRay(res.t);
     AA::Ray outRay = AA::Ray(collisionPoint, AA::Vec3::UnitVector(_position - collisionPoint));
+    outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);
 
     //Find the t of this ray
     IntersectedRayOnly(outRay, 0, INFINITY, lightRes);

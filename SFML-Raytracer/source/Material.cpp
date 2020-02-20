@@ -8,8 +8,25 @@ Material::~Material()
 {
 }
 
+bool const Material::MaterialActive()
+{
+	return _useMaterial;
+}
+
 AA::Vec3 Material::MaterialCalculatedColour()
 {
 	//Do a basic diffuse
-	return GetColourVecNormalised() / AA::PI;
+	AA::Vec3 col = AA::Vec3(_colour.r, _colour.g, _colour.b);
+	col /= 255;
+	return col / AA::PI;
+}
+
+sf::Color Material::GetColour()
+{
+	return _colour;
+}
+
+void Material::SetColour(sf::Color col)
+{
+	_colour = col;
 }
