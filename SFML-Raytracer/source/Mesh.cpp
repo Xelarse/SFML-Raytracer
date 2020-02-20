@@ -215,7 +215,7 @@ bool Mesh::LoadModel(const char* path, ModelParams param)
 				verts = std::array<AA::Vertex, 3>({ verts[2], verts[1], verts[0] });
 			}
 			////Create the Tri and push it back onto vector
-			_tris.push_back(new Triangle(verts, _position, _scale, _meshTexture.get(), _isStatic));
+			_tris.push_back(new Triangle(verts, _position, _scale, _meshTexture.get(), _isStatic, sf::Color(0,0,0,255), false, _sceneLight));
 		}
 	}
 

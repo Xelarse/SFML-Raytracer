@@ -1,6 +1,7 @@
 #pragma once
 #include "Utilities.h"
 #include "Hittable.h"
+#include "Camera.h"
 
 class Light : public Hittable
 {
@@ -10,7 +11,7 @@ public:
 	Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, bool debugRender);
 	~Light() override;
 
-	virtual void CalculateLighting(const AA::Ray& ray, Hittable::HitResult& res);
+	virtual void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res);
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
@@ -29,9 +30,10 @@ public:
 private:
 
 	AA::Vec3 _position;
-	double _sphereRadius = 0.5;
+	double _sphereRadius = 0.1;
 	Hittable* _statics = nullptr;
 	Hittable* _dynamics = nullptr;
 	bool _debugRender = true;
+	Camera _rayCamera;
 };
 

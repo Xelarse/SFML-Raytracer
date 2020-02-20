@@ -88,7 +88,7 @@ bool Triangle::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hi
 	//At this point its passed all tests and hit the TRI
 	res.t = v0v2.DotProduct(qvec) * invDet;
 	res.p = ray.GetPointAlongRay(res.t);
-	res.normal = v0._normal;
+	res.normal = v0v1.CrossProduct(v0v2);
 	res.col = GetPixelColour(u, v);
 
 	if (_sceneLight != nullptr)
@@ -150,7 +150,7 @@ bool Triangle::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max
 	//At this point its passed all tests and hit the TRI
 	res.t = v0v2.DotProduct(qvec) * invDet;
 	res.p = ray.GetPointAlongRay(res.t);
-	res.normal = v0._normal;			//TODO do the cross product thing to get the actual normal
+	res.normal = v0v1.CrossProduct(v0v2);
 	return true;
 }
 
