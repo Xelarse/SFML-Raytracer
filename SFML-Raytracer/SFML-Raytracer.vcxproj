@@ -171,6 +171,7 @@
     <ClCompile Include="source\Light.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Mesh.cpp" />
+    <ClCompile Include="source\PointLight.cpp" />
     <ClCompile Include="source\PoolableThread.cpp" />
     <ClCompile Include="source\Sphere.cpp" />
     <ClCompile Include="source\Triangle.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="include\Light.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\ObjLoader.h" />
+    <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\PoolableThread.h" />
     <ClInclude Include="include\Sphere.h" />
     <ClInclude Include="include\Triangle.h" />

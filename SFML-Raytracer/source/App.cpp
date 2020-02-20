@@ -70,9 +70,9 @@ void App::InitScene()
     //SpawnBase();
     //SpawnMovable();
     //SpawnSphereStress();
-    SpawnMeshes();
+    //SpawnMeshes();
     //SpawnMeshStress();
-    //SpawnLightTest();
+    SpawnLightTest();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -89,7 +89,6 @@ void App::SpawnBase()
 
 void App::SpawnSphereStress()
 {
-    //Add a bunch of spheres using random dist
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> xDist(-5.0, 5.0);

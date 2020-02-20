@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Utilities.h"
 #include "AABB.h"
+#include "Material.h"
 
 class Light;
 
@@ -15,6 +16,7 @@ public:
 		AA::Vec3 p;
 		AA::Vec3 normal;
 		sf::Color col;
+		Material* mat;
 	};
 
 	Hittable();
@@ -38,9 +40,11 @@ public:
 	inline void UseColour(bool use) { _useColour = use; }
 
 protected:
-	sf::Color _col;
 	bool _useColour = false;
 	bool _isStatic = false;
+	Material _mat;
+
+	//Not owned just referenced
 	Light* _sceneLight = nullptr;
 };
 

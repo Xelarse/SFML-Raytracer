@@ -27,7 +27,7 @@ public:
 	inline const bool IsDebugRendering() { return _debugRender; }
 	inline void SetDebugRendering(bool active) { _debugRender = active; }
 
-private:
+protected:
 
 	AA::Vec3 _position;
 	double _sphereRadius = 0.1;

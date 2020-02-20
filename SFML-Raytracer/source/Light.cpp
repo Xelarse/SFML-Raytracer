@@ -17,11 +17,6 @@ void Light::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
 	bool staticHit = false;
     bool dynamicHit = false;
 
-    ////Update Camera with new info and fire a ray
-    //_rayCamera.SetLookFrom(_position);
-    //_rayCamera.SetLookAt(inRay.GetPointAlongRay(res.t));
-	//AA::Ray tempRay = _rayCamera.GetRay(1,1);
-
     //Build a ray that fires from the point of collision to the light
     AA::Vec3 collisionPoint = inRay.GetPointAlongRay(res.t);
     AA::Ray outRay = AA::Ray(collisionPoint, AA::Vec3::UnitVector(_position - collisionPoint));
@@ -29,7 +24,6 @@ void Light::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
     //Find the t of this ray
     IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
 
-    //Send out both rays using the new ray with the new t_max
     if (_statics != nullptr)
     {
         staticHit = _statics->IntersectedRayOnly(outRay, 0.0, lightRes.t, staticRes);
