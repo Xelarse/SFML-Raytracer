@@ -1,6 +1,6 @@
 #include "..\include\Hittable.h"
 
-Hittable::Hittable()
+Hittable::Hittable() : _col(sf::Color(0,0,0,255))
 {
 }
 

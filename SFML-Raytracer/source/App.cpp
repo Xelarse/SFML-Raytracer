@@ -44,7 +44,7 @@ void App::InitCoreSystems()
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
     _staticHittables = std::make_unique<Hittables>(true, _useBvh, false);
     _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
-    _sceneLight = std::make_unique<Light>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 10, 5));
+    _sceneLight = std::make_unique<Light>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 5));
 
     AA::Vec3 lookFrom = AA::Vec3(0, 4, -5);
     AA::Vec3 lookAt = AA::Vec3(0, 1, 0);
@@ -100,19 +100,19 @@ void App::SpawnSphereStress()
 
 void App::SpawnMeshes()
 {
-    ////12 Tri Cube
-    //_staticHittables->_hittableObjects.push_back(new Mesh(
-    //        "assets/cube.obj",
-    //        "assets/cubeHori.tga",
-    //        AA::Vec3(0.0, 0.5, 0.0),
-    //        AA::Vec3(2.5, 2.5, 2.5),
-    //        true,
-    //        _useMeshBvh,
-    //        false,
-    //        Mesh::ModelParams::DEFAULT,
-    //        _sceneLight.get()
-    //    )
-    //);
+    //12 Tri Cube
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/cube.obj",
+            "assets/cubeHori.tga",
+            AA::Vec3(0.0, 0.5, 0.0),
+            AA::Vec3(1.5, 1.5, 1.5),
+            true,
+            _useMeshBvh,
+            false,
+            Mesh::ModelParams::DEFAULT,
+            _sceneLight.get()
+        )
+    );
 
     ////104 Tri boat
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -156,19 +156,19 @@ void App::SpawnMeshes()
     //    )
     //);
 
-    //672 Tri Shibe
-    _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/Shibe/Shibe.obj",
-            "assets/Shibe/Shibe.png",
-            AA::Vec3(0.0, 1.0, 0.0),
-            AA::Vec3(0.4, 0.4, 0.4),
-            true,
-            _useMeshBvh,
-            false,
-            Mesh::ModelParams::FLIP_Z,
-            _sceneLight.get()
-        )
-    );
+    ////672 Tri Shibe
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/Shibe/Shibe.obj",
+    //        "assets/Shibe/Shibe.png",
+    //        AA::Vec3(0.0, 1.0, 0.0),
+    //        AA::Vec3(0.4, 0.4, 0.4),
+    //        true,
+    //        _useMeshBvh,
+    //        false,
+    //        Mesh::ModelParams::FLIP_Z,
+    //        _sceneLight.get()
+    //    )
+    //);
 
     ////716 Tri Plant pot
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -290,28 +290,42 @@ void App::Update(float dt)
             AA::Vec3 previous = _sceneLight->GetPosition();
             previous[2] -= 0.25;
             previous[2] = previous.Z() < -5.0 ? -5.0 : previous.Z();
-            _sceneLight->SetPosition(previous);
+            _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
             previous[2] += 0.25;
             previous[2] = previous.Z() > 5 ? 5 : previous.Z();
-            _sceneLight->SetPosition(previous);
+            _sceneLight->Move(previous);
         }
         if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
             previous[0] -= 0.25;
             previous[0] = previous.X() < -6.0 ? -6.0 : previous.X();
-            _sceneLight->SetPosition(previous);
+            _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
             previous[0] += 0.25;
             previous[0] = previous.X() > 6.0 ? 6.0 : previous.X();
-            _sceneLight->SetPosition(previous);
+            _sceneLight->Move(previous);
+        }
+        if (_pEventHander->IsKeyPressed(sf::Keyboard::Q))
+        {
+            AA::Vec3 previous = _sceneLight->GetPosition();
+            previous[1] -= 0.25;
+            previous[1] = previous.Y() < -6.0 ? -6.0 : previous.Y();
+            _sceneLight->Move(previous);
+        }
+        else if (_pEventHander->IsKeyPressed(sf::Keyboard::E))
+        {
+            AA::Vec3 previous = _sceneLight->GetPosition();
+            previous[1] += 0.25;
+            previous[1] = previous.Y() > 6.0 ? 6.0 : previous.Y();
+            _sceneLight->Move(previous);
         }
     }
 
@@ -477,28 +491,76 @@ void App::CreateImageSegment()
 
 void App::GetColour(const double& u, const double& v, sf::Color& colOut)
 {
-    Hittable::HitResult staticRes, dynamicRes;
+    Hittable::HitResult staticRes, dynamicRes, lightRes;
     AA::Ray ray = _cam->GetRay(u, v);
-    bool staticHit, dynamicHit;
+    bool staticHit, dynamicHit, lightHit;
+    staticRes.t = INFINITY;
+    dynamicRes.t = INFINITY;
+    lightRes.t = INFINITY;
 
-    staticHit = _staticHittables->IntersectedRay(ray, 0.0, 20000, staticRes);
-    dynamicHit = _dynamicHittables->IntersectedRay(ray, 0.0, 20000.0, dynamicRes);
-
-    if (staticHit && dynamicHit)
+    staticHit = _staticHittables->IntersectedRay(ray, 0.0, INFINITY, staticRes);
+    dynamicHit = _dynamicHittables->IntersectedRay(ray, 0.0, INFINITY, dynamicRes);
+    if (_sceneLight)
     {
-        colOut = staticRes.t < dynamicRes.t ? staticRes.col : dynamicRes.col;
-    }
-    else if (staticHit)
-    {
-        colOut = staticRes.col;
-    }
-    else if (dynamicHit)
-    {
-        colOut = dynamicRes.col;
+        lightHit = _sceneLight->IntersectedRay(ray, 0.0, INFINITY, lightRes);
+        if (staticHit && dynamicHit && lightHit)
+        {
+            if (staticRes.t < dynamicRes.t)
+            {
+                colOut = staticRes.t < lightRes.t ? staticRes.col : lightRes.col;
+            }
+            else
+            {
+                colOut = dynamicRes.t < lightRes.t ? dynamicRes.col : lightRes.col;
+            }
+        }
+        else if (staticHit && lightHit)
+        {
+            colOut = staticRes.t < lightRes.t ? staticRes.col : lightRes.col;
+        }
+        else if (dynamicHit && lightHit)
+        {
+            colOut = dynamicRes.t < lightRes.t ? dynamicRes.col : lightRes.col;
+        }
+        else if (staticHit && dynamicHit)
+        {
+            colOut = staticRes.t < dynamicRes.t ? staticRes.col : dynamicRes.col;
+        }
+        else if (staticHit)
+        {
+            colOut = staticRes.col;
+        }
+        else if (dynamicHit)
+        {
+            colOut = dynamicRes.col;
+        }
+        else if (lightHit)
+        {
+            colOut = lightRes.col;
+        }
+        else
+        {
+            colOut = BackgroundGradientCol(ray).Vec3ToCol();
+        }
     }
     else
     {
-        colOut = BackgroundGradientCol(ray).Vec3ToCol();
+        if (staticHit && dynamicHit)
+        {
+            colOut = staticRes.t < dynamicRes.t ? staticRes.col : dynamicRes.col;
+        }
+        else if (staticHit)
+        {
+            colOut = staticRes.col;
+        }
+        else if (dynamicHit)
+        {
+            colOut = dynamicRes.col;
+        }
+        else
+        {
+            colOut = BackgroundGradientCol(ray).Vec3ToCol();
+        }
     }
 }
 
