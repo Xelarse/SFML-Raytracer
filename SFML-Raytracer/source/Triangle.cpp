@@ -149,6 +149,7 @@ bool Triangle::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max
 
 	//At this point its passed all tests and hit the TRI
 	res.t = v0v2.DotProduct(qvec) * invDet;
+	if(res.t < AA::kEpsilon) { return false; }
 	res.p = ray.GetPointAlongRay(res.t);
 	res.normal = v0v1.CrossProduct(v0v2);
 	return true;
