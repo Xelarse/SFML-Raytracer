@@ -84,7 +84,7 @@ void App::InitScene()
 
 void App::SpawnBase()
 {
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, Material(sf::Color(0, 0, 0, 255), false), _sceneLight.get()));
 }
 
 void App::SpawnSphereStress()
@@ -98,39 +98,41 @@ void App::SpawnSphereStress()
 
     for (int i = 0; i < 3000; ++i)
     {
-        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
+        _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(xDist(gen), yDist(gen), zDist(gen)), rad(gen), true, Material(sf::Color(0, 0, 0, 255), false), _sceneLight.get()));
     }
 }
 
 void App::SpawnMeshes()
 {
-    ////12 Tri Cube
-    //_staticHittables->_hittableObjects.push_back(new Mesh(
-    //        "assets/cube.obj",
-    //        "assets/cubeHori.tga",
-    //        AA::Vec3(0.0, 0.5, 0.0),
-    //        AA::Vec3(1.5, 1.5, 1.5),
-    //        true,
-    //        _useMeshBvh,
-    //        false,
-    //        Mesh::ModelParams::DEFAULT,
-    //        _sceneLight.get()
-    //    )
-    //);
-
-    //104 Tri boat
+    //12 Tri Cube
     _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/KennyPirate/boat_small.obj",
-            "NO_TEXTURE",
+            "assets/cube.obj",
+            "assets/cubeHori.tga",
             AA::Vec3(0.0, 0.5, 0.0),
-            AA::Vec3(0.2, 0.2, 0.2),
+            AA::Vec3(1.5, 1.5, 1.5),
             true,
+            Material(sf::Color(255, 0, 187, 255), false),
             _useMeshBvh,
             false,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )
     );
+
+    ////104 Tri boat
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/KennyPirate/boat_small.obj",
+    //        "NO_TEXTURE",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(0.2, 0.2, 0.2),
+    //        true,
+    //        Material(sf::Color(255, 0, 187, 255), false),
+    //        _useMeshBvh,
+    //        false,
+    //        Mesh::ModelParams::DEFAULT,
+    //        _sceneLight.get()
+    //    )
+    //);
 
     ////194 Tri palm tree
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -139,6 +141,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(1.5, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
     //        true,
+    //        Material(sf::Color(255, 0, 187, 255), false),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::DEFAULT,
@@ -153,6 +156,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
     //        true,
+    //        Material(sf::Color(255, 0, 187, 255), false),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::DEFAULT,
@@ -167,6 +171,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(0.0, 1.0, 0.0),
     //        AA::Vec3(0.4, 0.4, 0.4),
     //        true,
+    //        Material(sf::Color(255, 0, 187, 255), false),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::FLIP_Z,
@@ -181,6 +186,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(4.0, 4.0, 4.0),
     //        true,
+    //        Material(sf::Color(255, 0, 187, 255), false),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::DEFAULT,
@@ -198,6 +204,7 @@ void App::SpawnMeshStress()
             AA::Vec3(1.0, 0.5, 0.0),
             AA::Vec3(0.175, 0.175, 0.175),
             true,
+            Material(sf::Color(255, 0, 187, 255), true),
             _useMeshBvh,
             false,
             Mesh::ModelParams::DEFAULT,
@@ -212,6 +219,7 @@ void App::SpawnMeshStress()
             AA::Vec3(-1.0, 0.5, 0.0),
             AA::Vec3(0.15, 0.15, 0.15),
             true,
+            Material(sf::Color(255, 0, 187, 255), true),
             _useMeshBvh,
             false,
             Mesh::ModelParams::DEFAULT,
@@ -226,6 +234,7 @@ void App::SpawnMeshStress()
             AA::Vec3(1.75, 0.5, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
             true,
+            Material(sf::Color(255, 0, 187, 255), true),
             _useMeshBvh,
             false,
             Mesh::ModelParams::DEFAULT,
@@ -237,16 +246,15 @@ void App::SpawnMeshStress()
 void App::SpawnMovable()
 {
     //Spawns a box that can be controlled with wasd
-    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
+    _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, Material(sf::Color(0, 0, 0, 255), false), _sceneLight.get()));
     _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
 }
 
 void App::SpawnLightTest()
 {
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, sf::Color(42, 209, 212, 255), true, _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, sf::Color(194, 10, 10, 255), true, _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, sf::Color(27, 209, 10, 255), true, _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), true, sf::Color(0, 0, 0, 255), false, _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, Material(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, Material(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, Material(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
 }
 
 void App::Tick(float dt)

@@ -6,7 +6,7 @@ class Sphere : public Hittable
 {
 public:
 
-	Sphere(AA::Vec3 o, double r, bool isStatic, sf::Color col, bool useColour, Light* sceneLight = nullptr);
+	Sphere(AA::Vec3 o, double r, bool isStatic, Material mat, Light* sceneLight = nullptr);
 	~Sphere() override;
 
 	inline double SphereRadius() const { return _radius; };

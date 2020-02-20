@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Lights">
       <UniqueIdentifier>{589b244a-9fa6-4f1b-863d-99e535dd3810}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Material">
+      <UniqueIdentifier>{7db78913-275e-4d19-843e-916518f54d11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Material">
+      <UniqueIdentifier>{9cf65fe3-3311-4467-bf15-aa6431924a39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -79,7 +85,10 @@
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
     <ClCompile Include="source\PointLight.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Material.cpp">
+      <Filter>Source Files\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,8 +140,11 @@
     <ClInclude Include="include\Light.h">
       <Filter>Header Files\Lights</Filter>
     </ClInclude>
+    <ClInclude Include="include\Material.h">
+      <Filter>Header Files\Material</Filter>
+    </ClInclude>
     <ClInclude Include="include\PointLight.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Lights</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

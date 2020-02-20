@@ -57,7 +57,7 @@ bool Light::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRe
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _position) / _sphereRadius;
-            res.col = _col;
+            res.col = _lightColour;
             return true;
         }
 
@@ -67,7 +67,7 @@ bool Light::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitRe
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _position) / _sphereRadius;
-            res.col = _col;
+            res.col = _lightColour;
             return true;
         }
     }

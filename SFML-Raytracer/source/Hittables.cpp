@@ -1,6 +1,6 @@
 #include "..\include\Hittables.h"
 
-Hittables::Hittables(bool isHittableStatic, bool useBvh, bool useSAH) : Hittable(isHittableStatic, sf::Color(255,255,255,255), false, nullptr), _bvhEnabled(useBvh), _sahEnabled(useSAH)
+Hittables::Hittables(bool isHittableStatic, bool useBvh, bool useSAH) : Hittable(isHittableStatic, Material(sf::Color(255,255,255,255), false), nullptr), _bvhEnabled(useBvh), _sahEnabled(useSAH)
 {
 	_bvh = std::make_unique<BvhNode>();
 }

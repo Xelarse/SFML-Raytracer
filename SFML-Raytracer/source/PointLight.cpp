@@ -41,8 +41,8 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
         //For now just take the color from the material, later there will be functions related to doin a calc to get the right value out
         double nDotDRSquared = res.normal.DotProduct(outRay._dir) / (lightRes.t * lightRes.t);
 
-        //Basic diffuse for mat
-        AA::Vec3 hitColourPid = res.mat->GetColourVecNormalised() / AA::PI;
+        //Material colour properties
+        AA::Vec3 hitColourPid = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour() : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
 
         //Calc final colour
         AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec;

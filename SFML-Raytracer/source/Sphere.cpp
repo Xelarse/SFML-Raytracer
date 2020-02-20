@@ -1,7 +1,7 @@
 #include "..\include\Sphere.h"
 #include "Light.h"
 
-Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, sf::Color col, bool useColour, Light* sceneLight) : Hittable(isStatic, col, useColour, sceneLight), _origin(o), _radius(r)
+Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, Material mat, Light* sceneLight) : Hittable(isStatic, mat, sceneLight), _origin(o), _radius(r)
 {
 }
 
@@ -25,14 +25,16 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _origin) / _radius;
-            if (_useColour)
+            if (_material.MaterialActive())
             {
-                res.col = _col;
+                res.col = _material.GetColour();
             }
             else
             {
                 res.col = AA::NormalToColour(res.normal);
+                _material.SetColour(res.col);
             }
+            res.mat = &_material;
             if (_sceneLight != nullptr)
             {
                 _sceneLight->CalculateLighting(ray, res);
@@ -46,14 +48,16 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _origin) / _radius;
-            if (_useColour)
+            if (_material.MaterialActive())
             {
-                res.col = _col;
+                res.col = _material.GetColour();
             }
             else
             {
                 res.col = AA::NormalToColour(res.normal);
+                _material.SetColour(res.col);
             }
+            res.mat = &_material;
             if (_sceneLight != nullptr)
             {
                 _sceneLight->CalculateLighting(ray, res);

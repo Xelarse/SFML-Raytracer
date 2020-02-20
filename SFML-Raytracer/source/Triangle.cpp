@@ -1,8 +1,8 @@
 #include "..\include\Triangle.h"
 #include "Light.h"
 
-Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, sf::Color col, bool useColour, Light* sceneLight)
-	: Hittable(isStatic, col, useColour, sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
+Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, Material mat, Light* sceneLight)
+	: Hittable(isStatic, mat, sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
 {
 	//Set up the bounds for the Tri
 	_bounds[0] = _verts[0]._position;
@@ -90,6 +90,7 @@ bool Triangle::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hi
 	res.p = ray.GetPointAlongRay(res.t);
 	res.normal = v0v1.CrossProduct(v0v2);
 	res.col = GetPixelColour(u, v);
+	res.mat = &_material;
 
 	if (_sceneLight != nullptr)
 	{
@@ -179,7 +180,12 @@ void Triangle::Scale(AA::Vec3 newScale)
 
 sf::Color Triangle::GetPixelColour(double u, double v)
 {
-	if(_texturePtr == nullptr) { return AA::NormalToColour(_verts[0]._normal); }
+	if(_texturePtr == nullptr) 
+	{
+		_material.SetColour(AA::NormalToColour(_verts[0]._normal));
+		return _material.GetColour();
+	}
+
 
 	double w = 1 - u - v;
 
@@ -188,6 +194,7 @@ sf::Color Triangle::GetPixelColour(double u, double v)
 
 	//Translate this normalised value to a pixel value from the texture
 	int x = (_texturePtr->getSize().x) * texCoord.X();
-	int y = (_texturePtr->getSize().y) * ( 1.0f - texCoord.Y());	//Y might need flipping
-	return _texturePtr->getPixel(x, y);
+	int y = (_texturePtr->getSize().y) * ( 1.0f - texCoord.Y());
+	_material.SetColour(_texturePtr->getPixel(x, y));
+	return _material.GetColour();
 }

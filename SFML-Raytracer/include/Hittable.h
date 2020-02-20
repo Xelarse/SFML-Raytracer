@@ -20,7 +20,7 @@ public:
 	};
 
 	Hittable();
-	Hittable(bool isStatic, sf::Color col, bool useColour, Light* sceneLight);
+	Hittable(bool isStatic, Material mat, Light* sceneLight);
 	virtual ~Hittable();
 
 	//Override function for detecting if a ray has hit an object
@@ -35,14 +35,9 @@ public:
 	virtual void Move(AA::Vec3 newPos) = 0;
 	virtual void Scale(AA::Vec3 newScale) = 0;
 
-	inline sf::Color Colour() const { return _col; };
-	inline bool UseColour() const { return _useColour; }
-	inline void UseColour(bool use) { _useColour = use; }
-
 protected:
-	bool _useColour = false;
 	bool _isStatic = false;
-	Material _mat;
+	Material _material;
 
 	//Not owned just referenced
 	Light* _sceneLight = nullptr;

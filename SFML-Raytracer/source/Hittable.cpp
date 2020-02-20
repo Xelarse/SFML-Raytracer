@@ -1,10 +1,10 @@
 #include "..\include\Hittable.h"
 
-Hittable::Hittable() : _col(sf::Color(0,0,0,255))
+Hittable::Hittable() : _material(Material(sf::Color(255, 0, 187,255), false))
 {
 }
 
-Hittable::Hittable(bool isStatic, sf::Color col, bool useColour, Light* sceneLight) : _isStatic(isStatic), _col(col), _useColour(useColour), _sceneLight(sceneLight)
+Hittable::Hittable(bool isStatic, Material mat, Light* sceneLight) : _isStatic(isStatic), _material(mat), _sceneLight(sceneLight)
 {
 }
 

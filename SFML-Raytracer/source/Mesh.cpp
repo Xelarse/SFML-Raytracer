@@ -4,8 +4,8 @@
 #include <iostream>
 #include <unordered_map>
 
-Mesh::Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, bool useBvh, bool useSmart, ModelParams param, Light* sceneLight)
-	: Hittable(isStatic, sf::Color(255,255,255,255), false, sceneLight),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
+Mesh::Mesh(const char* modelPath, const char* texturePath, AA::Vec3 position, AA::Vec3 scale, bool isStatic, Material mat, bool useBvh, bool useSmart, ModelParams param, Light* sceneLight)
+	: Hittable(isStatic, mat, sceneLight),  _position(position), _scale(scale), _useBvh(useBvh), _useSah(useSmart)
 {
 	LoadTexture(texturePath);
 	LoadModel(modelPath, param);
@@ -215,7 +215,7 @@ bool Mesh::LoadModel(const char* path, ModelParams param)
 				verts = std::array<AA::Vertex, 3>({ verts[2], verts[1], verts[0] });
 			}
 			////Create the Tri and push it back onto vector
-			_tris.push_back(new Triangle(verts, _position, _scale, _meshTexture.get(), _isStatic, sf::Color(0,0,0,255), false, _sceneLight));
+			_tris.push_back(new Triangle(verts, _position, _scale, _meshTexture.get(), _isStatic, _material, _sceneLight));
 		}
 	}
 
