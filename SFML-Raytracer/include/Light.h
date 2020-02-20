@@ -43,7 +43,6 @@ protected:
 	Hittable* _statics = nullptr;
 	Hittable* _dynamics = nullptr;
 	bool _debugRender = true;
-	Camera _rayCamera;
 	sf::Color _lightColour;
 	AA::Vec3 _lightColorVec;
 };
