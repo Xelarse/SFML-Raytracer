@@ -12,15 +12,6 @@ BvhNode::BvhNode(std::vector<Hittable*> hittables, double t0, double t1, bool us
 
 BvhNode::~BvhNode()
 {
-	if (_left != nullptr)
-	{
-		delete _left;
-	}
-
-	if (_right != nullptr)
-	{
-		delete _right;
-	}
 }
 
 bool BvhNode::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)

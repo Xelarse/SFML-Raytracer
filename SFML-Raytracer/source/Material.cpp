@@ -15,10 +15,10 @@ bool const Material::MaterialActive()
 
 AA::Vec3 Material::MaterialCalculatedColour()
 {
-	//Do a basic diffuse
+	//just return colour
 	AA::Vec3 col = AA::Vec3(_colour.r, _colour.g, _colour.b);
 	col /= 255;
-	return col / AA::PI;
+	return col;
 }
 
 sf::Color Material::GetColour()

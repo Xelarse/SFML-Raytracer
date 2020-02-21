@@ -164,6 +164,7 @@
     <ClCompile Include="source\Box.cpp" />
     <ClCompile Include="source\BvhNode.cpp" />
     <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\Diffuse.cpp" />
     <ClCompile Include="source\EventHandler.cpp" />
     <ClCompile Include="source\Hittable.cpp" />
     <ClCompile Include="source\Hittables.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="include\Box.h" />
     <ClInclude Include="include\BvhNode.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\Diffuse.h" />
     <ClInclude Include="include\EventHandler.h" />
     <ClInclude Include="include\Hittable.h" />
     <ClInclude Include="include\Hittables.h" />
