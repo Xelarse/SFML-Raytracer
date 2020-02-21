@@ -110,7 +110,7 @@ void App::SpawnMeshes()
     //12 Tri Cube
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/cube.obj",
-            "assets/cubeHori.tga",
+            "NO_TEXTURE", //"assets/cubeHori.tga",
             AA::Vec3(0.0, 0.5, 0.0),
             AA::Vec3(1.5, 1.5, 1.5),
             true,
