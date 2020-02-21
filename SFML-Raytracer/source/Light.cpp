@@ -1,11 +1,9 @@
 #include "..\include\Light.h"
 
-Light::Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, bool debugRender) 
-    : _statics(staticObjects), _dynamics(dynamicObjects), _position(pos), _debugRender(debugRender)
+Light::Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, sf::Color lightColour, double intensityMod, bool debugRender)
+    : _statics(staticObjects), _dynamics(dynamicObjects), _position(pos), _debugRender(debugRender), _intensityMod(intensityMod)
 {
-    //_lightColour = sf::Color(212, 186, 42, 255);
-    _lightColour = sf::Color(255, 255, 255, 255);
-    _lightColorVec = AA::Vec3(_lightColour.r, _lightColour.g, _lightColour.b);
+    SetLightColour(lightColour);
 }
 
 Light::~Light()
@@ -106,7 +104,6 @@ bool Light::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, H
 
     return false;
 }
-
 bool Light::BoundingBox(double t0, double t1, AABB& outBox) const
 {
     return false;

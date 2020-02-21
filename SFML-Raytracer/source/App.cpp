@@ -49,7 +49,8 @@ void App::InitCoreSystems()
 
     if (_lightingEnabled)
     {
-        _sceneLight = std::make_unique<Light>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), _lightingDebug);
+        //Light values ---- white: (255,255,255,255) --- Yellow: (255,243,71,255) --- Purple: (239,29,242,255) --- Dark teal: (9,97,88,255) --- Gray(123,123,123,255)
+        _sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), sf::Color(255, 255, 255, 255), 40.0, _lightingDebug);
     }
 
     AA::Vec3 lookFrom = AA::Vec3(0, 4, -5);
@@ -255,7 +256,7 @@ void App::SpawnMovable()
 void App::SpawnLightTest()
 {
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, Material(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
 }
 
@@ -310,43 +311,43 @@ void App::Update(float dt)
         if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[2] -= 0.1;
-            previous[2] = previous.Z() < -5.0 ? -5.0 : previous.Z();
+            previous[2] -= 0.3;
+            previous[2] = previous.Z() < -15.0 ? -15.0 : previous.Z();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[2] += 0.1;
-            previous[2] = previous.Z() > 5 ? 5 : previous.Z();
+            previous[2] += 0.3;
+            previous[2] = previous.Z() > 15 ? 15 : previous.Z();
             _sceneLight->Move(previous);
         }
         if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[0] -= 0.1;
-            previous[0] = previous.X() < -6.0 ? -6.0 : previous.X();
+            previous[0] -= 0.3;
+            previous[0] = previous.X() < -15.0 ? -15.0 : previous.X();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[0] += 0.1;
-            previous[0] = previous.X() > 6.0 ? 6.0 : previous.X();
+            previous[0] += 0.3;
+            previous[0] = previous.X() > 15.0 ? 15.0 : previous.X();
             _sceneLight->Move(previous);
         }
         if (_pEventHander->IsKeyPressed(sf::Keyboard::Q))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[1] -= 0.1;
-            previous[1] = previous.Y() < -6.0 ? -6.0 : previous.Y();
+            previous[1] -= 0.3;
+            previous[1] = previous.Y() < -15.0 ? -15.0 : previous.Y();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::E))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[1] += 0.1;
-            previous[1] = previous.Y() > 6.0 ? 6.0 : previous.Y();
+            previous[1] += 0.3;
+            previous[1] = previous.Y() > 15.0 ? 15.0 : previous.Y();
             _sceneLight->Move(previous);
         }
     }

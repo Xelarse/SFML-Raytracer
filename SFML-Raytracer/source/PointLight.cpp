@@ -1,6 +1,6 @@
 #include "..\include\PointLight.h"
 
-PointLight::PointLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, bool debugRender) : Light(staticObjects, dynamicObjects, pos, debugRender)
+PointLight::PointLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, sf::Color lightColour, double intensityMod, bool debugRender) : Light(staticObjects, dynamicObjects, pos, lightColour, intensityMod, debugRender)
 {
 }
 
@@ -39,14 +39,19 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
     }
     else
     {
-        //For now just take the color from the material, later there will be functions related to doin a calc to get the right value out
         double nDotDRSquared = res.normal.DotProduct(outRay._dir) / (lightRes.t * lightRes.t);
 
-        //Material colour properties
+        //Material colour properties, just default to the colour calc'd from the ray if its not using the material, most of the time its a colour based off the normal
         AA::Vec3 hitColourPid = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour() : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
 
         //Calc final colour
-        AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec;
+        AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec * _intensityMod;
+
+        //Clamp the values, this could be potentially messing with stuff
+        finalColourVec[0] = finalColourVec[0] > 1.0 ? 1.0 : finalColourVec[0];
+        finalColourVec[1] = finalColourVec[1] > 1.0 ? 1.0 : finalColourVec[1];
+        finalColourVec[2] = finalColourVec[2] > 1.0 ? 1.0 : finalColourVec[2];
+
         res.col = finalColourVec.Vec3ToCol();
     }
 }
