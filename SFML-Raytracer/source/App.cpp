@@ -107,20 +107,20 @@ void App::SpawnSphereStress()
 
 void App::SpawnMeshes()
 {
-    ////12 Tri Cube
-    //_staticHittables->_hittableObjects.push_back(new Mesh(
-    //        "assets/cube.obj",
-    //        "NO_TEXTURE", //"assets/cubeHori.tga",
-    //        AA::Vec3(0.0, 0.5, 0.0),
-    //        AA::Vec3(1.5, 1.5, 1.5),
-    //        true,
-    //        Diffuse(sf::Color(255, 0, 0, 255), true),
-    //        _useMeshBvh,
-    //        false,
-    //        Mesh::ModelParams::DEFAULT,
-    //        _sceneLight.get()
-    //    )
-    //);
+    //12 Tri Cube
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/cube.obj",
+            "assets/cubeHori.tga",
+            AA::Vec3(0.0, 0.5, 0.0),
+            AA::Vec3(1.5, 1.5, 1.5),
+            true,
+            Diffuse(sf::Color(255, 0, 0, 255), true),
+            _useMeshBvh,
+            false,
+            Mesh::ModelParams::DEFAULT,
+            _sceneLight.get()
+        )
+    );
 
     ////104 Tri boat
     //_staticHittables->_hittableObjects.push_back(new Mesh(
