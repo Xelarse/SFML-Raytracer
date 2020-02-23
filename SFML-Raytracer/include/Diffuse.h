@@ -4,11 +4,12 @@
 class Diffuse : public Material
 {
 public:
-	Diffuse() = delete;
+	Diffuse();
 	Diffuse(sf::Color col, bool useMaterialProperties);
 	~Diffuse() override;
 
 	AA::Vec3 MaterialCalculatedColour() override;
+	Material GetCopy() override;
 
 private:
 };

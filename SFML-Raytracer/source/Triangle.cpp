@@ -2,7 +2,7 @@
 #include "Light.h"
 
 Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, Material mat, Light* sceneLight)
-	: Hittable(isStatic, mat, sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
+	: Hittable(isStatic, mat.GetCopy(), sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
 {
 	//Set up the bounds for the Tri
 	_bounds[0] = _verts[0]._position;
@@ -90,7 +90,7 @@ bool Triangle::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hi
 	res.p = ray.GetPointAlongRay(res.t);
 	res.normal = v0v1.CrossProduct(v0v2);
 	res.col = GetPixelColour(u, v);
-	res.mat = &_material;
+	res.mat = _material.GetCopy();
 
 	if (_sceneLight != nullptr)
 	{
@@ -182,7 +182,10 @@ sf::Color Triangle::GetPixelColour(double u, double v)
 {
 	if(_texturePtr == nullptr) 
 	{
-		_material.SetColour(AA::NormalToColour(_verts[0]._normal));
+		if (!_material.MaterialActive())
+		{
+			_material.SetColour(AA::NormalToColour(_verts[0]._normal));
+		}
 		return _material.GetColour();
 	}
 

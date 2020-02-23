@@ -81,7 +81,7 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
         res.col = AA::NormalToColour(res.normal);
         _material.SetColour(res.col);
     }
-    res.mat = &_material;
+    res.mat = _material.GetCopy();
 
     if (_sceneLight != nullptr)
     {

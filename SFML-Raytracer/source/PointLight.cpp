@@ -42,7 +42,7 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
         double nDotDRSquared = res.normal.DotProduct(outRay._dir) / (lightRes.t * lightRes.t);
 
         //Material colour properties, just default to the colour calc'd from the ray if its not using the material, most of the time its a colour based off the normal
-        AA::Vec3 hitColourPid = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour() : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
+        AA::Vec3 hitColourPid = res.mat.MaterialActive() ? res.mat.MaterialCalculatedColour() : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
 
         //Calc final colour
         AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec * _intensityMod;
@@ -51,6 +51,10 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
         finalColourVec[0] = finalColourVec[0] > 1.0 ? 1.0 : finalColourVec[0];
         finalColourVec[1] = finalColourVec[1] > 1.0 ? 1.0 : finalColourVec[1];
         finalColourVec[2] = finalColourVec[2] > 1.0 ? 1.0 : finalColourVec[2];
+
+        finalColourVec[0] = finalColourVec[0] < 0.0 ? 0.0 : finalColourVec[0];
+        finalColourVec[1] = finalColourVec[1] < 0.0 ? 0.0 : finalColourVec[1];
+        finalColourVec[2] = finalColourVec[2] < 0.0 ? 0.0 : finalColourVec[2];
 
         res.col = finalColourVec.Vec3ToCol();
     }

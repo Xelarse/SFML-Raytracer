@@ -74,8 +74,8 @@ void App::InitScene()
     //SpawnMovable();
     //SpawnSphereStress();
     //SpawnMeshes();
-    //SpawnMeshStress();
-    SpawnLightTest();
+    SpawnMeshStress();
+    //SpawnLightTest();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -107,20 +107,20 @@ void App::SpawnSphereStress()
 
 void App::SpawnMeshes()
 {
-    //12 Tri Cube
-    _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/cube.obj",
-            "NO_TEXTURE", //"assets/cubeHori.tga",
-            AA::Vec3(0.0, 0.5, 0.0),
-            AA::Vec3(1.5, 1.5, 1.5),
-            true,
-            Material(sf::Color(255, 0, 187, 255), false),
-            _useMeshBvh,
-            false,
-            Mesh::ModelParams::DEFAULT,
-            _sceneLight.get()
-        )
-    );
+    ////12 Tri Cube
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/cube.obj",
+    //        "NO_TEXTURE", //"assets/cubeHori.tga",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(1.5, 1.5, 1.5),
+    //        true,
+    //        Diffuse(sf::Color(255, 0, 0, 255), true),
+    //        _useMeshBvh,
+    //        false,
+    //        Mesh::ModelParams::DEFAULT,
+    //        _sceneLight.get()
+    //    )
+    //);
 
     ////104 Tri boat
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -129,7 +129,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
     //        true,
-    //        Material(sf::Color(255, 0, 187, 255), false),
+    //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::DEFAULT,
@@ -144,7 +144,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(1.5, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
     //        true,
-    //        Material(sf::Color(255, 0, 187, 255), false),
+    //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::DEFAULT,
@@ -159,7 +159,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(0.2, 0.2, 0.2),
     //        true,
-    //        Material(sf::Color(255, 0, 187, 255), false),
+    //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::DEFAULT,
@@ -174,7 +174,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(0.0, 1.0, 0.0),
     //        AA::Vec3(0.4, 0.4, 0.4),
     //        true,
-    //        Material(sf::Color(255, 0, 187, 255), false),
+    //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::FLIP_Z,
@@ -189,7 +189,7 @@ void App::SpawnMeshes()
     //        AA::Vec3(0.0, 0.5, 0.0),
     //        AA::Vec3(4.0, 4.0, 4.0),
     //        true,
-    //        Material(sf::Color(255, 0, 187, 255), false),
+    //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
     //        false,
     //        Mesh::ModelParams::DEFAULT,
@@ -200,14 +200,14 @@ void App::SpawnMeshes()
 
 void App::SpawnMeshStress()
 {
-    //428 Tri Pirate Captain
+    //172 Tri Rocks
     _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/KennyPirate/pirate_captain.obj",
+            "assets/KennyPirate/formation_rock.obj",
             "NO_TEXTURE",
-            AA::Vec3(1.0, 0.5, 0.0),
+            AA::Vec3(4.0, -1.0, 0.0),
             AA::Vec3(0.175, 0.175, 0.175),
             true,
-            Material(sf::Color(255, 0, 187, 255), true),
+            Diffuse(sf::Color(47, 255, 0, 255), true),
             _useMeshBvh,
             false,
             Mesh::ModelParams::DEFAULT,
@@ -215,14 +215,14 @@ void App::SpawnMeshStress()
         )
     );
 
-    //104 Tri boat
+    //92 Tri bottle
     _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/KennyPirate/boat_small.obj",
+            "assets/KennyPirate/bottleLarge.obj",
             "NO_TEXTURE",
-            AA::Vec3(-1.0, 0.5, 0.0),
-            AA::Vec3(0.15, 0.15, 0.15),
+            AA::Vec3(-1.0, -1.0, 0.0),
+            AA::Vec3(0.5, 0.5, 0.5),
             true,
-            Material(sf::Color(255, 0, 187, 255), true),
+            Diffuse(sf::Color(0, 242, 255, 255), true),
             _useMeshBvh,
             false,
             Mesh::ModelParams::DEFAULT,
@@ -234,10 +234,10 @@ void App::SpawnMeshStress()
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/KennyPirate/palm_long.obj",
             "NO_TEXTURE",
-            AA::Vec3(1.75, 0.5, 0.0),
+            AA::Vec3(1.75, -1.0, 0.0),
             AA::Vec3(0.2, 0.2, 0.2),
             true,
-            Material(sf::Color(255, 0, 187, 255), true),
+            Diffuse(sf::Color(255, 170, 0, 255), true),
             _useMeshBvh,
             false,
             Mesh::ModelParams::DEFAULT,

@@ -1,5 +1,9 @@
 #include "..\include\Diffuse.h"
 
+Diffuse::Diffuse()
+{
+}
+
 Diffuse::Diffuse(sf::Color col, bool useMaterialProperties) : Material(col, useMaterialProperties)
 {
 }
@@ -14,4 +18,9 @@ AA::Vec3 Diffuse::MaterialCalculatedColour()
 	AA::Vec3 col = AA::Vec3(_colour.r, _colour.g, _colour.b);
 	col /= 255;
 	return col / AA::PI;
+}
+
+Material Diffuse::GetCopy()
+{
+	return static_cast<Material>(Diffuse(_colour, _useMaterial));
 }

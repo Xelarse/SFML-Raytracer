@@ -16,7 +16,7 @@ public:
 		AA::Vec3 p;
 		AA::Vec3 normal;
 		sf::Color col;
-		Material* mat;
+		Material mat;
 	};
 
 	Hittable();
