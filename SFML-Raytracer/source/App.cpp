@@ -308,45 +308,46 @@ void App::Update(float dt)
 
     if (_sceneLight)
     {
+        float lightDt = dt * 0.001;
         if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[2] -= 0.3;
+            previous[2] -= (4.0 * lightDt);
             previous[2] = previous.Z() < -15.0 ? -15.0 : previous.Z();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[2] += 0.3;
+            previous[2] += (4.0 * lightDt);
             previous[2] = previous.Z() > 15 ? 15 : previous.Z();
             _sceneLight->Move(previous);
         }
         if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[0] -= 0.3;
+            previous[0] -= (4.0 * lightDt);
             previous[0] = previous.X() < -15.0 ? -15.0 : previous.X();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[0] += 0.3;
+            previous[0] += (4.0 * lightDt);
             previous[0] = previous.X() > 15.0 ? 15.0 : previous.X();
             _sceneLight->Move(previous);
         }
         if (_pEventHander->IsKeyPressed(sf::Keyboard::Q))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[1] -= 0.3;
+            previous[1] -= (4.0 * lightDt);
             previous[1] = previous.Y() < -15.0 ? -15.0 : previous.Y();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::E))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[1] += 0.3;
+            previous[1] += (4.0 * lightDt);
             previous[1] = previous.Y() > 15.0 ? 15.0 : previous.Y();
             _sceneLight->Move(previous);
         }
