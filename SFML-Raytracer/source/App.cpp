@@ -74,8 +74,8 @@ void App::InitScene()
     //SpawnMovable();
     //SpawnSphereStress();
     //SpawnMeshes();
-    //SpawnMeshStress();
-    SpawnLightTest();
+    SpawnMeshStress();
+    //SpawnLightTest();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -107,20 +107,20 @@ void App::SpawnSphereStress()
 
 void App::SpawnMeshes()
 {
-    //12 Tri Cube
-    _staticHittables->_hittableObjects.push_back(new Mesh(
-            "assets/cube.obj",
-            "assets/cubeHori.tga",
-            AA::Vec3(0.0, 0.5, 0.0),
-            AA::Vec3(1.5, 1.5, 1.5),
-            true,
-            Diffuse(sf::Color(255, 0, 0, 255), true),
-            _useMeshBvh,
-            _useSAH,
-            Mesh::ModelParams::DEFAULT,
-            _sceneLight.get()
-        )
-    );
+    ////12 Tri Cube
+    //_staticHittables->_hittableObjects.push_back(new Mesh(
+    //        "assets/cube.obj",
+    //        "assets/cubeHori.tga",
+    //        AA::Vec3(0.0, 0.5, 0.0),
+    //        AA::Vec3(1.5, 1.5, 1.5),
+    //        true,
+    //        Diffuse(sf::Color(255, 0, 0, 255), true),
+    //        _useMeshBvh,
+    //        _useMeshSAH,
+    //        Mesh::ModelParams::DEFAULT,
+    //        _sceneLight.get()
+    //    )
+    //);
 
     ////104 Tri boat
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -131,26 +131,26 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        _useSAH,
+    //        _useMeshSAH,
     //        Mesh::ModelParams::DEFAULT,
     //        _sceneLight.get()
     //    )
     //);
 
-    ////194 Tri palm tree
-    //_staticHittables->_hittableObjects.push_back(new Mesh(
-    //        "assets/KennyPirate/palm_long.obj",
-    //        "NO_TEXTURE",
-    //        AA::Vec3(1.5, 0.5, 0.0),
-    //        AA::Vec3(0.2, 0.2, 0.2),
-    //        true,
-    //        Material(sf::Color(255, 0, 187, 255), true),
-    //        _useMeshBvh,
-    //        _useSAH,
-    //        Mesh::ModelParams::DEFAULT,
-    //        _sceneLight.get()
-    //    )
-    //);
+    //194 Tri palm tree
+    _staticHittables->_hittableObjects.push_back(new Mesh(
+            "assets/KennyPirate/palm_long.obj",
+            "NO_TEXTURE",
+            AA::Vec3(1.5, 0.5, 0.0),
+            AA::Vec3(0.2, 0.2, 0.2),
+            true,
+            Material(sf::Color(255, 0, 187, 255), true),
+            _useMeshBvh,
+            _useMeshSAH,
+            Mesh::ModelParams::DEFAULT,
+            _sceneLight.get()
+        )
+    );
 
     ////428 Tri Pirate Captain
     //_staticHittables->_hittableObjects.push_back(new Mesh(
@@ -161,7 +161,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        _useSAH,
+    //        _useMeshSAH,
     //        Mesh::ModelParams::DEFAULT,
     //        _sceneLight.get()
     //    )
@@ -176,7 +176,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        _useSAH,
+    //        _useMeshSAH,
     //        Mesh::ModelParams::FLIP_Z,
     //        _sceneLight.get()
     //    )
@@ -191,7 +191,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        _useSAH,
+    //        _useMeshSAH,
     //        Mesh::ModelParams::DEFAULT,
     //        _sceneLight.get()
     //    )
@@ -209,7 +209,7 @@ void App::SpawnMeshStress()
             true,
             Diffuse(sf::Color(47, 255, 0, 255), true),
             _useMeshBvh,
-            _useSAH,
+            _useMeshSAH,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )
@@ -224,7 +224,7 @@ void App::SpawnMeshStress()
             true,
             Diffuse(sf::Color(0, 242, 255, 255), true),
             _useMeshBvh,
-            _useSAH,
+            _useMeshSAH,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )
@@ -239,7 +239,7 @@ void App::SpawnMeshStress()
             true,
             Diffuse(sf::Color(255, 170, 0, 255), true),
             _useMeshBvh,
-            _useSAH,
+            _useMeshSAH,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )

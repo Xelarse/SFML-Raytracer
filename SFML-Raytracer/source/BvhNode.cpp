@@ -178,7 +178,7 @@ void BvhNode::SmartConstruction(std::vector<Hittable*> hittables, double t0, dou
 	else
 	{
 		std::array<int, 3> inds {-1, -1, -1};
-		std::array<double, 3> costs {-1, -1, -1};
+		std::array<double, 3> costs {INFINITY, INFINITY, INFINITY};
 		std::vector<Hittable*> rhs;
 
 		//Go through each axis find the best place on that axis to split the index array and cache the cost
@@ -196,38 +196,47 @@ void BvhNode::SmartConstruction(std::vector<Hittable*> hittables, double t0, dou
 			}
 		}
 
-		//Sort the array again on that axis and split it at the index cached
-		switch (static_cast<AxisSort>(lowestInd))
+		if (costs[lowestInd] > hittables.size())
 		{
-			case AxisSort::X_AXIS:
-			{
-				std::sort(hittables.begin(), hittables.end(), BvhNode::CompareXBox);
-				break;
-			}
-			case AxisSort::Y_AXIS:
-			{
-				std::sort(hittables.begin(), hittables.end(), BvhNode::CompareYBox);
-				break;
-			}
-			default:
-			{
-				std::sort(hittables.begin(), hittables.end(), BvhNode::CompareZBox);
-				break;
-			}
-		}
-
-		//Safety check to set a default split of center if something messed up from earlier
-		inds[lowestInd] = inds[lowestInd] == -1 ? hittables.size() / 2 : inds[lowestInd];
-		int popOffs = hittables.size() - (inds[lowestInd] + 1);
-
-		for (int i = 0; i < popOffs; ++i)
-		{
-			rhs.push_back(hittables.back());
+			_left = hittables.back();
 			hittables.pop_back();
+			_right = new BvhNode(hittables, t0, t1, true);
 		}
+		else
+		{
+			//Sort the array again on that axis and split it at the index cached
+			switch (static_cast<AxisSort>(lowestInd))
+			{
+				case AxisSort::X_AXIS:
+				{
+					std::sort(hittables.begin(), hittables.end(), BvhNode::CompareXBox);
+					break;
+				}
+				case AxisSort::Y_AXIS:
+				{
+					std::sort(hittables.begin(), hittables.end(), BvhNode::CompareYBox);
+					break;
+				}
+				default:
+				{
+					std::sort(hittables.begin(), hittables.end(), BvhNode::CompareZBox);
+					break;
+				}
+			}
 
-		_left = new BvhNode(hittables, t0, t1, true);
-		_right = new BvhNode(rhs, t0, t1, true);
+			//Safety check to set a default split of center if something messed up from earlier
+			inds[lowestInd] = inds[lowestInd] == -1 ? hittables.size() / 2 : inds[lowestInd];
+			int popOffs = hittables.size() - (inds[lowestInd] + 1);
+
+			for (int i = 0; i <= popOffs; ++i)
+			{
+				rhs.push_back(hittables.back());
+				hittables.pop_back();
+			}
+
+			_left = new BvhNode(hittables, t0, t1, true);
+			_right = new BvhNode(rhs, t0, t1, true);
+		}
 	}
 
 
@@ -267,8 +276,8 @@ void BvhNode::CalculateAxisCost(std::vector<Hittable*> hittables, AxisSort axis,
 			break;
 	}
 
-	hittables.front()->BoundingBox(0, 0, maxBox);
-	hittables.back()->BoundingBox(0, 0, minBox);
+	hittables.front()->BoundingBox(0, 0, minBox);
+	hittables.back()->BoundingBox(0, 0, maxBox);
 	min = minBox.Min()[axisInd];
 	max = maxBox.Max()[axisInd];
 
@@ -276,12 +285,12 @@ void BvhNode::CalculateAxisCost(std::vector<Hittable*> hittables, AxisSort axis,
 	{
 		//Get the current percentage along at this index
 		hittables[i]->BoundingBox(0, 0, tempBox);
-		double percent = 1 - AA::InverseLerp(min, max, tempBox.Min()[axisInd]);
+		double percent = AA::InverseLerp(min, max, tempBox.Min()[axisInd]);
 
 		//Math
 		// Cost of a split = (Probab of hitting box A  * Tris in box A) + (Probab of hitting box B * tris in box B)
 		//use the math function to determine the weighting of the percentage and the current iteration vs the remaining percentage and the remaining iterations
-		double newCost = (percent * (i + 1.0)) + ((1.0 - percent) * (hittables.size() - (i + 1.0)));
+		double newCost = _traversalCost + (percent * (i + 1.0)) + ((1.0 - percent) * (hittables.size() - (i + 1.0)));
 
 		//if the cost is lower than the current one cache the cost and save the index
 		if (newCost < outCost)

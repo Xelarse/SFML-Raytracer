@@ -67,7 +67,8 @@ private:
 
 	bool _useBvh = true;
 	bool _useMeshBvh = true;
-	bool _useSAH = false;
+	bool _useSAH = true;
+	bool _useMeshSAH = true;
 
 	double _cameraXBound = 8.0;
 	double _cameraPanSpeed = 2.0;

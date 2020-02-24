@@ -47,5 +47,6 @@ public:
 	AA::Vec3 _positionMod;
 	AA::Vec3 _scaleMod;
 	AABB _box;
+	double _traversalCost = 10;
 };
 
