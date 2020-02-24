@@ -47,15 +47,7 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
         //Calc final colour
         AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec * _intensityMod;
 
-        //Clamp the values, this could be potentially messing with stuff
-        finalColourVec[0] = finalColourVec[0] > 1.0 ? 1.0 : finalColourVec[0];
-        finalColourVec[1] = finalColourVec[1] > 1.0 ? 1.0 : finalColourVec[1];
-        finalColourVec[2] = finalColourVec[2] > 1.0 ? 1.0 : finalColourVec[2];
-
-        finalColourVec[0] = finalColourVec[0] < 0.0 ? 0.0 : finalColourVec[0];
-        finalColourVec[1] = finalColourVec[1] < 0.0 ? 0.0 : finalColourVec[1];
-        finalColourVec[2] = finalColourVec[2] < 0.0 ? 0.0 : finalColourVec[2];
-
-        res.col = finalColourVec.Vec3ToCol();
+        //Tonemap using the selected method and set the colour
+        res.col = AA::GammaTonemap(finalColourVec);
     }
 }
