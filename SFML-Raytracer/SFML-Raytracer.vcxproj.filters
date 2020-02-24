@@ -93,6 +93,9 @@
     <ClCompile Include="source\Diffuse.cpp">
       <Filter>Source Files\Material</Filter>
     </ClCompile>
+    <ClCompile Include="source\AreaLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="include\Diffuse.h">
       <Filter>Header Files\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AreaLight.h">
+      <Filter>Header Files\Lights</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

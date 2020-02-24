@@ -475,6 +475,30 @@ namespace AA
 
 		return hdr.Vec3ToCol();
 	}
+
+	static AA::Vec3 LinearTonemapHDR(Vec3 hdr)
+	{
+		hdr[0] = hdr[0] > 1.0 ? 1.0 : hdr[0];
+		hdr[1] = hdr[1] > 1.0 ? 1.0 : hdr[1];
+		hdr[2] = hdr[2] > 1.0 ? 1.0 : hdr[2];
+
+		hdr[0] = hdr[0] < 0.0 ? 0.0 : hdr[0];
+		hdr[1] = hdr[1] < 0.0 ? 0.0 : hdr[1];
+		hdr[2] = hdr[2] < 0.0 ? 0.0 : hdr[2];
+
+		return hdr;
+	}
+
+	static AA::Vec3 GammaTonemapHDR(Vec3 hdr)
+	{
+		double power = 1 / 2.2;
+
+		hdr[0] = std::min(std::pow(hdr[0], power), 1.0);
+		hdr[1] = std::min(std::pow(hdr[1], power), 1.0);
+		hdr[2] = std::min(std::pow(hdr[2], power), 1.0);
+
+		return hdr;
+	}
 }
 
 //Hash for Vec2

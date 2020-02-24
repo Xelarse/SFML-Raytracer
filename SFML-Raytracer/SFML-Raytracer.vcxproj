@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="source\AABB.cpp" />
     <ClCompile Include="source\App.cpp" />
+    <ClCompile Include="source\AreaLight.cpp" />
     <ClCompile Include="source\Box.cpp" />
     <ClCompile Include="source\BvhNode.cpp" />
     <ClCompile Include="source\Camera.cpp" />
@@ -181,6 +182,7 @@
   <ItemGroup>
     <ClInclude Include="include\AABB.h" />
     <ClInclude Include="include\App.h" />
+    <ClInclude Include="include\AreaLight.h" />
     <ClInclude Include="include\Box.h" />
     <ClInclude Include="include\BvhNode.h" />
     <ClInclude Include="include\Camera.h" />
