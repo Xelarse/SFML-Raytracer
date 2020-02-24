@@ -180,6 +180,11 @@ namespace AA
 			return sf::Color(_e[0] * 255.0, _e[1] * 255.0, _e[2] * 255.0, 255.0);
 		}
 
+		inline bool IsNAN() const
+		{
+			return _e[0] != _e[0] || _e[1] != _e[1] || _e[2] != _e[2];
+		}
+
 	private:
 		double _e[3];
 	};

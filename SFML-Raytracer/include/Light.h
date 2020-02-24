@@ -49,5 +49,6 @@ protected:
 	sf::Color _lightColour;
 	AA::Vec3 _lightColorVec;
 	double _intensityMod;
+	const sf::Color _shadowColour = sf::Color(0, 0, 0, 255);
 };
 

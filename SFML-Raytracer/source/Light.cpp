@@ -90,6 +90,7 @@ bool Light::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, H
         {
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
+            res.normal = (res.p - _position) / _sphereRadius;
             return true;
         }
 
@@ -98,6 +99,7 @@ bool Light::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, H
         {
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
+            res.normal = (res.p - _position) / _sphereRadius;
             return true;
         }
     }

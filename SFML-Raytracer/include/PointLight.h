@@ -10,4 +10,3 @@ public:
 
 	void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res) override;
 };
-

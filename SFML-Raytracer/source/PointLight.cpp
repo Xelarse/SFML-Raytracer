@@ -22,22 +22,12 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
 
     //Find the t of this ray
     IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
-     
-    if (_statics != nullptr)
-    {
-        staticHit = _statics->IntersectedRayOnly(outRay, 0.0, lightRes.t, staticRes);
-    }
 
-    if (_dynamics != nullptr)
-    {
-        dynamicHit = _dynamics->IntersectedRayOnly(outRay, 0.0, lightRes.t, dynamicRes);
-    }
+    //Check against a hit with both static and dynamics
+    staticHit = _statics == nullptr ? false : _statics->IntersectedRayOnly(outRay, 0.0, lightRes.t, staticRes);
+    dynamicHit = _dynamics == nullptr ? false : _dynamics->IntersectedRayOnly(outRay, 0.0, lightRes.t, dynamicRes);
 
-    if (staticHit || dynamicHit)
-    {
-        res.col = sf::Color(0, 0, 0, 255);
-    }
-    else
+    if (!staticHit && !dynamicHit)
     {
         double nDotDRSquared = res.normal.DotProduct(outRay._dir) / (lightRes.t * lightRes.t);
 
@@ -49,5 +39,8 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
 
         //Tonemap using the selected method and set the colour
         res.col = AA::GammaTonemap(finalColourVec);
+        return;
     }
+
+    res.col = _shadowColour;
 }

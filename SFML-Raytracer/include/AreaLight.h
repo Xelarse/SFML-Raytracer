@@ -1,5 +1,6 @@
 #pragma once
 #include "Light.h"
+#include <random>
 
 class AreaLight : public Light
 {
@@ -13,5 +14,6 @@ public:
 private:
 	int _samples = 10;
 	AABB _boundary;
+	std::mt19937 _ranGenerator;
 };
 
