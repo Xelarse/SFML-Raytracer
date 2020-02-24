@@ -78,10 +78,6 @@ bool Mesh::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, Hi
 		return false;
 	}
 
-	Hittable::HitResult tempRes;
-	bool didHit = false;
-	double closestHit = t_max;
-
 	////With BVH
 	//Create a bvh of the hittables, then do the iterations of the ray against the bvh intersect ray
 	if (_useBvh)
@@ -91,12 +87,7 @@ bool Mesh::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, Hi
 		{
 			_meshBvh->ConstructBVH(_tris, 0.0, 0.0, _useSah);
 		}
-		didHit = _meshBvh->IntersectedRayOnly(ray, t_min, t_max, tempRes);
-
-		if (didHit)
-		{
-			res = tempRes;
-		}
+		return _meshBvh->IntersectedRayOnly(ray, t_min, t_max, res);
 	}
 
 	//// Without BVH
@@ -104,16 +95,14 @@ bool Mesh::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, Hi
 	{
 		for (auto& hitt : _tris)
 		{
-			if (hitt->IntersectedRayOnly(ray, t_min, closestHit, tempRes))
+			if (hitt->IntersectedRayOnly(ray, t_min, t_max, res))
 			{
-				didHit = true;
-				closestHit = tempRes.t;
-				res = tempRes;
+				return true;
 			}
 		}
 	}
 
-	return didHit;
+	return false;
 }
 
 bool Mesh::LoadModel(const char* path, ModelParams param)

@@ -82,18 +82,12 @@ bool Sphere::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, 
         double temp = (-b - sqrt(discrim)) / a;
         if (temp < t_max && temp > t_min)
         {
-            res.t = temp;
-            res.p = ray.GetPointAlongRay(res.t);
-            res.normal = (res.p - _origin) / _radius;
             return true;
         }
 
         temp = (-b + sqrt(discrim)) / a;
         if (temp < t_max && temp > t_min)
         {
-            res.t = temp;
-            res.p = ray.GetPointAlongRay(res.t);
-            res.normal = (res.p - _origin) / _radius;
             return true;
         }
     }

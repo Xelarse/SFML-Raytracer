@@ -177,10 +177,6 @@ bool Box::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, Hit
     {
         return false;
     }
-
-    res.p = ray.GetPointAlongRay(res.t);
-    CalcNormal(res);
-
     return true;
 }
 

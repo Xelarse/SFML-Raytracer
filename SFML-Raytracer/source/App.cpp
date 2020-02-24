@@ -44,8 +44,8 @@ void App::InitCoreSystems()
 
     //Raytracer related inits
     _pixelColourBuffer = std::make_unique<AA::ColourArray>(_width, _height);
-    _staticHittables = std::make_unique<Hittables>(true, _useBvh, false);
-    _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, false);
+    _staticHittables = std::make_unique<Hittables>(true, _useBvh, _useSAH);
+    _dynamicHittables = std::make_unique<Hittables>(false, _useBvh, _useSAH);
 
     if (_lightingEnabled)
     {
@@ -74,8 +74,8 @@ void App::InitScene()
     //SpawnMovable();
     //SpawnSphereStress();
     //SpawnMeshes();
-    SpawnMeshStress();
-    //SpawnLightTest();
+    //SpawnMeshStress();
+    SpawnLightTest();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)
@@ -116,7 +116,7 @@ void App::SpawnMeshes()
             true,
             Diffuse(sf::Color(255, 0, 0, 255), true),
             _useMeshBvh,
-            false,
+            _useSAH,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )
@@ -131,7 +131,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        false,
+    //        _useSAH,
     //        Mesh::ModelParams::DEFAULT,
     //        _sceneLight.get()
     //    )
@@ -146,7 +146,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        false,
+    //        _useSAH,
     //        Mesh::ModelParams::DEFAULT,
     //        _sceneLight.get()
     //    )
@@ -161,7 +161,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        false,
+    //        _useSAH,
     //        Mesh::ModelParams::DEFAULT,
     //        _sceneLight.get()
     //    )
@@ -176,7 +176,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        false,
+    //        _useSAH,
     //        Mesh::ModelParams::FLIP_Z,
     //        _sceneLight.get()
     //    )
@@ -191,7 +191,7 @@ void App::SpawnMeshes()
     //        true,
     //        Material(sf::Color(255, 0, 187, 255), true),
     //        _useMeshBvh,
-    //        false,
+    //        _useSAH,
     //        Mesh::ModelParams::DEFAULT,
     //        _sceneLight.get()
     //    )
@@ -209,7 +209,7 @@ void App::SpawnMeshStress()
             true,
             Diffuse(sf::Color(47, 255, 0, 255), true),
             _useMeshBvh,
-            false,
+            _useSAH,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )
@@ -224,7 +224,7 @@ void App::SpawnMeshStress()
             true,
             Diffuse(sf::Color(0, 242, 255, 255), true),
             _useMeshBvh,
-            false,
+            _useSAH,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )
@@ -239,7 +239,7 @@ void App::SpawnMeshStress()
             true,
             Diffuse(sf::Color(255, 170, 0, 255), true),
             _useMeshBvh,
-            false,
+            _useSAH,
             Mesh::ModelParams::DEFAULT,
             _sceneLight.get()
         )
