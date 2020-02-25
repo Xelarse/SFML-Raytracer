@@ -193,6 +193,10 @@ namespace AA
 	{
 		return Vec3(lh * rh.X(), lh * rh.Y(), lh * rh.Z());
 	}
+	inline Vec3 operator / (const double& lh, const Vec3& rh)
+	{
+		return Vec3(lh / rh.X(), lh / rh.Y(), lh / rh.Z());
+	}
 
 	class Vec2
 	{
@@ -503,6 +507,27 @@ namespace AA
 		hdr[2] = std::min(std::pow(hdr[2], power), 1.0);
 
 		return hdr;
+	}
+
+	static AA::Vec3 BackgroundGradientCol(const AA::Ray& ray)
+	{
+		AA::Vec3 top = AA::Vec3(0.0, 0.2, 1.0);
+		AA::Vec3 bottom = AA::Vec3(1.0, 1.0, 1.0);
+
+		AA::Vec3 unitDir = ray._dir.UnitVector();
+		float t = 0.5 * (unitDir.Y() + 1.0);
+
+		return AA::LinearLerp(top, bottom, t);
+	}
+
+	static AA::Vec3 BackgroundGradientCol(const AA::Vec3& unitDir)
+	{
+		AA::Vec3 top = AA::Vec3(0.0, 0.2, 1.0);
+		AA::Vec3 bottom = AA::Vec3(1.0, 1.0, 1.0);
+
+		float t = 0.5 * (unitDir.Y() + 1.0);
+
+		return AA::LinearLerp(top, bottom, t);
 	}
 }
 

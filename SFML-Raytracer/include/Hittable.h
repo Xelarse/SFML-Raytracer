@@ -16,11 +16,11 @@ public:
 		AA::Vec3 p;
 		AA::Vec3 normal;
 		sf::Color col;
-		Material mat;
+		Material* mat;
 	};
 
 	Hittable();
-	Hittable(bool isStatic, Material mat, Light* sceneLight);
+	Hittable(bool isStatic, Material* mat, Light* sceneLight);
 	virtual ~Hittable();
 
 	//Override function for detecting if a ray has hit an object
@@ -37,7 +37,7 @@ public:
 
 protected:
 	bool _isStatic = false;
-	Material _material;
+	std::unique_ptr<Material> _material;
 
 	//Not owned just referenced
 	Light* _sceneLight = nullptr;

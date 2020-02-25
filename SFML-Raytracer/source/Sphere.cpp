@@ -1,7 +1,7 @@
 #include "..\include\Sphere.h"
 #include "Light.h"
 
-Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, Material mat, Light* sceneLight) : Hittable(isStatic, mat, sceneLight), _origin(o), _radius(r)
+Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, Material* mat, Light* sceneLight) : Hittable(isStatic, mat, sceneLight), _origin(o), _radius(r)
 {
 }
 
@@ -25,16 +25,16 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _origin) / _radius;
-            if (_material.MaterialActive())
+            if (_material->MaterialActive())
             {
-                res.col = _material.GetColour();
+                res.col = _material->GetColour();
             }
             else
             {
                 res.col = AA::NormalToColour(res.normal);
-                _material.SetColour(res.col);
+                _material->SetColour(res.col);
             }
-            res.mat = _material.GetCopy();
+            res.mat = _material.get();
             if (_sceneLight != nullptr)
             {
                 _sceneLight->CalculateLighting(ray, res);
@@ -48,16 +48,16 @@ bool Sphere::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitR
             res.t = temp;
             res.p = ray.GetPointAlongRay(res.t);
             res.normal = (res.p - _origin) / _radius;
-            if (_material.MaterialActive())
+            if (_material->MaterialActive())
             {
-                res.col = _material.GetColour();
+                res.col = _material->GetColour();
             }
             else
             {
                 res.col = AA::NormalToColour(res.normal);
-                _material.SetColour(res.col);
+                _material->SetColour(res.col);
             }
-            res.mat = _material.GetCopy();
+            res.mat = _material.get();
             if (_sceneLight != nullptr)
             {
                 _sceneLight->CalculateLighting(ray, res);
@@ -82,12 +82,14 @@ bool Sphere::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, 
         double temp = (-b - sqrt(discrim)) / a;
         if (temp < t_max && temp > t_min)
         {
+            res.mat = _material.get();
             return true;
         }
 
         temp = (-b + sqrt(discrim)) / a;
         if (temp < t_max && temp > t_min)
         {
+            res.mat = _material.get();
             return true;
         }
     }

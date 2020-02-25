@@ -18,8 +18,8 @@ void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res
     bool dynamicHit = false;
 
     //Create the collision point and material calc as they will be used more than once, set up the other vars for later use
-    AA::Vec3 collisionPoint = inRay.GetPointAlongRay(res.t);
-    AA::Vec3 materialCalc = res.mat.MaterialActive() ? res.mat.MaterialCalculatedColour() : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
+    AA::Vec3 collisionPoint = res.p;
+    AA::Vec3 materialCalc = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay._startPos, res.p, res.normal) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
     AA::Ray outRay = AA::Ray(collisionPoint, collisionPoint);
     AA::Vec3 outCol = AA::Vec3(0, 0, 0);
     double boundsArea = std::abs(_boundary.Min().X() - _boundary.Max().X()) * std::abs(_boundary.Min().Y() - _boundary.Max().Y()) * std::abs(_boundary.Min().Z() - _boundary.Max().Z());

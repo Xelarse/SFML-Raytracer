@@ -1,8 +1,8 @@
 #include "..\include\Triangle.h"
 #include "Light.h"
 
-Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, Material mat, Light* sceneLight)
-	: Hittable(isStatic, mat.GetCopy(), sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr)
+Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, Material* mat, Light* sceneLight)
+	: Hittable(isStatic, nullptr, sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr), _materialRaw(mat)
 {
 	//Set up the bounds for the Tri
 	_bounds[0] = _verts[0]._position;
@@ -90,7 +90,7 @@ bool Triangle::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, Hi
 	res.p = ray.GetPointAlongRay(res.t);
 	res.normal = v0v1.CrossProduct(v0v2);
 	res.col = GetPixelColour(u, v);
-	res.mat = _material.GetCopy();
+	res.mat = _materialRaw;
 
 	if (_sceneLight != nullptr)
 	{
@@ -150,6 +150,7 @@ bool Triangle::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max
 
 	//At this point its passed all tests and hit the TRI
 	res.t = v0v2.DotProduct(qvec) * invDet;
+	res.mat = _materialRaw;
 	return res.t > AA::kEpsilon;
 }
 
@@ -179,11 +180,11 @@ sf::Color Triangle::GetPixelColour(double u, double v)
 {
 	if(_texturePtr == nullptr) 
 	{
-		if (!_material.MaterialActive())
+		if (!_materialRaw->MaterialActive())
 		{
-			_material.SetColour(AA::NormalToColour(_verts[0]._normal));
+			_materialRaw->SetColour(AA::NormalToColour(_verts[0]._normal));
 		}
-		return _material.GetColour();
+		return _materialRaw->GetColour();
 	}
 
 
@@ -195,6 +196,6 @@ sf::Color Triangle::GetPixelColour(double u, double v)
 	//Translate this normalised value to a pixel value from the texture
 	int x = (_texturePtr->getSize().x) * texCoord.X();
 	int y = (_texturePtr->getSize().y) * ( 1.0f - texCoord.Y());
-	_material.SetColour(_texturePtr->getPixel(x, y));
-	return _material.GetColour();
+	_materialRaw->SetColour(_texturePtr->getPixel(x, y));
+	return _materialRaw->GetColour();
 }

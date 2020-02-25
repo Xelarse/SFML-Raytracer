@@ -8,8 +8,7 @@ public:
 	Diffuse(sf::Color col, bool useMaterialProperties);
 	~Diffuse() override;
 
-	AA::Vec3 MaterialCalculatedColour() override;
-	Material GetCopy() override;
+	AA::Vec3 MaterialCalculatedColour(AA::Vec3 rayStart, AA::Vec3 rayHit, AA::Vec3 surfaceNormal) override;
 
 private:
 };

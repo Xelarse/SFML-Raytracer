@@ -96,6 +96,9 @@
     <ClCompile Include="source\AreaLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="source\Mirror.cpp">
+      <Filter>Source Files\Material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="include\AreaLight.h">
       <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mirror.h">
+      <Filter>Header Files\Material</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

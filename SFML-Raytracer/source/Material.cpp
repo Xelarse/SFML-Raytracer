@@ -17,17 +17,12 @@ bool const Material::MaterialActive()
 	return _useMaterial;
 }
 
-AA::Vec3 Material::MaterialCalculatedColour()
+AA::Vec3 Material::MaterialCalculatedColour(AA::Vec3 rayStart, AA::Vec3 rayHit, AA::Vec3 surfaceNormal)
 {
 	//just return colour
 	AA::Vec3 col = AA::Vec3(_colour.r, _colour.g, _colour.b);
 	col /= 255;
 	return col;
-}
-
-Material Material::GetCopy()
-{
-	return Material(_colour, _useMaterial);
 }
 
 sf::Color Material::GetColour()

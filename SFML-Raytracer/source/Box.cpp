@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Light.h"
 
-Box::Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, Material mat, Light* sceneLight)
+Box::Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, Material* mat, Light* sceneLight)
     : Hittable(isStatic, mat, sceneLight), _origin(origin), _scale(scale)
 {
 	UpdateBounds();
@@ -72,16 +72,16 @@ bool Box::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResu
     res.p = ray.GetPointAlongRay(res.t);
     CalcNormal(res);
 
-    if (_material.MaterialActive())
+    if (_material->MaterialActive())
     {
-        res.col = _material.GetColour();
+        res.col = _material->GetColour();
     }
     else
     {
         res.col = AA::NormalToColour(res.normal);
-        _material.SetColour(res.col);
+        _material->SetColour(res.col);
     }
-    res.mat = _material.GetCopy();
+    res.mat = _material.get();
 
     if (_sceneLight != nullptr)
     {
@@ -177,6 +177,8 @@ bool Box::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, Hit
     {
         return false;
     }
+
+    res.mat = _material.get();
     return true;
 }
 

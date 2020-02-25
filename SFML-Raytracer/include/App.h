@@ -49,8 +49,6 @@ private:
 	void GetColour(const double& u, const double& v, sf::Color& colOut);
 	void GetColourAntiAliasing(const double& u, const double& v, sf::Color& colOut);
 
-	AA::Vec3 BackgroundGradientCol(const AA::Ray& ray);
-
 	//SFML Stuff
 	const int _width = 800;
 	const int _height = 600;

@@ -16,7 +16,7 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
     bool dynamicHit = false;
 
     //Build a ray that fires from the point of collision to the light
-    AA::Vec3 collisionPoint = inRay.GetPointAlongRay(res.t);
+    AA::Vec3 collisionPoint = res.p;
     AA::Ray outRay = AA::Ray(collisionPoint, AA::Vec3::UnitVector(_position - collisionPoint));
     outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);
 
@@ -32,7 +32,7 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
         double nDotDRSquared = res.normal.DotProduct(outRay._dir) / (lightRes.t * lightRes.t);
 
         //Material colour properties, just default to the colour calc'd from the ray if its not using the material, most of the time its a colour based off the normal
-        AA::Vec3 hitColourPid = res.mat.MaterialActive() ? res.mat.MaterialCalculatedColour() : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
+        AA::Vec3 hitColourPid = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay._startPos, res.p, res.normal) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
 
         //Calc final colour
         AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec * _intensityMod;
