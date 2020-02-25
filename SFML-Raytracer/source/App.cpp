@@ -55,11 +55,11 @@ void App::InitCoreSystems()
         //_sceneLight = std::make_unique<AreaLight>(
         //    _staticHittables.get(),
         //    _dynamicHittables.get(),
-        //    AA::Vec3(10, 7, -3),
+        //    AA::Vec3(0, 4, -10),
         //    AABB(AA::Vec3(-2, -2, -2), AA::Vec3(2, 2, 2)),
-        //    500,
+        //    100,
         //    sf::Color(255, 255, 255, 255),
-        //    0.5,
+        //    0.1,
         //    _lightingDebug
         //);
     }
@@ -269,6 +269,7 @@ void App::SpawnLightTest()
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, new Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Mirror(sf::Color(27, 209, 10, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
 }
 
 void App::Tick(float dt)

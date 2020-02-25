@@ -198,6 +198,16 @@ namespace AA
 		return Vec3(lh / rh.X(), lh / rh.Y(), lh / rh.Z());
 	}
 
+	inline Vec3 operator - (const double& lh, const Vec3& rh)
+	{
+		return Vec3(lh - rh.X(), lh - rh.Y(), lh - rh.Z());
+	}
+
+	inline Vec3 operator + (const double& lh, const Vec3& rh)
+	{
+		return Vec3(lh + rh.X(), lh + rh.Y(), lh + rh.Z());
+	}
+
 	class Vec2
 	{
 	public:

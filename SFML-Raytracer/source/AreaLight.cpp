@@ -60,10 +60,11 @@ void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res
         {
             //Do the fancy calc of the area light 
             double nDotDHit = res.normal.DotProduct(outRay._dir);
-            double nDotDLight = lightRes.normal.DotProduct(collisionPoint - lightPosition);
+            //double nDotDLight = lightRes.normal.DotProduct(collisionPoint - lightPosition); //TODO ask tom why using this makes the scene terribly dark, without it the spheres are just white
 
             //Calc value before the pdf(xi)
-            AA::Vec3 beforePdf = ((nDotDHit * nDotDLight) / (lightRes.t * lightRes.t) )* materialCalc * _lightColorVec * _intensityMod;
+            //AA::Vec3 beforePdf = ((nDotDHit * nDotDLight) / (lightRes.t * lightRes.t) )* materialCalc * _lightColorVec * _intensityMod;
+            AA::Vec3 beforePdf = (nDotDHit / (lightRes.t * lightRes.t)) * materialCalc * _lightColorVec * _intensityMod;
 
             //Safety check for div by zero
             if(beforePdf == AA::Vec3(0,0,0) || beforePdf == AA::Vec3(-0,-0,-0)) { continue; }
@@ -75,5 +76,5 @@ void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res
 
     //Average out the light based on the above taken samples and set it to the res col
     outCol /= _samples;
-    res.col = outCol == AA::Vec3(0,0,0) || outCol.IsNAN() ? _shadowColour : outCol.Vec3ToCol();
+    res.col = outCol == AA::Vec3(0, 0, 0) || outCol.IsNAN() ? _shadowColour : outCol.Vec3ToCol();
 }

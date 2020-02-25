@@ -1,6 +1,6 @@
 #include "..\include\Mirror.h"
 
-Mirror::Mirror(sf::Color col, bool useMaterialProperties, Hittable* _statics, Hittable* _dynamics)
+Mirror::Mirror(sf::Color col, bool useMaterialProperties, Hittable* statics, Hittable* dynamics) : Material(col, useMaterialProperties), _statics(statics), _dynamics(dynamics)
 {
 }
 
@@ -39,6 +39,6 @@ AA::Vec3 Mirror::MaterialCalculatedColour(AA::Vec3 rayStart, AA::Vec3 rayHit, AA
 	else
 	{
 		//return the background colour
-		return AA::BackgroundGradientCol((1.0 / surfaceNormal));
+		return AA::BackgroundGradientCol((surfaceNormal));
 	}
 }

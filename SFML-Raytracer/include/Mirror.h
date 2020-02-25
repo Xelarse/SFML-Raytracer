@@ -6,7 +6,7 @@ class Mirror : public Material
 {
 public:
 	Mirror() = delete;
-	Mirror(sf::Color col, bool useMaterialProperties, Hittable* _statics, Hittable* _dynamics);
+	Mirror(sf::Color col, bool useMaterialProperties, Hittable* statics, Hittable* dynamics);
 	~Mirror() override;
 
 	AA::Vec3 MaterialCalculatedColour(AA::Vec3 rayStart, AA::Vec3 rayHit, AA::Vec3 surfaceNormal) override;
