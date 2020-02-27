@@ -266,10 +266,10 @@ void App::SpawnMovable()
 
 void App::SpawnLightTest()
 {
-    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, new Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
     //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Mirror(sf::Color(27, 209, 10, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0.5, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0.0, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
 }
 
 void App::Tick(float dt)
@@ -368,14 +368,14 @@ void App::Update(float dt)
     if (_pEventHander->IsKeyPressed(sf::Keyboard::Up))
     {
         double previous = _cam->GetVFov();
-        previous += 2;
-        previous = previous > 90 ? 90 : previous;
+        previous += 3;
+        previous = previous > 150 ? 150 : previous;
         _cam->SetVFov(previous);
     }
     else if (_pEventHander->IsKeyPressed(sf::Keyboard::Down))
     {
         double previous = _cam->GetVFov();
-        previous -= 2;
+        previous -= 3;
         previous = previous < 20 ? 20 : previous;
         _cam->SetVFov(previous);
     }

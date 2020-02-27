@@ -156,6 +156,11 @@ namespace AA
 		{
 			return _e[0] * _e[0] + _e[1] * _e[1] + _e[2] * _e[2];
 		}
+		
+		inline double Distance(Vec3 rhs)
+		{
+			return sqrt( ((_e[0] - rhs[0]) * (_e[0] - rhs[0])) + ((_e[1] - rhs[1]) * (_e[1] - rhs[1])) + ((_e[2] - rhs[2]) * (_e[2] - rhs[2])));
+		}
 
 		inline Vec3 UnitVector() const
 		{

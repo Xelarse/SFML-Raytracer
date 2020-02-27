@@ -13,7 +13,7 @@ AreaLight::~AreaLight()
 
 void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
 {
-    Hittable::HitResult staticRes, dynamicRes, lightRes;
+    Hittable::HitResult staticRes, dynamicRes;
     bool staticHit = false;
     bool dynamicHit = false;
 
@@ -58,16 +58,16 @@ void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res
         if(nDotDHit == 0.0) { continue; }
         double nDotDLight = _normal.DotProduct(AA::Vec3::UnitVector(collisionPoint - lightPosition));
 
-        //Find the t of this ray
-        IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
+        //Calc the distance from hit to light
+        double dist = collisionPoint.Distance(lightPosition);
 
         //Check against a hit with both static and dynamics
-        staticHit = _statics == nullptr ? false : _statics->IntersectedRayOnly(outRay, 0.0, lightRes.t, staticRes);
-        dynamicHit = _dynamics == nullptr ? false : _dynamics->IntersectedRayOnly(outRay, 0.0, lightRes.t, dynamicRes);
+        staticHit = _statics == nullptr ? false : _statics->IntersectedRayOnly(outRay, 0.0, dist, staticRes);
+        dynamicHit = _dynamics == nullptr ? false : _dynamics->IntersectedRayOnly(outRay, 0.0, dist, dynamicRes);
 
         if (!staticHit && !dynamicHit)
         {
-            AA::Vec3 reflectance = ((nDotDHit * nDotDLight) / (lightRes.t * lightRes.t) ) * materialCalc * _lightColorVec * _intensityMod;
+            AA::Vec3 reflectance = ((nDotDHit * nDotDLight) / (dist * dist) ) * materialCalc * _lightColorVec * _intensityMod;
 
             // Divide by PDF of sampling position on light source
             reflectance = reflectance / (1 / boundsArea);
