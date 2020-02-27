@@ -17,7 +17,7 @@ bool const Material::MaterialActive()
 	return _useMaterial;
 }
 
-AA::Vec3 Material::MaterialCalculatedColour(AA::Vec3 rayStart, AA::Vec3 rayHit, AA::Vec3 surfaceNormal)
+AA::Vec3 Material::MaterialCalculatedColour(const AA::Vec3& camRayStart, const AA::Vec3& camRayHit, const AA::Vec3& camRayNormal, const AA::Ray& outRay)
 {
 	//just return colour
 	AA::Vec3 col = AA::Vec3(_colour.r, _colour.g, _colour.b);

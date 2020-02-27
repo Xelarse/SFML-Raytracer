@@ -20,6 +20,14 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
     AA::Ray outRay = AA::Ray(collisionPoint, AA::Vec3::UnitVector(_position - collisionPoint));
     outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);
 
+    //Check if the dot of the hit max zero returns zero and if it does the light calc doesnt need to be done as the normal is the opposide side to the light ray
+    double nDotDHit = std::max(res.normal.DotProduct(outRay._dir), 0.0);
+    if (nDotDHit == 0.0)
+    {
+        res.col = _shadowColour;
+        return;
+    }
+
     //Find the t of this ray
     IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
 
@@ -29,13 +37,11 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
 
     if (!staticHit && !dynamicHit)
     {
-        double nDotDRSquared = res.normal.DotProduct(outRay._dir) / (lightRes.t * lightRes.t);
-
         //Material colour properties, just default to the colour calc'd from the ray if its not using the material, most of the time its a colour based off the normal
-        AA::Vec3 hitColourPid = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay._startPos, res.p, res.normal) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
+        AA::Vec3 hitColourPid = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay._startPos, res.p, res.normal, outRay) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
 
         //Calc final colour
-        AA::Vec3 finalColourVec = nDotDRSquared * hitColourPid * _lightColorVec * _intensityMod;
+        AA::Vec3 finalColourVec = (nDotDHit /  (lightRes.t * lightRes.t)) * hitColourPid * _lightColorVec * _intensityMod;
 
         //Tonemap using the selected method and set the colour
         res.col = AA::GammaTonemap(finalColourVec);

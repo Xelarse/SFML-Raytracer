@@ -56,10 +56,10 @@ void App::InitCoreSystems()
             _staticHittables.get(),
             _dynamicHittables.get(),
             AA::Vec3(0, 4, -10),
-            AABB(AA::Vec3(-2, -2, -2), AA::Vec3(2, 2, 2)),
-            100,
+            AA::Vec2(2.0, 2.0),
+            5,
             sf::Color(255, 255, 255, 255),
-            20.0,
+            5.0,
             _lightingDebug
         );
     }
@@ -266,10 +266,10 @@ void App::SpawnMovable()
 
 void App::SpawnLightTest()
 {
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, new Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
     //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Mirror(sf::Color(27, 209, 10, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0.5, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
 }
 
 void App::Tick(float dt)

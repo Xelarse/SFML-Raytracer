@@ -19,7 +19,6 @@ void VolumeLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& r
 
     //Create the collision point and material calc as they will be used more than once, set up the other vars for later use
     AA::Vec3 collisionPoint = res.p;
-    AA::Vec3 materialCalc = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay._startPos, res.p, res.normal) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
     AA::Ray outRay = AA::Ray(collisionPoint, collisionPoint);
     AA::Vec3 outCol = AA::Vec3(0, 0, 0);
     double boundsArea = std::abs(_boundary.Min().X() - _boundary.Max().X()) * std::abs(_boundary.Min().Y() - _boundary.Max().Y()) * std::abs(_boundary.Min().Z() - _boundary.Max().Z());
@@ -47,8 +46,17 @@ void VolumeLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& r
 
         //Adjust outray to match the new position its sampled to and shift it slightly along its normal
         outRay._dir = AA::Vec3::UnitVector(lightPosition - collisionPoint);
-        outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);   //TODO remove this from the recursive function or set it back to the point
+        outRay._startPos = collisionPoint;
+        outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);
 
+        //Do the material calc based on the new data from the new outRay
+        AA::Vec3 materialCalc = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay._startPos, res.p, res.normal, outRay) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
+
+        //Check if the dot of the hit max zero returns zero and if it does the light calc doesnt need to be done as the normal is the opposide side to the light ray
+        double nDotDHit = std::max(res.normal.DotProduct(outRay._dir), 0.0);
+        if(nDotDHit == 0.0) { continue; }
+        
+        //Otherwise move onto the visibility check
         //Find the t of this ray
         IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
 
@@ -58,20 +66,7 @@ void VolumeLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& r
 
         if (!staticHit && !dynamicHit)
         {
-            //Do the fancy calc of the area light 
-            double nDotDHit = res.normal.DotProduct(outRay._dir);
-            double nDotDLight = lightRes.normal.DotProduct(collisionPoint - lightPosition); //TODO ask tom why using this makes the scene terribly dark, without it the spheres are just white
-
-            //TODO move material calc into here for GGX, 
-            //Calc value before the pdf(xi)
-            //AA::Vec3 reflectance = ((nDotDHit * nDotDLight) / (lightRes.t * lightRes.t) )* materialCalc * _lightColorVec * _intensityMod;
             AA::Vec3 reflectance = (nDotDHit / (lightRes.t * lightRes.t)) * materialCalc * _lightColorVec * _intensityMod;
-
-            //Safety check for div by zero
-            if (reflectance == AA::Vec3(0, 0, 0) || reflectance == AA::Vec3(-0, -0, -0))
-            {
-                continue;
-            }
 
             // Divide by PDF of sampling position on light source
             reflectance = reflectance / (1 / boundsArea);
