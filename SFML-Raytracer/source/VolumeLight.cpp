@@ -1,17 +1,17 @@
-#include "..\include\AreaLight.h"
+#include "..\include\VolumeLight.h"
 
-AreaLight::AreaLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, AABB boundary, int sampleCount, sf::Color lightColour, double intensityMod, bool debugRender) : Light(staticObjects, dynamicObjects, pos, lightColour, intensityMod, debugRender), _samples(sampleCount), _boundary(boundary)
+VolumeLight::VolumeLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, AABB boundary, int sampleCount, sf::Color lightColour, double intensityMod, bool debugRender) : Light(staticObjects, dynamicObjects, pos, lightColour, intensityMod, debugRender), _samples(sampleCount), _boundary(boundary)
 {
     //Set up the random generator for later use
     std::random_device rd;
     _ranGenerator = std::mt19937(rd());
 }
 
-AreaLight::~AreaLight()
+VolumeLight::~VolumeLight()
 {
 }
 
-void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
+void VolumeLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
 {
     Hittable::HitResult staticRes, dynamicRes, lightRes;
     bool staticHit = false;
@@ -47,7 +47,7 @@ void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res
 
         //Adjust outray to match the new position its sampled to and shift it slightly along its normal
         outRay._dir = AA::Vec3::UnitVector(lightPosition - collisionPoint);
-        outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);
+        outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);   //TODO remove this from the recursive function or set it back to the point
 
         //Find the t of this ray
         IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
@@ -65,20 +65,23 @@ void AreaLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res
             //TODO move material calc into here for GGX, 
             //Calc value before the pdf(xi)
             //AA::Vec3 reflectance = ((nDotDHit * nDotDLight) / (lightRes.t * lightRes.t) )* materialCalc * _lightColorVec * _intensityMod;
-            AA::Vec3 beforePdf = (nDotDHit / (lightRes.t * lightRes.t)) * materialCalc * _lightColorVec * _intensityMod;
+            AA::Vec3 reflectance = (nDotDHit / (lightRes.t * lightRes.t)) * materialCalc * _lightColorVec * _intensityMod;
 
             //Safety check for div by zero
-            if(reflectance == AA::Vec3(0,0,0) || reflectance == AA::Vec3(-0,-0,-0)) { continue; }
+            if (reflectance == AA::Vec3(0, 0, 0) || reflectance == AA::Vec3(-0, -0, -0))
+            {
+                continue;
+            }
 
             // Divide by PDF of sampling position on light source
-            reflectance = reflectance / (1 / ((bounds[1].X - bounds[0].X) * (bounds[1].Y - ...)))
+            reflectance = reflectance / (1 / boundsArea);
 
             //Tonemap using the selected method and set the colour
-            outCol += AA::GammaTonemapHDR(reflectance / (1.0 / boundsArea));
+            outCol += reflectance;
         }
     }
 
     //Average out the light based on the above taken samples and set it to the res col
     outCol /= _samples;
-    res.col = outCol == AA::Vec3(0, 0, 0) || outCol.IsNAN() ? _shadowColour : outCol.Vec3ToCol();
+    res.col = outCol == AA::Vec3(0, 0, 0) || outCol.IsNAN() ? _shadowColour : AA::GammaTonemap(outCol);
 }

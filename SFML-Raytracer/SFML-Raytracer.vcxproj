@@ -179,6 +179,7 @@
     <ClCompile Include="source\PoolableThread.cpp" />
     <ClCompile Include="source\Sphere.cpp" />
     <ClCompile Include="source\Triangle.cpp" />
+    <ClCompile Include="source\VolumeLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AABB.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="include\Sphere.h" />
     <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Utilities.h" />
+    <ClInclude Include="include\VolumeLight.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
