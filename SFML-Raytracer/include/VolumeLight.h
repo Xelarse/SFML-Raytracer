@@ -4,6 +4,7 @@
 
 class VolumeLight : public Light
 {
+public:
 	VolumeLight() = delete;
 	VolumeLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, AABB boundary, int sampleCount, sf::Color lightColour, double intensityMod, bool debugRender);
 	~VolumeLight() override;

@@ -62,6 +62,16 @@ void App::InitCoreSystems()
             5.0,
             _lightingDebug
         );
+        //_sceneLight = std::make_unique<VolumeLight>(
+        //    _staticHittables.get(),
+        //    _dynamicHittables.get(),
+        //    AA::Vec3(0.0, 4.0, -10.0),
+        //    AABB(AA::Vec3(-2.0, -2.0, -2.0), AA::Vec3(2.0, 2.0, 2.0)),
+        //    10,
+        //    sf::Color(255, 255, 255, 255),
+        //    0.8,
+        //    _lightingDebug
+        //);
     }
 
     AA::Vec3 lookFrom = AA::Vec3(0, 4, -5);

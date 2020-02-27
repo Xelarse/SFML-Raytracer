@@ -14,6 +14,7 @@
 #include "Light.h"
 #include "PointLight.h"
 #include "AreaLight.h"
+#include "VolumeLight.h"
 
 class App
 {
