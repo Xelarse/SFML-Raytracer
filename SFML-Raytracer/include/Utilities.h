@@ -544,6 +544,16 @@ namespace AA
 
 		return AA::LinearLerp(top, bottom, t);
 	}
+
+	static AA::Vec3 colToVec3(const sf::Color& col)
+	{
+		return AA::Vec3(col.r / 255, col.g / 255, col.b / 255);
+	}
+
+	static AA::Vec3 reflectRay(const AA::Vec3& inDir, const AA::Vec3& normal)
+	{
+		return inDir - 2 * inDir.DotProduct(normal) * normal;
+	}
 }
 
 //Hash for Vec2

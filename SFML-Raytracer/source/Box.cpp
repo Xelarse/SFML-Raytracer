@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include "Light.h"
+#include "Material.h"
 
 Box::Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, Material* mat, Light* sceneLight)
     : Hittable(isStatic, mat, sceneLight), _origin(origin), _scale(scale)

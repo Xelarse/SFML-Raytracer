@@ -2,9 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include "Utilities.h"
 #include "AABB.h"
-#include "Material.h"
 
 class Light;
+class Material;
 
 class Hittable
 {

@@ -1,5 +1,6 @@
 #include "..\include\Sphere.h"
 #include "Light.h"
+#include "Material.h"
 
 Sphere::Sphere(AA::Vec3 o, double r, bool isStatic, Material* mat, Light* sceneLight) : Hittable(isStatic, mat, sceneLight), _origin(o), _radius(r)
 {

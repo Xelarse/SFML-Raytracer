@@ -9,7 +9,7 @@ public:
 	VolumeLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, AABB boundary, int sampleCount, sf::Color lightColour, double intensityMod, bool debugRender);
 	~VolumeLight() override;
 
-	void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res) override;
+	void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive = false) override;
 
 private:
 	int _samples = 10;

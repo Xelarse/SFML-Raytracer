@@ -10,8 +10,18 @@ Light::~Light()
 {
 }
 
-void Light::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
+void Light::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive)
 {
+    if (isRecursive)
+    {
+        if (_currentRecursion >= _recursionCap)
+        {
+            res.col = _shadowColour;
+            return;
+        }
+        ++_currentRecursion;
+    }
+
 	//Just does a check purely based on collisions to create a shadow ray
 	Hittable::HitResult staticRes, dynamicRes, lightRes;
 	bool staticHit = false;
@@ -37,7 +47,7 @@ void Light::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
 
     if (staticHit || dynamicHit)
     {
-        res.col = sf::Color(0, 0, 0, 255);
+        res.col = _shadowColour;
     }
 }
 

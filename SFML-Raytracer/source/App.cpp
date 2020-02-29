@@ -51,15 +51,15 @@ void App::InitCoreSystems()
     if (_lightingEnabled)
     {
         //Light values ---- white: (255,255,255,255) --- Yellow: (255,243,71,255) --- Purple: (239,29,242,255) --- Dark teal: (9,97,88,255) --- Gray(123,123,123,255)
-        //_sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), sf::Color(255, 255, 255, 255), 20.0, _lightingDebug);
+        //_sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), sf::Color(255, 255, 255, 255), 100.0, _lightingDebug);
         _sceneLight = std::make_unique<AreaLight>(
             _staticHittables.get(),
             _dynamicHittables.get(),
-            AA::Vec3(0, 4, -10),
-            AA::Vec2(2.0, 2.0),
-            5,
+            AA::Vec3(0.0, 4.0, -6.0),
+            AA::Vec2(5.0, 5.0),
+            1,
             sf::Color(255, 255, 255, 255),
-            5.0,
+            100.0,
             _lightingDebug
         );
         //_sceneLight = std::make_unique<VolumeLight>(
@@ -67,7 +67,7 @@ void App::InitCoreSystems()
         //    _dynamicHittables.get(),
         //    AA::Vec3(0.0, 4.0, -10.0),
         //    AABB(AA::Vec3(-2.0, -2.0, -2.0), AA::Vec3(2.0, 2.0, 2.0)),
-        //    10,
+        //    2,
         //    sf::Color(255, 255, 255, 255),
         //    0.8,
         //    _lightingDebug
@@ -88,9 +88,6 @@ void App::InitCoreSystems()
 
 void App::InitScene()
 {
-    //Add a static sphere with no specific colour and one with a colour for backdrop
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, new Material(sf::Color(102, 0, 102, 255), true), _sceneLight.get()));
-
     //SpawnBase();
     //SpawnMovable();
     //SpawnSphereStress();
@@ -108,11 +105,17 @@ void App::InitScene()
 
 void App::SpawnBase()
 {
+    //Add a static sphere with no specific colour and one with a colour for backdrop
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, new Material(sf::Color(102, 0, 102, 255), true), _sceneLight.get()));
+
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Material(sf::Color(0, 0, 0, 255), false), _sceneLight.get()));
 }
 
 void App::SpawnSphereStress()
 {
+    //Add a static sphere with no specific colour and one with a colour for backdrop
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, new Material(sf::Color(102, 0, 102, 255), true), _sceneLight.get()));
+
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> xDist(-5.0, 5.0);
@@ -128,6 +131,9 @@ void App::SpawnSphereStress()
 
 void App::SpawnMeshes()
 {
+    //Add a static sphere with no specific colour and one with a colour for backdrop
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, new Material(sf::Color(102, 0, 102, 255), true), _sceneLight.get()));
+
     ////12 Tri Cube
     //_staticHittables->_hittableObjects.push_back(new Mesh(
     //        "assets/cube.obj",
@@ -221,6 +227,9 @@ void App::SpawnMeshes()
 
 void App::SpawnMeshStress()
 {
+    //Add a static sphere with no specific colour and one with a colour for backdrop
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, new Material(sf::Color(102, 0, 102, 255), true), _sceneLight.get()));
+
     //172 Tri Rocks
     _staticHittables->_hittableObjects.push_back(new Mesh(
             "assets/KennyPirate/formation_rock.obj",
@@ -269,6 +278,9 @@ void App::SpawnMeshStress()
 
 void App::SpawnMovable()
 {
+    //Add a static sphere with no specific colour and one with a colour for backdrop
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, -static_cast<double>(_height) - 1, -1), _height, true, new Material(sf::Color(102, 0, 102, 255), true), _sceneLight.get()));
+
     //Spawns a box that can be controlled with wasd
     _dynamicHittables->_hittableObjects.push_back(new Box(AA::Vec3(2, 0.5, -0.5), AA::Vec3(1, 1, 2), false, new Material(sf::Color(0, 0, 0, 255), false), _sceneLight.get()));
     _testBox = dynamic_cast<Box*>(_dynamicHittables->_hittableObjects.back());
@@ -276,10 +288,18 @@ void App::SpawnMovable()
 
 void App::SpawnLightTest()
 {
+    //Room boxes
+    _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(-6, 5, 0), AA::Vec3(1, 10, 20), true, new Diffuse(sf::Color(240, 0, 0, 255), true), _sceneLight.get()));     //Left
+    _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(6, 5, 0), AA::Vec3(1, 10, 20), true, new Diffuse(sf::Color(240, 136, 0, 255), true), _sceneLight.get()));    //Right
+    _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 5, 6), AA::Vec3(20, 10, 1), true, new Diffuse(sf::Color(247, 227, 0, 255), true), _sceneLight.get()));    //Back
+    //_staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 5, -6), AA::Vec3(20, 10, 1), true, new Diffuse(sf::Color(0, 247, 4, 255), true), _sceneLight.get()));     //Front
+    //_staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 6, 0), AA::Vec3(20, 1, 20), true, new Diffuse(sf::Color(0, 4, 247, 255), true), _sceneLight.get()));       //Top
+    _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, -2, 0), AA::Vec3(20, 1, 20), true, new Diffuse(sf::Color(217, 0, 237, 255), true), _sceneLight.get()));     //Bottom
+
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, new Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
-    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Mirror(sf::Color(27, 209, 10, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0.0, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, new Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Mirror(sf::Color(27, 209, 10, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0.0, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
 }
 
 void App::Tick(float dt)
@@ -330,47 +350,49 @@ void App::Update(float dt)
 
     if (_sceneLight)
     {
+        _sceneLight->ResetRecursionCount();
+
         float lightDt = dt * 0.001;
         if (_pEventHander->IsKeyPressed(sf::Keyboard::S))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[2] -= (4.0 * lightDt);
-            previous[2] = previous.Z() < -15.0 ? -15.0 : previous.Z();
+            previous[2] -= ((_pEventHander->IsKeyPressed(sf::Keyboard::LShift) ? _lightMaxSpeed : _lightMinSpeed) * lightDt);
+            previous[2] = previous.Z() < -_lightBounds ? -_lightBounds : previous.Z();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::W))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[2] += (4.0 * lightDt);
-            previous[2] = previous.Z() > 15 ? 15 : previous.Z();
+            previous[2] += ((_pEventHander->IsKeyPressed(sf::Keyboard::LShift) ? _lightMaxSpeed : _lightMinSpeed) * lightDt);
+            previous[2] = previous.Z() > _lightBounds ? _lightBounds : previous.Z();
             _sceneLight->Move(previous);
         }
         if (_pEventHander->IsKeyPressed(sf::Keyboard::D))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[0] -= (4.0 * lightDt);
-            previous[0] = previous.X() < -15.0 ? -15.0 : previous.X();
+            previous[0] -= ((_pEventHander->IsKeyPressed(sf::Keyboard::LShift) ? _lightMaxSpeed : _lightMinSpeed) * lightDt);
+            previous[0] = previous.X() < -_lightBounds ? -_lightBounds : previous.X();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::A))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[0] += (4.0 * lightDt);
-            previous[0] = previous.X() > 15.0 ? 15.0 : previous.X();
+            previous[0] += ((_pEventHander->IsKeyPressed(sf::Keyboard::LShift) ? _lightMaxSpeed : _lightMinSpeed) * lightDt);
+            previous[0] = previous.X() > _lightBounds ? _lightBounds : previous.X();
             _sceneLight->Move(previous);
         }
         if (_pEventHander->IsKeyPressed(sf::Keyboard::Q))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[1] -= (4.0 * lightDt);
-            previous[1] = previous.Y() < -15.0 ? -15.0 : previous.Y();
+            previous[1] -= ((_pEventHander->IsKeyPressed(sf::Keyboard::LShift) ? _lightMaxSpeed : _lightMinSpeed) * lightDt);
+            previous[1] = previous.Y() < -_lightBounds ? -_lightBounds : previous.Y();
             _sceneLight->Move(previous);
         }
         else if (_pEventHander->IsKeyPressed(sf::Keyboard::E))
         {
             AA::Vec3 previous = _sceneLight->GetPosition();
-            previous[1] += (4.0 * lightDt);
-            previous[1] = previous.Y() > 15.0 ? 15.0 : previous.Y();
+            previous[1] += ((_pEventHander->IsKeyPressed(sf::Keyboard::LShift) ? _lightMaxSpeed : _lightMinSpeed) * lightDt);
+            previous[1] = previous.Y() > _lightBounds ? _lightBounds : previous.Y();
             _sceneLight->Move(previous);
         }
     }

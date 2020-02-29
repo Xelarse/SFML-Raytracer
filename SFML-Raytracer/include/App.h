@@ -70,12 +70,15 @@ private:
 	bool _useSAH = true;
 	bool _useMeshSAH = true;
 
-	double _cameraXBound = 8.0;
-	double _cameraPanSpeed = 2.0;
+	double _cameraXBound = 5.0;
+	double _cameraPanSpeed = 1.5;
 	bool _camLeft = true;
 
 	bool _lightingEnabled = true;
 	bool _lightingDebug = true;
+	const float _lightBounds = 200.0;
+	const float _lightMaxSpeed = 30.0;
+	const float _lightMinSpeed = 5.0;
 
 
 	Box* _testBox = nullptr;
@@ -89,7 +92,7 @@ private:
 	const bool _isThreaded = true;
 	std::mutex _divisionMutex;
 	int _currentDivision;
-	const int _totalThreads = 160;	//MUST BE A CLEAN DIVISION OF _width * _height //30 max for laptop 160 for desktop
+	const int _totalThreads = 30;	//MUST BE A CLEAN DIVISION OF _width * _height //30 max for laptop 160 for desktop
 	const int _calcsPerDivision;
 	std::unique_ptr<JobManager> _jobManager;
 };

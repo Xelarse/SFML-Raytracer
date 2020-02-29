@@ -1,4 +1,5 @@
 #include "..\include\VolumeLight.h"
+#include "Material.h"
 
 VolumeLight::VolumeLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, AABB boundary, int sampleCount, sf::Color lightColour, double intensityMod, bool debugRender) : Light(staticObjects, dynamicObjects, pos, lightColour, intensityMod, debugRender), _samples(sampleCount), _boundary(boundary)
 {
@@ -11,8 +12,19 @@ VolumeLight::~VolumeLight()
 {
 }
 
-void VolumeLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res)
+void VolumeLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive)
 {
+    //TODO fix this in a nice way to encompass depth, not iterations
+    //if (isRecursive)
+    //{
+    //    if (_currentRecursion >= _recursionCap)
+    //    {
+    //        res.col = _shadowColour;
+    //        return;
+    //    }
+    //    ++_currentRecursion;
+    //}
+
     Hittable::HitResult staticRes, dynamicRes;
     bool staticHit = false;
     bool dynamicHit = false;
@@ -50,7 +62,7 @@ void VolumeLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& r
         outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);
 
         //Do the material calc based on the new data from the new outRay
-        AA::Vec3 materialCalc = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay._startPos, res.p, res.normal, outRay) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
+        AA::Vec3 materialCalc = res.mat->MaterialActive() ? res.mat->MaterialCalculatedColour(inRay, res, this) : AA::Vec3(res.col.r / 255, res.col.g / 255, res.col.b / 255);
 
         //Check if the dot of the hit max zero returns zero and if it does the light calc doesnt need to be done as the normal is the opposide side to the light ray
         double nDotDHit = std::max(res.normal.DotProduct(outRay._dir), 0.0);

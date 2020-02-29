@@ -1,4 +1,5 @@
 #include "..\include\Hittable.h"
+#include "Material.h"
 
 Hittable::Hittable() : _material(new Material(sf::Color(0, 0, 0,255), false))
 {

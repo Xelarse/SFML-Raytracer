@@ -11,7 +11,7 @@ public:
 	Light(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, sf::Color lightColour, double intensityMod, bool debugRender);
 	~Light() override;
 
-	virtual void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res);
+	virtual void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive = false);
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
@@ -39,6 +39,8 @@ public:
 	inline const bool IsDebugRendering() { return _debugRender; }
 	inline void SetDebugRendering(bool active) { _debugRender = active; }
 
+	inline void ResetRecursionCount() { _currentRecursion = 0; }
+
 protected:
 
 	AA::Vec3 _position;
@@ -49,6 +51,8 @@ protected:
 	sf::Color _lightColour;
 	AA::Vec3 _lightColorVec;
 	double _intensityMod;
+	int _recursionCap = 3;
+	int _currentRecursion = 0;
 	const sf::Color _shadowColour = sf::Color(0, 0, 0, 255);
 };
 

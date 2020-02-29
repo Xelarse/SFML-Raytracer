@@ -9,7 +9,7 @@ public:
 	AreaLight(Hittable* staticObjects, Hittable* dynamicObjects, AA::Vec3 pos, AA::Vec2 dims, int sampleCount, sf::Color lightColour, double intensityMod, bool debugRender);
 	~AreaLight() override;
 
-	void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res) override;
+	void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive = false) override;
 
 private:
 	int _samples = 10;

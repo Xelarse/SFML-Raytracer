@@ -1,4 +1,5 @@
 #include "..\include\Hittables.h"
+#include "Material.h"
 
 Hittables::Hittables(bool isHittableStatic, bool useBvh, bool useSAH) : Hittable(isHittableStatic, new Material(sf::Color(255,255,255,255), false), nullptr), _bvhEnabled(useBvh), _sahEnabled(useSAH)
 {

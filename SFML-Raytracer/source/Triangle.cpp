@@ -1,5 +1,6 @@
 #include "..\include\Triangle.h"
 #include "Light.h"
+#include "Material.h"
 
 Triangle::Triangle(std::array<AA::Vertex, 3> verts, AA::Vec3 position, AA::Vec3 scale, sf::Image* texPtr, bool isStatic, Material* mat, Light* sceneLight)
 	: Hittable(isStatic, nullptr, sceneLight), _verts(verts), _pos(position), _scale(scale), _texturePtr(texPtr), _materialRaw(mat)
