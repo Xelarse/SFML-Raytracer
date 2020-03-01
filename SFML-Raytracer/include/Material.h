@@ -15,6 +15,7 @@ public:
 	virtual AA::Vec3 MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable::HitResult& prevHit, Light* sceneLight);
 
 	sf::Color GetColour();
+	AA::Vec3 GetColourVec();
 	void SetColour(sf::Color col);
 
 protected:

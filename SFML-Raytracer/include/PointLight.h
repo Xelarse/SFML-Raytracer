@@ -9,4 +9,5 @@ public:
 	~PointLight() override;
 
 	void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive = false) override;
+	AA::Vec3 CalculateLightingForMaterial(const AA::Ray& inRay, Hittable::HitResult& res) override;
 };

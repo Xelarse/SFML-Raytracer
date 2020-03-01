@@ -51,6 +51,41 @@ void Light::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, co
     }
 }
 
+AA::Vec3 Light::CalculateLightingForMaterial(const AA::Ray& inRay, Hittable::HitResult& res)
+{
+    //Just does a check purely based on collisions to create a shadow ray
+    Hittable::HitResult staticRes, dynamicRes, lightRes;
+    bool staticHit = false;
+    bool dynamicHit = false;
+
+    //Build a ray that fires from the point of collision to the light
+    AA::Vec3 collisionPoint = inRay.GetPointAlongRay(res.t);
+    AA::Ray outRay = AA::Ray(collisionPoint, AA::Vec3::UnitVector(_position - collisionPoint));
+    outRay._startPos = outRay.GetPointAlongRay(AA::kEpsilon);
+
+    //Find the t of this ray
+    IntersectedRayOnly(outRay, 0, INFINITY, lightRes);
+
+    if (_statics != nullptr)
+    {
+        staticHit = _statics->IntersectedRayOnly(outRay, 0.0, lightRes.t, staticRes);
+    }
+
+    if (_dynamics != nullptr)
+    {
+        dynamicHit = _dynamics->IntersectedRayOnly(outRay, 0.0, lightRes.t, dynamicRes);
+    }
+
+    if (staticHit || dynamicHit)
+    {
+        return AA::colToVec3(_shadowColour);
+    }
+    else
+    {
+        return AA::colToVec3(res.col);
+    }
+}
+
 bool Light::IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
 {
     AA::Vec3 oc = ray._startPos - _position;

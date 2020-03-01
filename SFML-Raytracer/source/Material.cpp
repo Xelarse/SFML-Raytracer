@@ -30,6 +30,13 @@ sf::Color Material::GetColour()
 	return _colour;
 }
 
+AA::Vec3 Material::GetColourVec()
+{
+	AA::Vec3 col = AA::Vec3(_colour.r, _colour.g, _colour.b);
+	col /= 255;
+	return col;
+}
+
 void Material::SetColour(sf::Color col)
 {
 	_colour = col;

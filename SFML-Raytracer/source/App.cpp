@@ -51,17 +51,17 @@ void App::InitCoreSystems()
     if (_lightingEnabled)
     {
         //Light values ---- white: (255,255,255,255) --- Yellow: (255,243,71,255) --- Purple: (239,29,242,255) --- Dark teal: (9,97,88,255) --- Gray(123,123,123,255)
-        //_sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), sf::Color(255, 255, 255, 255), 100.0, _lightingDebug);
-        _sceneLight = std::make_unique<AreaLight>(
-            _staticHittables.get(),
-            _dynamicHittables.get(),
-            AA::Vec3(0.0, 4.0, -6.0),
-            AA::Vec2(5.0, 5.0),
-            1,
-            sf::Color(255, 255, 255, 255),
-            100.0,
-            _lightingDebug
-        );
+        _sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), sf::Color(255, 255, 255, 255), 20.0, _lightingDebug);
+        //_sceneLight = std::make_unique<AreaLight>(
+        //    _staticHittables.get(),
+        //    _dynamicHittables.get(),
+        //    AA::Vec3(0.0, 4.0, -6.0),
+        //    AA::Vec2(5.0, 5.0),
+        //    1,
+        //    sf::Color(255, 255, 255, 255),
+        //    100.0,
+        //    _lightingDebug
+        //);
         //_sceneLight = std::make_unique<VolumeLight>(
         //    _staticHittables.get(),
         //    _dynamicHittables.get(),
@@ -289,12 +289,31 @@ void App::SpawnMovable()
 void App::SpawnLightTest()
 {
     //Room boxes
+    Box* temp = nullptr;
+
     _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(-6, 5, 0), AA::Vec3(1, 10, 20), true, new Diffuse(sf::Color(240, 0, 0, 255), true), _sceneLight.get()));     //Left
+    temp = dynamic_cast<Box*>(_staticHittables->_hittableObjects.back());
+    temp->OverrideNormal(AA::Vec3(1, 0, 0));
+
     _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(6, 5, 0), AA::Vec3(1, 10, 20), true, new Diffuse(sf::Color(240, 136, 0, 255), true), _sceneLight.get()));    //Right
+    temp = dynamic_cast<Box*>(_staticHittables->_hittableObjects.back());
+    temp->OverrideNormal(AA::Vec3(-1, 0, 0));
+
     _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 5, 6), AA::Vec3(20, 10, 1), true, new Diffuse(sf::Color(247, 227, 0, 255), true), _sceneLight.get()));    //Back
-    //_staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 5, -6), AA::Vec3(20, 10, 1), true, new Diffuse(sf::Color(0, 247, 4, 255), true), _sceneLight.get()));     //Front
-    //_staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 6, 0), AA::Vec3(20, 1, 20), true, new Diffuse(sf::Color(0, 4, 247, 255), true), _sceneLight.get()));       //Top
+    temp = dynamic_cast<Box*>(_staticHittables->_hittableObjects.back());
+    temp->OverrideNormal(AA::Vec3(0, 0, -1));
+
+    _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 5, -6), AA::Vec3(20, 10, 1), true, new Diffuse(sf::Color(0, 247, 4, 255), true), _sceneLight.get()));     //Front
+    temp = dynamic_cast<Box*>(_staticHittables->_hittableObjects.back());
+    temp->OverrideNormal(AA::Vec3(0, 0, 1));
+
+    _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, 6, 0), AA::Vec3(20, 1, 20), true, new Diffuse(sf::Color(0, 4, 247, 255), true), _sceneLight.get()));       //Top
+    temp = dynamic_cast<Box*>(_staticHittables->_hittableObjects.back());
+    temp->OverrideNormal(AA::Vec3(0, -1, 0));
+
     _staticHittables->_hittableObjects.push_back(new Box(AA::Vec3(0, -2, 0), AA::Vec3(20, 1, 20), true, new Diffuse(sf::Color(217, 0, 237, 255), true), _sceneLight.get()));     //Bottom
+    temp = dynamic_cast<Box*>(_staticHittables->_hittableObjects.back());
+    temp->OverrideNormal(AA::Vec3(0, 1, 0));
 
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
     //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, new Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));

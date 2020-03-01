@@ -7,6 +7,13 @@
 Box::Box(AA::Vec3 origin, AA::Vec3 scale, bool isStatic, Material* mat, Light* sceneLight)
     : Hittable(isStatic, mat, sceneLight), _origin(origin), _scale(scale)
 {
+    _faceNormals[0] = AA::Vec3(1, 0, 0);
+    _faceNormals[1] = AA::Vec3(-1, 0, 0);
+    _faceNormals[2] = AA::Vec3(0, 1, 0);
+    _faceNormals[3] = AA::Vec3(0, -1, 0);
+    _faceNormals[4] = AA::Vec3(0, 0, 1);
+    _faceNormals[5] = AA::Vec3(0, 0, -1);
+
 	UpdateBounds();
 }
 
@@ -108,6 +115,12 @@ void Box::Scale(AA::Vec3 newScale)
 	UpdateBounds();
 }
 
+void Box::OverrideNormal(AA::Vec3 norm)
+{
+    _overrideNormal = norm;
+    _normalOverride = true;
+}
+
 void Box::UpdateBounds()
 {
 	AA::Vec3 deltaVec = _scale * 0.5;
@@ -118,9 +131,27 @@ void Box::UpdateBounds()
 
 void Box::CalcNormal(HitResult& res)
 {
-    //Get vector from origin of cube to hit location use for Normal
-    AA::Vec3 oToHit = res.p - _origin;
-    res.normal = AA::Vec3::UnitVector(oToHit);
+    if (_normalOverride)
+    {
+        res.normal = _overrideNormal;
+        return;
+    }
+
+    const AA::Vec3 oToHit = AA::Vec3::UnitVector(res.p - _origin);
+    float currentClosest = 0.0;
+    int bestIndex = -1;
+
+    for (int i = 0; i < _faceNormals.size(); ++i)
+    {
+        float val = oToHit.DotProduct(_faceNormals[i]);
+        if (val > currentClosest&& val <= 1.0)
+        {
+            currentClosest = val;
+            bestIndex = i;
+        }
+    }
+
+    res.normal = _faceNormals[bestIndex];
 }
 
 bool Box::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res)

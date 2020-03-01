@@ -16,14 +16,19 @@ public:
 	void Scale(AA::Vec3 newScale) override;
 
 	AA::Vec3 GetPosition() { return _origin; }
+	void OverrideNormal(AA::Vec3 norm);
 
 private:
 
 	void UpdateBounds();
 	void CalcNormal(HitResult& res);
 
+	bool _normalOverride = false;
+	AA::Vec3 _overrideNormal;
+
 	AA::Vec3 _scale;
 	AA::Vec3 _origin;
 	AA::Vec3 _bounds[2];
+	std::array<AA::Vec3, 6> _faceNormals;
 };
 

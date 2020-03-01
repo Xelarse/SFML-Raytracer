@@ -14,7 +14,7 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 	//Raycast out from the hit location towards where the initial ray started
 	Hittable::HitResult staticRes, dynamicRes;
 	bool staticHit, dynamicHit;
-	AA::Ray materialRay = AA::Ray(prevHit.p, AA::reflectRay(AA::Vec3::UnitVector(prevHit.p - sceneLight->GetPosition()), prevHit.normal));
+	AA::Ray materialRay = AA::Ray(prevHit.p, prevHit.normal);
 	materialRay._startPos = materialRay.GetPointAlongRay(AA::kEpsilon);
 
 	staticHit = _statics == nullptr ? false : _statics->IntersectedRay(materialRay, 0.0, INFINITY, staticRes);
@@ -26,26 +26,36 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 		//Find the closest one AKA the lowest t and use that colour
 		if (staticRes.t < dynamicRes.t)
 		{
-			sceneLight->CalculateLighting(materialRay, staticRes, true);
-			return AA::colToVec3(staticRes.col);
+			//sceneLight->CalculateLighting(materialRay, staticRes, true);
+			//return AA::colToVec3(staticRes.col);
+
+			//Add the light value to this ?
+
+
+			return staticRes.mat->GetColourVec(); //MaterialCalculatedColour(materialRay, staticRes, sceneLight);
 		}
 		else
 		{
-			sceneLight->CalculateLighting(materialRay, dynamicRes, true);
-			return AA::colToVec3(dynamicRes.col);
+			//sceneLight->CalculateLighting(materialRay, dynamicRes, true);
+			//return AA::colToVec3(dynamicRes.col);
+			return staticRes.mat->GetColourVec(); //MaterialCalculatedColour(materialRay, dynamicRes, sceneLight);
 		}
 	}
 	else if (staticHit)
 	{
 		//return the colour information from the static hit
-		sceneLight->CalculateLighting(materialRay, staticRes, true);
-		return AA::colToVec3(staticRes.col);
+		//sceneLight->CalculateLighting(materialRay, staticRes, true);
+		//return AA::colToVec3(staticRes.col);
+
+		return staticRes.mat->GetColourVec(); // MaterialCalculatedColour(materialRay, staticRes, sceneLight);
 	}
 	else if (dynamicHit)
 	{
 		//Return the colour information from the dynamic hit
-		sceneLight->CalculateLighting(materialRay, dynamicRes, true);
-		return AA::colToVec3(dynamicRes.col);
+		//sceneLight->CalculateLighting(materialRay, dynamicRes, true);
+		//return AA::colToVec3(dynamicRes.col);
+
+		return staticRes.mat->GetColourVec(); //MaterialCalculatedColour(materialRay, dynamicRes, sceneLight);
 	}
 	else
 	{
