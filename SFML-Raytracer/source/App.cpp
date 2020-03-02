@@ -69,7 +69,7 @@ void App::InitCoreSystems()
         //    AABB(AA::Vec3(-2.0, -2.0, -2.0), AA::Vec3(2.0, 2.0, 2.0)),
         //    5,
         //    sf::Color(255, 255, 255, 255),
-        //    1.0,
+        //    0.75,
         //    _lightingDebug
         //);
     }
