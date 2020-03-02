@@ -289,13 +289,11 @@ void App::SpawnMovable()
 
 void App::SpawnLightTest()
 {
-    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(3, 0.5, 1), 1.0, true, new Mirror(sf::Color(42, 209, 212, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(3, 0.5, 1), 1.0, true, new Mirror(sf::Color(255, 0, 255, 0), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
+    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(2, 1.5, -1), 0.8, true, new Diffuse(sf::Color(42, 209, 212, 255), true), _sceneLight.get()));
     _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(-2, 1.5, -1), 1.5, true, new Diffuse(sf::Color(194, 10, 10, 255), true), _sceneLight.get()));
-    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Mirror(sf::Color(27, 209, 10, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
+    _staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, -1), 0.8, true, new Mirror(sf::Color(0, 0, 255, 50), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
     //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0.0, 0.5, -1), 0.8, true, new Diffuse(sf::Color(27, 209, 10, 255), true), _sceneLight.get()));
-
-    //_staticHittables->_hittableObjects.push_back(new Sphere(AA::Vec3(0, 0.5, 7), 4.0, true, new Mirror(sf::Color(255,255,255, 255), true, _staticHittables.get(), _dynamicHittables.get()), _sceneLight.get()));
 }
 
 void App::SpawnBoxRoom()

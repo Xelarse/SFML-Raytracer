@@ -20,29 +20,34 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 	staticHit = _statics == nullptr ? false : _statics->IntersectedRay(materialRay, 0.0, INFINITY, staticRes);
 	dynamicHit = _dynamics == nullptr ? false : _dynamics->IntersectedRay(materialRay, 0.0, INFINITY, dynamicRes);
 
+	AA::Vec3 resultantCol;
+
 	//If it hits something get the colour information from the returned object and maybe diffuse it?
 	if (staticHit && dynamicHit)
 	{
 		//Find the closest one AKA the lowest t and use that colour
 		if (staticRes.t < dynamicRes.t)
 		{
-			return sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
+			resultantCol = sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
 		}
 		else
 		{
-			return sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
+			resultantCol = sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
 		}
 	}
 	else if (staticHit)
 	{
-		return sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
+		resultantCol = sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
 	}
 	else if (dynamicHit)
 	{
-		return sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
+		resultantCol = sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
 	}
 	else
 	{
-		return AA::BackgroundGradientCol(prevHit.normal);
+		resultantCol = AA::BackgroundGradientCol(prevHit.normal);
 	}
+
+	//Add the mirror colour to the result and use the alpha channel as a strength for the tint
+	return resultantCol + (AA::colToVec3(_colour) * AA::InverseLerp(0, 255, _colour.a));
 }
