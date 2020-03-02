@@ -527,6 +527,8 @@ namespace AA
 	static AA::Vec3 BackgroundGradientCol(const AA::Ray& ray)
 	{
 		AA::Vec3 top = AA::Vec3(0.0, 0.2, 1.0);
+		return top;
+
 		AA::Vec3 bottom = AA::Vec3(1.0, 1.0, 1.0);
 
 		AA::Vec3 unitDir = ray._dir.UnitVector();

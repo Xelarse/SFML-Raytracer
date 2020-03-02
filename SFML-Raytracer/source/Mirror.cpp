@@ -43,6 +43,6 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 	}
 	else
 	{
-		return AA::Vec3(0, 0, 0); //AA::BackgroundGradientCol((prevHit.normal));
+		return AA::BackgroundGradientCol(prevHit.normal);
 	}
 }

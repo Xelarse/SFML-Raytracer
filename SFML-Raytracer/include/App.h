@@ -36,6 +36,7 @@ private:
 	void SpawnMeshStress();
 	void SpawnMovable();
 	void SpawnLightTest();
+	void SpawnBoxRoom();
 
 	//dt in milliseconds
 	void Tick(float dt);

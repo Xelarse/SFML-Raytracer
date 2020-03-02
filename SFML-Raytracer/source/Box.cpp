@@ -156,6 +156,9 @@ void Box::CalcNormal(HitResult& res)
 
 bool Box::IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res)
 {
+    //TODO REMOVE THIS, CRAZY HACKY FIX FOR THE DAMN ROOM LIGHTING
+    return false;
+
     double tXMin, tYMin, tZMin, tXMax, tYMax, tZMax;
 
     //Work out tmin and max for both x and y and sort them without having to swap based on which is bigger
