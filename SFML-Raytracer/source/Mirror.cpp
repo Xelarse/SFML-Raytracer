@@ -26,40 +26,23 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 		//Find the closest one AKA the lowest t and use that colour
 		if (staticRes.t < dynamicRes.t)
 		{
-			//sceneLight->CalculateLighting(materialRay, staticRes, true);
-			//return AA::colToVec3(staticRes.col);
-
-			//Add the light value to this ?
-
-
 			return sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
 		}
 		else
 		{
-			//sceneLight->CalculateLighting(materialRay, dynamicRes, true);
-			//return AA::colToVec3(dynamicRes.col);
 			return sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
 		}
 	}
 	else if (staticHit)
 	{
-		//return the colour information from the static hit
-		//sceneLight->CalculateLighting(materialRay, staticRes, true);
-		//return AA::colToVec3(staticRes.col);
-
 		return sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
 	}
 	else if (dynamicHit)
 	{
-		//Return the colour information from the dynamic hit
-		//sceneLight->CalculateLighting(materialRay, dynamicRes, true);
-		//return AA::colToVec3(dynamicRes.col);
-
 		return sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
 	}
 	else
 	{
-		//return the background colour
-		return AA::BackgroundGradientCol((prevHit.normal));
+		return AA::Vec3(0, 0, 0); //AA::BackgroundGradientCol((prevHit.normal));
 	}
 }

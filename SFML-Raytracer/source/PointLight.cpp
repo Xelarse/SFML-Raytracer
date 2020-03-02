@@ -11,17 +11,6 @@ PointLight::~PointLight()
 
 void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive)
 {
-    //TODO fix this in a nice way to encompass depth, not iterations
-    //if (isRecursive)
-    //{
-    //    if (_currentRecursion >= _recursionCap)
-    //    {
-    //        res.col = _shadowColour;
-    //        return;
-    //    }
-    //    ++_currentRecursion;
-    //}
-
     Hittable::HitResult staticRes, dynamicRes;
     bool staticHit = false;
     bool dynamicHit = false;
