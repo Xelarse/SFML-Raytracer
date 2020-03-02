@@ -32,13 +32,13 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 			//Add the light value to this ?
 
 
-			return staticRes.mat->GetColourVec(); //MaterialCalculatedColour(materialRay, staticRes, sceneLight);
+			return sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
 		}
 		else
 		{
 			//sceneLight->CalculateLighting(materialRay, dynamicRes, true);
 			//return AA::colToVec3(dynamicRes.col);
-			return staticRes.mat->GetColourVec(); //MaterialCalculatedColour(materialRay, dynamicRes, sceneLight);
+			return sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
 		}
 	}
 	else if (staticHit)
@@ -47,7 +47,7 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 		//sceneLight->CalculateLighting(materialRay, staticRes, true);
 		//return AA::colToVec3(staticRes.col);
 
-		return staticRes.mat->GetColourVec(); // MaterialCalculatedColour(materialRay, staticRes, sceneLight);
+		return sceneLight->CalculateLightingForMaterial(prevRay, staticRes);
 	}
 	else if (dynamicHit)
 	{
@@ -55,7 +55,7 @@ AA::Vec3 Mirror::MaterialCalculatedColour(const AA::Ray& prevRay, const Hittable
 		//sceneLight->CalculateLighting(materialRay, dynamicRes, true);
 		//return AA::colToVec3(dynamicRes.col);
 
-		return staticRes.mat->GetColourVec(); //MaterialCalculatedColour(materialRay, dynamicRes, sceneLight);
+		return sceneLight->CalculateLightingForMaterial(prevRay, dynamicRes);
 	}
 	else
 	{

@@ -51,7 +51,7 @@ void Light::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, co
     }
 }
 
-AA::Vec3 Light::CalculateLightingForMaterial(const AA::Ray& inRay, Hittable::HitResult& res)
+AA::Vec3 Light::CalculateLightingForMaterial(const AA::Ray& inRay, const Hittable::HitResult& res)
 {
     //Just does a check purely based on collisions to create a shadow ray
     Hittable::HitResult staticRes, dynamicRes, lightRes;

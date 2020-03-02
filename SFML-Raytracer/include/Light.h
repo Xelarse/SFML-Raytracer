@@ -12,7 +12,7 @@ public:
 	~Light() override;
 
 	virtual void CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& res, const bool& isRecursive = false);
-	virtual AA::Vec3 CalculateLightingForMaterial(const AA::Ray& inRay, Hittable::HitResult& res);
+	virtual AA::Vec3 CalculateLightingForMaterial(const AA::Ray& inRay, const Hittable::HitResult& res);
 
 	bool IntersectedRay(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;
 	bool IntersectedRayOnly(const AA::Ray& ray, double t_min, double t_max, HitResult& res) override;

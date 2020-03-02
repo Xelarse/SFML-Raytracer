@@ -59,12 +59,8 @@ void PointLight::CalculateLighting(const AA::Ray& inRay, Hittable::HitResult& re
     res.col = _shadowColour;
 }
 
-AA::Vec3 PointLight::CalculateLightingForMaterial(const AA::Ray& inRay, Hittable::HitResult& res)
+AA::Vec3 PointLight::CalculateLightingForMaterial(const AA::Ray& inRay, const Hittable::HitResult& res)
 {
-    Hittable::HitResult staticRes, dynamicRes;
-    bool staticHit = false;
-    bool dynamicHit = false;
-
     //Create the collision point and material calc as they will be used more than once, set up the other vars for later use
     AA::Vec3 collisionPoint = res.p;
     AA::Ray outRay = AA::Ray(collisionPoint, AA::Vec3::UnitVector(_position - collisionPoint));
@@ -81,18 +77,8 @@ AA::Vec3 PointLight::CalculateLightingForMaterial(const AA::Ray& inRay, Hittable
     //Otherwise move onto the visibility check
     //Calc the distance from hit to light
     double dist = collisionPoint.Distance(_position);
+    AA::Vec3 reflectance = (nDotDHit / (dist * dist)) * materialCalc * _lightColorVec * _intensityMod;
 
-    //Check against a hit with both static and dynamics
-    staticHit = _statics == nullptr ? false : _statics->IntersectedRayOnly(outRay, 0.0, dist, staticRes);
-    dynamicHit = _dynamics == nullptr ? false : _dynamics->IntersectedRayOnly(outRay, 0.0, dist, dynamicRes);
-
-    if (!staticHit && !dynamicHit)
-    {
-        AA::Vec3 reflectance = (nDotDHit / (dist * dist)) * materialCalc * _lightColorVec * _intensityMod;
-
-        //Tonemap using the selected method and set the colour
-        return reflectance;
-    }
-
-    return AA::colToVec3(_shadowColour);
+    //Tonemap using the selected method and set the colour
+    return reflectance;
 }
