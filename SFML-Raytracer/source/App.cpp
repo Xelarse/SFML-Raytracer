@@ -51,13 +51,13 @@ void App::InitCoreSystems()
     if (_lightingEnabled)
     {
         //Light values ---- white: (255,255,255,255) --- Yellow: (255,243,71,255) --- Purple: (239,29,242,255) --- Dark teal: (9,97,88,255) --- Gray(123,123,123,255)
-        _sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, 0), sf::Color(255, 255, 255, 255), 20.0, _lightingDebug);
+        _sceneLight = std::make_unique<PointLight>(_staticHittables.get(), _dynamicHittables.get(), AA::Vec3(0, 3, -4.0), sf::Color(255, 255, 255, 255), 20.0, _lightingDebug);
         //_sceneLight = std::make_unique<AreaLight>(
         //    _staticHittables.get(),
         //    _dynamicHittables.get(),
-        //    AA::Vec3(0.0, 2.0, -3.0),
+        //    AA::Vec3(2.0, 2.0, -6.0),
         //    AA::Vec2(5.0, 5.0),
-        //    4,
+        //    8,
         //    sf::Color(255, 255, 255, 255),
         //    2.0,
         //    _lightingDebug
@@ -93,8 +93,8 @@ void App::InitScene()
     //SpawnMovable();
     //SpawnSphereStress();
     //SpawnMeshes();
-    //SpawnMeshStress();
-    SpawnLightTest();
+    SpawnMeshStress();
+    //SpawnLightTest();
 
     //Prompt the hittables to construt their BVH's
     if (_useBvh)

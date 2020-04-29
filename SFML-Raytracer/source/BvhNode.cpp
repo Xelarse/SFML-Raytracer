@@ -95,7 +95,6 @@ bool BvhNode::BoundingBox(double t0, double t1, AABB& outBox) const
 
 void BvhNode::ConstructBVH(std::vector<Hittable*> hittables, double t0, double t1, bool useSmart)
 {
-	//TODO Fix the smart construction or just leave it 
 	if (hittables.size() == 0) { return; }
 	if (useSmart)
 	{
